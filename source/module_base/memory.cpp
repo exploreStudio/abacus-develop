@@ -234,10 +234,10 @@ double Memory::record_gpu
 {
 	if(!Memory::init_flag_gpu)
 	{
-		name_gpu = new std::string[n_memory + 2];
-		class_name_gpu = new std::string[n_memory + 2];
-		consume_gpu = new double[n_memory + 2];
-		for(int i=0;i<n_memory + 2;i++)
+		name_gpu = new std::string[n_memory];
+		class_name_gpu = new std::string[n_memory];
+		consume_gpu = new double[n_memory];
+		for(int i=0;i<n_memory;i++)
 		{
 			consume_gpu[i] = 0.0;
 		}
