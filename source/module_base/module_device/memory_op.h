@@ -46,16 +46,12 @@ struct synchronize_memory_op
     /// @brief memcpy for multi-device
     ///
     /// Input Parameters
-    /// \param dev_out : the type of computing device of arr_out
-    /// \param dev_in : the type of computing device of arr_in
     /// \param arr_in : input array
     /// \param size : array size
     ///
     /// Output Parameters
     /// \param arr_out : output array initialized by the input array
-    void operator()(const Device_out* dev_out,
-                    const Device_in* dev_in,
-                    FPTYPE* arr_out,
+    void operator()(FPTYPE* arr_out,
                     const FPTYPE* arr_in,
                     const size_t size);
 };
@@ -125,27 +121,21 @@ struct set_memory_op<FPTYPE, base_device::DEVICE_GPU>
 template <typename FPTYPE>
 struct synchronize_memory_op<FPTYPE, base_device::DEVICE_CPU, base_device::DEVICE_GPU>
 {
-    void operator()(const base_device::DEVICE_CPU* dev_out,
-                    const base_device::DEVICE_GPU* dev_in,
-                    FPTYPE* arr_out,
+    void operator()(FPTYPE* arr_out,
                     const FPTYPE* arr_in,
                     const size_t size);
 };
 template <typename FPTYPE>
 struct synchronize_memory_op<FPTYPE, base_device::DEVICE_GPU, base_device::DEVICE_CPU>
 {
-    void operator()(const base_device::DEVICE_GPU* dev_out,
-                    const base_device::DEVICE_CPU* dev_in,
-                    FPTYPE* arr_out,
+    void operator()(FPTYPE* arr_out,
                     const FPTYPE* arr_in,
                     const size_t size);
 };
 template <typename FPTYPE>
 struct synchronize_memory_op<FPTYPE, base_device::DEVICE_GPU, base_device::DEVICE_GPU>
 {
-    void operator()(const base_device::DEVICE_GPU* dev_out,
-                    const base_device::DEVICE_GPU* dev_in,
-                    FPTYPE* arr_out,
+    void operator()(FPTYPE* arr_out,
                     const FPTYPE* arr_in,
                     const size_t size);
 };

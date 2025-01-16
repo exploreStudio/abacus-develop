@@ -51,8 +51,7 @@ void resize_memory_op<FPTYPE, base_device::DEVICE_GPU>::operator()(FPTYPE*& arr,
 }
 
 template <typename FPTYPE>
-void set_memory_op<FPTYPE, base_device::DEVICE_GPU>::operator()(const base_device::DEVICE_GPU* dev,
-                                                                FPTYPE* arr,
+void set_memory_op<FPTYPE, base_device::DEVICE_GPU>::operator()(FPTYPE* arr,
                                                                 const int var,
                                                                 const size_t size)
 {
@@ -61,8 +60,6 @@ void set_memory_op<FPTYPE, base_device::DEVICE_GPU>::operator()(const base_devic
 
 template <typename FPTYPE>
 void synchronize_memory_op<FPTYPE, base_device::DEVICE_CPU, base_device::DEVICE_GPU>::operator()(
-    const base_device::DEVICE_CPU* dev_out,
-    const base_device::DEVICE_GPU* dev_in,
     FPTYPE* arr_out,
     const FPTYPE* arr_in,
     const size_t size)
@@ -72,8 +69,6 @@ void synchronize_memory_op<FPTYPE, base_device::DEVICE_CPU, base_device::DEVICE_
 
 template <typename FPTYPE>
 void synchronize_memory_op<FPTYPE, base_device::DEVICE_GPU, base_device::DEVICE_CPU>::operator()(
-    const base_device::DEVICE_GPU* dev_out,
-    const base_device::DEVICE_CPU* dev_in,
     FPTYPE* arr_out,
     const FPTYPE* arr_in,
     const size_t size)
@@ -83,8 +78,6 @@ void synchronize_memory_op<FPTYPE, base_device::DEVICE_GPU, base_device::DEVICE_
 
 template <typename FPTYPE>
 void synchronize_memory_op<FPTYPE, base_device::DEVICE_GPU, base_device::DEVICE_GPU>::operator()(
-    const base_device::DEVICE_GPU* dev_out,
-    const base_device::DEVICE_GPU* dev_in,
     FPTYPE* arr_out,
     const FPTYPE* arr_in,
     const size_t size)

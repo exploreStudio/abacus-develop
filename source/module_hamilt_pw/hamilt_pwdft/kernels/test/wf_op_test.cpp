@@ -415,23 +415,23 @@ TEST_F(TestSrcPWWfMultiDevice, cal_sk_op_gpu)
     resmem_int_op()(d_atom_na, atom_na.size());
     resmem_int_op()(d_igl2isz, igl2isz.size());
     resmem_int_op()(d_is2fftixy, is2fftixy.size());
-    syncmem_int_h2d_op()(gpu_ctx, cpu_ctx, d_atom_na, atom_na.data(), atom_na.size());
-    syncmem_int_h2d_op()(gpu_ctx, cpu_ctx, d_igl2isz, igl2isz.data(), igl2isz.size());
-    syncmem_int_h2d_op()(gpu_ctx, cpu_ctx, d_is2fftixy, is2fftixy.data(), is2fftixy.size());
+    syncmem_int_h2d_op()(d_atom_na, atom_na.data(), atom_na.size());
+    syncmem_int_h2d_op()(d_igl2isz, igl2isz.data(), igl2isz.size());
+    syncmem_int_h2d_op()(d_is2fftixy, is2fftixy.data(), is2fftixy.size());
 
     resmem_var_op()(d_kvec_c, kvec_c.size());
     resmem_var_op()(d_atom_tau, atom_tau.size());
-    syncmem_var_h2d_op()(gpu_ctx, cpu_ctx, d_kvec_c, kvec_c.data(), kvec_c.size());
-    syncmem_var_h2d_op()(gpu_ctx, cpu_ctx, d_atom_tau, atom_tau.data(), atom_tau.size());
+    syncmem_var_h2d_op()(d_kvec_c, kvec_c.data(), kvec_c.size());
+    syncmem_var_h2d_op()(d_atom_tau, atom_tau.data(), atom_tau.size());
 
     resmem_complex_op()(d_sk, sk.size());
     resmem_complex_op()(d_eigts1, eigts1.size());
     resmem_complex_op()(d_eigts2, eigts2.size());
     resmem_complex_op()(d_eigts3, eigts3.size());
-    syncmem_complex_h2d_op()(gpu_ctx, cpu_ctx, d_sk, sk.data(), sk.size());
-    syncmem_complex_h2d_op()(gpu_ctx, cpu_ctx, d_eigts1, eigts1.data(), eigts1.size());
-    syncmem_complex_h2d_op()(gpu_ctx, cpu_ctx, d_eigts2, eigts2.data(), eigts2.size());
-    syncmem_complex_h2d_op()(gpu_ctx, cpu_ctx, d_eigts3, eigts3.data(), eigts3.size());
+    syncmem_complex_h2d_op()(d_sk, sk.data(), sk.size());
+    syncmem_complex_h2d_op()(d_eigts1, eigts1.data(), eigts1.size());
+    syncmem_complex_h2d_op()(d_eigts2, eigts2.data(), eigts2.size());
+    syncmem_complex_h2d_op()(d_eigts3, eigts3.data(), eigts3.size());
 
     hamilt::cal_sk_op<double, base_device::DEVICE_GPU>()(gpu_ctx,
                                                          ik,
@@ -459,7 +459,7 @@ TEST_F(TestSrcPWWfMultiDevice, cal_sk_op_gpu)
                                                          d_eigts3,
                                                          d_sk);
 
-    syncmem_complex_d2h_op()(cpu_ctx, gpu_ctx, sk.data(), d_sk, sk.size());
+    syncmem_complex_d2h_op()(sk.data(), d_sk, sk.size());
 
     for (int ii = 0; ii < sk.size(); ii++) {
         EXPECT_LT(fabs(sk[ii] - expected_sk[ii]), 6e-5);

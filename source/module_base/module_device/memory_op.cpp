@@ -58,9 +58,7 @@ struct set_memory_op<FPTYPE, base_device::DEVICE_CPU>
 template <typename FPTYPE>
 struct synchronize_memory_op<FPTYPE, base_device::DEVICE_CPU, base_device::DEVICE_CPU>
 {
-    void operator()(const base_device::DEVICE_CPU* dev_out,
-                    const base_device::DEVICE_CPU* dev_in,
-                    FPTYPE* arr_out,
+    void operator()(FPTYPE* arr_out,
                     const FPTYPE* arr_in,
                     const size_t size)
     {
@@ -174,9 +172,7 @@ struct set_memory_op<FPTYPE, base_device::DEVICE_GPU>
 template <typename FPTYPE>
 struct synchronize_memory_op<FPTYPE, base_device::DEVICE_GPU, base_device::DEVICE_GPU>
 {
-    void operator()(const base_device::DEVICE_GPU* dev_out,
-                    const base_device::DEVICE_GPU* dev_in,
-                    FPTYPE* arr_out,
+    void operator()(FPTYPE* arr_out,
                     const FPTYPE* arr_in,
                     const size_t size)
     {
@@ -186,9 +182,7 @@ struct synchronize_memory_op<FPTYPE, base_device::DEVICE_GPU, base_device::DEVIC
 template <typename FPTYPE>
 struct synchronize_memory_op<FPTYPE, base_device::DEVICE_GPU, base_device::DEVICE_CPU>
 {
-    void operator()(const base_device::DEVICE_GPU* dev_out,
-                    const base_device::DEVICE_CPU* dev_in,
-                    FPTYPE* arr_out,
+    void operator()(FPTYPE* arr_out,
                     const FPTYPE* arr_in,
                     const size_t size)
     {
@@ -198,9 +192,7 @@ struct synchronize_memory_op<FPTYPE, base_device::DEVICE_GPU, base_device::DEVIC
 template <typename FPTYPE>
 struct synchronize_memory_op<FPTYPE, base_device::DEVICE_CPU, base_device::DEVICE_GPU>
 {
-    void operator()(const base_device::DEVICE_CPU* dev_out,
-                    const base_device::DEVICE_GPU* dev_in,
-                    FPTYPE* arr_out,
+    void operator()(FPTYPE* arr_out,
                     const FPTYPE* arr_in,
                     const size_t size)
     {

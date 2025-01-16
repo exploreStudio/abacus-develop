@@ -193,14 +193,10 @@ void Potential::update_from_charge(const Charge*const chg, const UnitCell*const 
                                  this->vofk_smooth.nr * this->vofk_smooth.nc);
         }
         else {
-            syncmem_d2d_h2d_op()(gpu_ctx,
-                                 cpu_ctx,
-                                 d_veff_smooth,
+            syncmem_d2d_h2d_op()(d_veff_smooth,
                                  this->veff_smooth.c,
                                  this->veff_smooth.nr * this->veff_smooth.nc);
-            syncmem_d2d_h2d_op()(gpu_ctx,
-                                 cpu_ctx,
-                                 d_vofk_smooth,
+            syncmem_d2d_h2d_op()(d_vofk_smooth,
                                  this->vofk_smooth.c,
                                  this->vofk_smooth.nr * this->vofk_smooth.nc);
         }

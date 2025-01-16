@@ -91,12 +91,12 @@ TEST_F(TestModuleHamiltVeff, veff_pw_op_gpu)
     std::complex<double>* d_res = NULL;
     resize_memory_double_op()(d_in, in.size());
     resize_memory_complex_op()(d_res, res.size());
-    syncmem_double_h2d_op()(gpu_ctx, cpu_ctx, d_in, in.data(), in.size());
-    syncmem_complex_h2d_op()(gpu_ctx, cpu_ctx, d_res, res.data(), res.size());
+    syncmem_double_h2d_op()(d_in, in.data(), in.size());
+    syncmem_complex_h2d_op()(d_res, res.data(), res.size());
 
     veff_gpu_op()(gpu_ctx, this->size, d_res, d_in);
 
-    syncmem_complex_d2h_op()(cpu_ctx, gpu_ctx, res.data(), d_res, res.size());
+    syncmem_complex_d2h_op()(res.data(), d_res, res.size());
     for (int ii = 0; ii < res.size(); ii++) {
         EXPECT_LT(fabs(res[ii] - expected_out[ii]), 6e-5);
     }
@@ -115,9 +115,9 @@ TEST_F(TestModuleHamiltVeff, veff_pw_spin_op_gpu)
     resize_memory_double_op()(d_in, in_spin.size());
     resize_memory_complex_op()(d_res, res.size());
     resize_memory_complex_op()(d_res1, res1.size());
-    syncmem_double_h2d_op()(gpu_ctx, cpu_ctx, d_in, in_spin.data(), in_spin.size());
-    syncmem_complex_h2d_op()(gpu_ctx, cpu_ctx, d_res, res.data(), res.size());
-    syncmem_complex_h2d_op()(gpu_ctx, cpu_ctx, d_res1, res1.data(), res1.size());
+    syncmem_double_h2d_op()(d_in, in_spin.data(), in_spin.size());
+    syncmem_complex_h2d_op()(d_res, res.data(), res.size());
+    syncmem_complex_h2d_op()(d_res1, res1.data(), res1.size());
 
     const double * in_[4];
     for (int ii = 0; ii < 4; ii++) {
@@ -126,8 +126,8 @@ TEST_F(TestModuleHamiltVeff, veff_pw_spin_op_gpu)
 
     veff_gpu_op()(gpu_ctx, this->size, d_res, d_res1, in_);
 
-    syncmem_complex_d2h_op()(cpu_ctx, gpu_ctx, res.data(), d_res, res.size());
-    syncmem_complex_d2h_op()(cpu_ctx, gpu_ctx, res1.data(), d_res1, res1.size());
+    syncmem_complex_d2h_op()(res.data(), d_res, res.size());
+    syncmem_complex_d2h_op()(res1.data(), d_res1, res1.size());
     for (int ii = 0; ii < res.size(); ii++) {
         EXPECT_LT(fabs(res[ii] - expected_out_spin[ii]), 7.5e-5);
         EXPECT_LT(fabs(res1[ii] - expected_out1_spin[ii]), 6e-5);

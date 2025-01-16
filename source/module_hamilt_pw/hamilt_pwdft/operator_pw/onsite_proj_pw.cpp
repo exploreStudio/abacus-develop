@@ -147,7 +147,7 @@ void OnsiteProj<OperatorPW<T, Device>>::cal_ps_delta_spin(const int npol, const 
                 ip_iat0[ip0++] = iat;
             }
         }
-        syncmem_int_h2d_op()(this->ctx, this->cpu_ctx, this->ip_iat, ip_iat0.data(), onsite_p->get_tot_nproj());
+        syncmem_int_h2d_op()(this->ip_iat, ip_iat0.data(), onsite_p->get_tot_nproj());
     }
 
     // prepare array of nh_iat and lambda_array to pass to the onsite_ps_op operator
@@ -159,7 +159,7 @@ void OnsiteProj<OperatorPW<T, Device>>::cal_ps_delta_spin(const int npol, const 
         tmp_lambda_coeff[iat * 4 + 2] = std::complex<double>(lambda[iat][0], -1 * lambda[iat][1]);
         tmp_lambda_coeff[iat * 4 + 3] = std::complex<double>(-1 * lambda[iat][2], 0.0);
     }
-    syncmem_complex_h2d_op()(this->ctx, this->cpu_ctx, this->lambda_coeff, tmp_lambda_coeff.data(), this->ucell->nat * 4);
+    syncmem_complex_h2d_op()(this->lambda_coeff, tmp_lambda_coeff.data(), this->ucell->nat * 4);
     // TODO: code block above should be moved to the init function
 
     hamilt::onsite_ps_op<Real, Device>()(
@@ -285,15 +285,15 @@ void OnsiteProj<OperatorPW<T, Device>>::cal_ps_dftu(const int npol, const int m)
                 }
             }
         }
-        syncmem_int_h2d_op()(this->ctx, this->cpu_ctx, this->orb_l_iat, orb_l_iat0.data(), this->ucell->nat);
-        syncmem_int_h2d_op()(this->ctx, this->cpu_ctx, this->ip_iat, ip_iat0.data(), onsite_p->get_tot_nproj());
-        syncmem_int_h2d_op()(this->ctx, this->cpu_ctx, this->ip_m, ip_m0.data(), onsite_p->get_tot_nproj());
-        syncmem_int_h2d_op()(this->ctx, this->cpu_ctx, this->vu_begin_iat, vu_begin_iat0.data(), this->ucell->nat);
+        syncmem_int_h2d_op()(this->orb_l_iat, orb_l_iat0.data(), this->ucell->nat);
+        syncmem_int_h2d_op()(this->ip_iat, ip_iat0.data(), onsite_p->get_tot_nproj());
+        syncmem_int_h2d_op()(this->ip_m, ip_m0.data(), onsite_p->get_tot_nproj());
+        syncmem_int_h2d_op()(this->vu_begin_iat, vu_begin_iat0.data(), this->ucell->nat);
 
         resmem_complex_op()(this->vu_device, dftu->get_size_eff_pot_pw());
     }
 
-    syncmem_complex_h2d_op()(this->ctx, this->cpu_ctx, this->vu_device, dftu->get_eff_pot_pw(0), dftu->get_size_eff_pot_pw());
+    syncmem_complex_h2d_op()(this->vu_device, dftu->get_eff_pot_pw(0), dftu->get_size_eff_pot_pw());
 
     hamilt::onsite_ps_op<Real, Device>()(
         this->ctx,   // device context

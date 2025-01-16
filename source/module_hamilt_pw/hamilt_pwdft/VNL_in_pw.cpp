@@ -471,9 +471,9 @@ void pseudopot_cell_vnl::getvnl(Device* ctx,
         resmem_int_op()(atom_nh, ucell.ntype);
         resmem_int_op()(atom_nb, ucell.ntype);
         resmem_int_op()(atom_na, ucell.ntype);
-        syncmem_int_op()(ctx, cpu_ctx, atom_nh, h_atom_nh, ucell.ntype);
-        syncmem_int_op()(ctx, cpu_ctx, atom_nb, h_atom_nb, ucell.ntype);
-        syncmem_int_op()(ctx, cpu_ctx, atom_na, h_atom_na, ucell.ntype);
+        syncmem_int_op()(atom_nh, h_atom_nh, ucell.ntype);
+        syncmem_int_op()(atom_nb, h_atom_nb, ucell.ntype);
+        syncmem_int_op()(atom_na, h_atom_na, ucell.ntype);
 
         resmem_var_op()(gk, npw * 3);
         castmem_var_h2d_op()(ctx, cpu_ctx, gk, reinterpret_cast<double*>(_gk), npw * 3);
@@ -881,16 +881,16 @@ void pseudopot_cell_vnl::init_vnl(UnitCell& cell, const ModulePW::PW_Basis* rho_
         }
         else
         {
-            syncmem_z2z_h2d_op()(gpu_ctx, cpu_ctx, this->z_qq_so, this->qq_so.ptr, this->qq_so.getSize());
+            syncmem_z2z_h2d_op()(this->z_qq_so, this->qq_so.ptr, this->qq_so.getSize());
         }
         // Even when the single precision flag is enabled,
         // these variables are utilized in the Force/Stress calculation as well.
         // modified by denghuilu at 2023-05-15
-        syncmem_d2d_h2d_op()(gpu_ctx, cpu_ctx, this->d_indv, this->indv.c, this->indv.nr * this->indv.nc);
-        syncmem_d2d_h2d_op()(gpu_ctx, cpu_ctx, this->d_nhtol, this->nhtol.c, this->nhtol.nr * this->nhtol.nc);
-        syncmem_d2d_h2d_op()(gpu_ctx, cpu_ctx, this->d_nhtolm, this->nhtolm.c, this->nhtolm.nr * this->nhtolm.nc);
-        syncmem_d2d_h2d_op()(gpu_ctx, cpu_ctx, this->d_tab, this->tab.ptr, this->tab.getSize());
-        syncmem_d2d_h2d_op()(gpu_ctx, cpu_ctx, this->d_qq_nt, this->qq_nt.ptr, this->qq_nt.getSize());
+        syncmem_d2d_h2d_op()(this->d_indv, this->indv.c, this->indv.nr * this->indv.nc);
+        syncmem_d2d_h2d_op()(this->d_nhtol, this->nhtol.c, this->nhtol.nr * this->nhtol.nc);
+        syncmem_d2d_h2d_op()(this->d_nhtolm, this->nhtolm.c, this->nhtolm.nr * this->nhtolm.nc);
+        syncmem_d2d_h2d_op()(this->d_tab, this->tab.ptr, this->tab.getSize());
+        syncmem_d2d_h2d_op()(this->d_qq_nt, this->qq_nt.ptr, this->qq_nt.getSize());
     }
     else
     {
@@ -1503,15 +1503,11 @@ void pseudopot_cell_vnl::cal_effective_D(const ModuleBase::matrix& veff,
         }
         else
         {
-            syncmem_z2z_h2d_op()(gpu_ctx,
-                                 cpu_ctx,
-                                 this->z_deeq_nc,
+            syncmem_z2z_h2d_op()(this->z_deeq_nc,
                                  this->deeq_nc.ptr,
                                  PARAM.inp.nspin * cell.nat * this->nhm * this->nhm);
         }
-        syncmem_d2d_h2d_op()(gpu_ctx,
-                             cpu_ctx,
-                             this->d_deeq,
+        syncmem_d2d_h2d_op()(this->d_deeq,
                              this->deeq.ptr,
                              PARAM.inp.nspin * cell.nat * this->nhm * this->nhm);
     }

@@ -141,7 +141,7 @@ TEST_F(TestModulePsiMemory, resize_memory_op_comlex_double_cpu)
 TEST_F(TestModulePsiMemory, synchronize_memory_op_double_cpu_to_cpu)
 {
     std::vector<double> h_xx(xx.size(), 0);
-    synchronize_memory_double_cpu_to_cpu_op()(cpu_ctx, cpu_ctx, h_xx.data(), xx.data(), xx.size());
+    synchronize_memory_double_cpu_to_cpu_op()(h_xx.data(), xx.data(), xx.size());
     for (int ii = 0; ii < z_xx.size(); ii++)
     {
         EXPECT_EQ(h_xx[ii], xx[ii]);
@@ -151,7 +151,7 @@ TEST_F(TestModulePsiMemory, synchronize_memory_op_double_cpu_to_cpu)
 TEST_F(TestModulePsiMemory, synchronize_memory_op_complex_double_cpu_to_cpu)
 {
     std::vector<std::complex<double>> hz_xx(z_xx.size(), std::complex<double>(0, 0));
-    synchronize_memory_complex_double_cpu_to_cpu_op()(cpu_ctx, cpu_ctx, hz_xx.data(), z_xx.data(), z_xx.size());
+    synchronize_memory_complex_double_cpu_to_cpu_op()(hz_xx.data(), z_xx.data(), z_xx.size());
     for (int ii = 0; ii < z_xx.size(); ii++)
     {
         EXPECT_EQ(hz_xx[ii], z_xx[ii]);
@@ -236,7 +236,7 @@ TEST_F(TestModulePsiMemory, synchronize_memory_op_double_cpu_to_gpu)
     thrust::device_ptr<double> d_xx = thrust::device_malloc<double>(xx.size());
     std::vector<double> hv_xx(xx.size(), 0);
     thrust::copy(hv_xx.begin(), hv_xx.end(), d_xx);
-    synchronize_memory_double_cpu_to_gpu_op()(gpu_ctx, cpu_ctx, thrust::raw_pointer_cast(d_xx), xx.data(), xx.size());
+    synchronize_memory_double_cpu_to_gpu_op()(thrust::raw_pointer_cast(d_xx), xx.data(), xx.size());
 
     thrust::host_vector<double> h_xx(xx.size());
     thrust::copy(d_xx, d_xx + xx.size(), h_xx.begin());
@@ -252,9 +252,7 @@ TEST_F(TestModulePsiMemory, synchronize_memory_op_double_gpu_to_cpu)
     thrust::device_ptr<double> d_xx = thrust::device_malloc<double>(xx.size());
     thrust::copy(xx.begin(), xx.end(), d_xx);
     thrust::host_vector<double> h_xx(xx.size());
-    synchronize_memory_double_gpu_to_cpu_op()(cpu_ctx,
-                                              gpu_ctx,
-                                              thrust::raw_pointer_cast(h_xx.data()),
+    synchronize_memory_double_gpu_to_cpu_op()(thrust::raw_pointer_cast(h_xx.data()),
                                               thrust::raw_pointer_cast(d_xx),
                                               xx.size());
 
@@ -270,9 +268,7 @@ TEST_F(TestModulePsiMemory, synchronize_memory_op_double_gpu_to_gpu)
     thrust::device_ptr<double> d1_xx = thrust::device_malloc<double>(xx.size());
     thrust::device_ptr<double> d2_xx = thrust::device_malloc<double>(xx.size());
     thrust::copy(xx.begin(), xx.end(), d1_xx);
-    synchronize_memory_double_gpu_to_gpu_op()(gpu_ctx,
-                                              gpu_ctx,
-                                              thrust::raw_pointer_cast(d2_xx),
+    synchronize_memory_double_gpu_to_gpu_op()(thrust::raw_pointer_cast(d2_xx),
                                               thrust::raw_pointer_cast(d1_xx),
                                               xx.size());
 
@@ -291,9 +287,7 @@ TEST_F(TestModulePsiMemory, synchronize_memory_op_complex_double_cpu_to_gpu)
     thrust::device_ptr<std::complex<double>> dz_xx = thrust::device_malloc<std::complex<double>>(z_xx.size());
     std::vector<std::complex<double>> hvz_xx(z_xx.size(), 0);
     thrust::copy(hvz_xx.begin(), hvz_xx.end(), dz_xx);
-    synchronize_memory_complex_double_cpu_to_gpu_op()(gpu_ctx,
-                                                      cpu_ctx,
-                                                      thrust::raw_pointer_cast(dz_xx),
+    synchronize_memory_complex_double_cpu_to_gpu_op()(thrust::raw_pointer_cast(dz_xx),
                                                       z_xx.data(),
                                                       z_xx.size());
 
@@ -311,9 +305,7 @@ TEST_F(TestModulePsiMemory, synchronize_memory_op_complex_double_gpu_to_cpu)
     thrust::device_ptr<std::complex<double>> dz_xx = thrust::device_malloc<std::complex<double>>(z_xx.size());
     thrust::copy(z_xx.begin(), z_xx.end(), dz_xx);
     thrust::host_vector<std::complex<double>> hz_xx(z_xx.size());
-    synchronize_memory_complex_double_gpu_to_cpu_op()(cpu_ctx,
-                                                      gpu_ctx,
-                                                      thrust::raw_pointer_cast(hz_xx.data()),
+    synchronize_memory_complex_double_gpu_to_cpu_op()(thrust::raw_pointer_cast(hz_xx.data()),
                                                       thrust::raw_pointer_cast(dz_xx),
                                                       z_xx.size());
 
@@ -329,9 +321,7 @@ TEST_F(TestModulePsiMemory, synchronize_memory_op_complex_double_gpu_to_gpu)
     thrust::device_ptr<std::complex<double>> dz1_xx = thrust::device_malloc<std::complex<double>>(z_xx.size());
     thrust::device_ptr<std::complex<double>> dz2_xx = thrust::device_malloc<std::complex<double>>(z_xx.size());
     thrust::copy(z_xx.begin(), z_xx.end(), dz1_xx);
-    synchronize_memory_complex_double_gpu_to_gpu_op()(gpu_ctx,
-                                                      gpu_ctx,
-                                                      thrust::raw_pointer_cast(dz2_xx),
+    synchronize_memory_complex_double_gpu_to_gpu_op()(thrust::raw_pointer_cast(dz2_xx),
                                                       thrust::raw_pointer_cast(dz1_xx),
                                                       z_xx.size());
 

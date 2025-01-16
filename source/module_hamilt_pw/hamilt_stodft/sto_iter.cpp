@@ -29,7 +29,7 @@ void Stochastic_Iter<T, Device>::dot(const int& n, const Real* x, const int& inc
     Real* result_device = nullptr;
     resmem_var_op()(result_device, 1);
     container::kernels::blas_dot<Real, ct_Device>()(n, p_che->coef_real, 1, spolyv, 1, result_device);
-    syncmem_var_d2h_op()(cpu_ctx, this->ctx, &result, result_device, 1);
+    syncmem_var_d2h_op()(&result, result_device, 1);
     delmem_var_op()(this->ctx, result_device);
 }
 
@@ -65,7 +65,7 @@ void Stochastic_Iter<T, Device>::orthog(const int& ik, psi::Psi<T, Device>& psi,
         stowf.chi0->fix_k(ik);
         stowf.chiortho->fix_k(ik);
         T *wfgin = stowf.chi0->get_pointer(), *wfgout = stowf.chiortho->get_pointer();
-        cpymem_complex_op()(this->ctx, this->ctx, wfgout, wfgin, npwx * nchipk);
+        cpymem_complex_op()(wfgout, wfgin, npwx * nchipk);
         // for (int ig = 0; ig < npwx * nchipk; ++ig)
         // {
         //     wfgout[ig] = wfgin[ig];
@@ -209,8 +209,8 @@ void Stochastic_Iter<T, Device>::check_precision(const double ref, const double 
     {
         Real last_coef = 0;
         Real last_spolyv = 0;
-        syncmem_var_d2h_op()(this->cpu_ctx, this->ctx, &last_coef, &p_che->coef_real[p_che->norder - 1], 1);
-        syncmem_var_d2h_op()(this->cpu_ctx, this->ctx, &last_spolyv, &spolyv[p_che->norder - 1], 1);
+        syncmem_var_d2h_op()(&last_coef, &p_che->coef_real[p_che->norder - 1], 1);
+        syncmem_var_d2h_op()(&last_spolyv, &spolyv[p_che->norder - 1], 1);
         error = last_coef * last_spolyv;
     }
     else
@@ -220,8 +220,8 @@ void Stochastic_Iter<T, Device>::check_precision(const double ref, const double 
         // double last_spolyv = spolyv[norder * norder - 1];
         Real last_coef = 0;
         Real last_spolyv = 0;
-        syncmem_var_d2h_op()(this->cpu_ctx, this->ctx, &last_coef, &p_che->coef_real[norder - 1], 1);
-        syncmem_var_d2h_op()(this->cpu_ctx, this->ctx, &last_spolyv, &spolyv[norder * norder - 1], 1);
+        syncmem_var_d2h_op()(&last_coef, &p_che->coef_real[norder - 1], 1);
+        syncmem_var_d2h_op()(&last_spolyv, &spolyv[norder * norder - 1], 1);
         Real dot1 = 0, dot2 = 0;
         this->dot(norder, p_che->coef_real, 1, spolyv + norder * (norder - 1), 1, dot1);
         this->dot(norder, p_che->coef_real, 1, spolyv + norder - 1, norder, dot2);
@@ -391,7 +391,7 @@ void Stochastic_Iter<T, Device>::calPn(const int& ik, Stochastic_WF<T, Device>& 
         }
         if(ik == this->pkv->get_nks() - 1)
         {
-            syncmem_var_h2d_op()(this->ctx, cpu_ctx, spolyv, spolyv_cpu, norder);
+            syncmem_var_h2d_op()(spolyv, spolyv_cpu, norder);
         }
     }
     else

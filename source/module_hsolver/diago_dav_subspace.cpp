@@ -123,9 +123,7 @@ int Diago_DavSubspace<T, Device>::diag_once(const HPsiFunc& hpsi_func,
     {
         unconv[m] = m;
 
-        syncmem_complex_op()(this->ctx,
-                             this->ctx,
-                             this->psi_in_iter + m * this->dim,
+        syncmem_complex_op()(this->psi_in_iter + m * this->dim,
                              psi_in + m * psi_in_dmax,
                              this->dim);
     }
@@ -228,9 +226,7 @@ int Diago_DavSubspace<T, Device>::diag_once(const HPsiFunc& hpsi_func,
                 // update this->psi_in_iter according to psi_in
                 for (size_t i = 0; i < this->n_band; i++)
                 {
-                    syncmem_complex_op()(this->ctx,
-                                         this->ctx,
-                                         this->psi_in_iter + i * this->dim,
+                    syncmem_complex_op()(this->psi_in_iter + i * this->dim,
                                          psi_in + i * psi_in_dmax,
                                          this->dim);
                 }
@@ -273,7 +269,7 @@ void Diago_DavSubspace<T, Device>::cal_grad(const HPsiFunc& hpsi_func,
     {
         if (unconv[i] != i)
         {
-            syncmem_complex_op()(this->ctx, this->ctx, vcc + i * this->nbase_x, vcc + unconv[i] * this->nbase_x, nbase);
+            syncmem_complex_op()(vcc + i * this->nbase_x, vcc + unconv[i] * this->nbase_x, nbase);
             (*eigenvalue_iter)[i] = (*eigenvalue_iter)[unconv[i]];
         }
     }
@@ -310,7 +306,7 @@ void Diago_DavSubspace<T, Device>::cal_grad(const HPsiFunc& hpsi_func,
         e_temp_cpu.assign(nbase, (-1.0 * (*eigenvalue_iter)[m]));
         if (this->device == base_device::GpuDevice)
         {
-            syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, e_temp_hd, e_temp_cpu.data(), nbase);
+            syncmem_var_h2d_op()(e_temp_hd, e_temp_cpu.data(), nbase);
         }
         vector_mul_vector_op<T, Device>()(this->ctx,
                                                 nbase,
@@ -356,7 +352,7 @@ void Diago_DavSubspace<T, Device>::cal_grad(const HPsiFunc& hpsi_func,
 #if defined(__CUDA) || defined(__ROCM)
         if (this->device == base_device::GpuDevice)
         {
-            syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, this->d_precondition, pre.data(), this->dim);
+            syncmem_var_h2d_op()(this->d_precondition, pre.data(), this->dim);
             vector_div_vector_op<T, Device>()(this->ctx,
                                               this->dim,
                                               psi_iter + (nbase + m) * this->dim,
@@ -461,7 +457,7 @@ void Diago_DavSubspace<T, Device>::cal_elem(const int& dim,
 #else
         auto* swap = new T[notconv * this->nbase_x];
 
-        syncmem_complex_op()(this->ctx, this->ctx, swap, hcc + nbase * this->nbase_x, notconv * this->nbase_x);
+        syncmem_complex_op()(swap, hcc + nbase * this->nbase_x, notconv * this->nbase_x);
 
         if (std::is_same<T, double>::value)
         {
@@ -491,7 +487,7 @@ void Diago_DavSubspace<T, Device>::cal_elem(const int& dim,
                            this->diag_comm.comm);
             }
 
-            syncmem_complex_op()(this->ctx, this->ctx, swap, scc + nbase * this->nbase_x, notconv * this->nbase_x);
+            syncmem_complex_op()(swap, scc + nbase * this->nbase_x, notconv * this->nbase_x);
 
             if (base_device::get_current_precision(swap) == "single")
             {
@@ -546,7 +542,7 @@ void Diago_DavSubspace<T, Device>::diag_zhegvx(const int& nbase,
             Real* eigenvalue_gpu = nullptr;
             resmem_real_op()(eigenvalue_gpu, this->nbase_x);
 
-            syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, eigenvalue_gpu, (*eigenvalue_iter).data(), this->nbase_x);
+            syncmem_var_h2d_op()(eigenvalue_gpu, (*eigenvalue_iter).data(), this->nbase_x);
 
             T* hcc_gpu = nullptr;
             T* scc_gpu = nullptr;
@@ -556,19 +552,19 @@ void Diago_DavSubspace<T, Device>::diag_zhegvx(const int& nbase,
             base_device::memory::resize_memory_op<T, Device>()(vcc_gpu, nbase * nbase);
             for(int i=0;i<nbase;i++)
             {
-                base_device::memory::synchronize_memory_op<T, Device, Device>()(this->ctx, this->ctx, hcc_gpu + i * nbase, hcc + i * nbase_x, nbase);
-                base_device::memory::synchronize_memory_op<T, Device, Device>()(this->ctx, this->ctx, scc_gpu + i * nbase, scc + i * nbase_x, nbase);
+                base_device::memory::synchronize_memory_op<T, Device, Device>()(hcc_gpu + i * nbase, hcc + i * nbase_x, nbase);
+                base_device::memory::synchronize_memory_op<T, Device, Device>()(scc_gpu + i * nbase, scc + i * nbase_x, nbase);
             }
             dngvd_op<T, Device>()(this->ctx, nbase, nbase, hcc_gpu, scc_gpu, eigenvalue_gpu, vcc_gpu);
             for(int i=0;i<nbase;i++)
             {
-                base_device::memory::synchronize_memory_op<T, Device, Device>()(this->ctx, this->ctx, vcc + i * nbase_x, vcc_gpu + i * nbase, nbase);
+                base_device::memory::synchronize_memory_op<T, Device, Device>()(vcc + i * nbase_x, vcc_gpu + i * nbase, nbase);
             }
             delmem_complex_op()(this->ctx, hcc_gpu);
             delmem_complex_op()(this->ctx, scc_gpu);
             delmem_complex_op()(this->ctx, vcc_gpu);
 
-            syncmem_var_d2h_op()(this->cpu_ctx, this->ctx, (*eigenvalue_iter).data(), eigenvalue_gpu, this->nbase_x);
+            syncmem_var_d2h_op()((*eigenvalue_iter).data(), eigenvalue_gpu, this->nbase_x);
 
             delmem_real_op()(this->ctx, eigenvalue_gpu);
         }
@@ -715,7 +711,7 @@ void Diago_DavSubspace<T, Device>::refresh(const int& dim,
                          this->dim);
 
     // update hphi
-    syncmem_complex_op()(this->ctx, this->ctx, hphi, psi_iter + nband * this->dim, this->dim * nband);
+    syncmem_complex_op()(hphi, psi_iter + nband * this->dim, this->dim * nband);
 
     nbase = nband;
 
@@ -743,9 +739,9 @@ void Diago_DavSubspace<T, Device>::refresh(const int& dim,
                                                                             this->nbase_x * this->nbase_x,
                                                                             "DAV::vcc");
 
-        syncmem_d2h_op()(this->cpu_ctx, this->ctx, hcc_cpu, hcc, this->nbase_x * this->nbase_x);
-        syncmem_d2h_op()(this->cpu_ctx, this->ctx, scc_cpu, scc, this->nbase_x * this->nbase_x);
-        syncmem_d2h_op()(this->cpu_ctx, this->ctx, vcc_cpu, vcc, this->nbase_x * this->nbase_x);
+        syncmem_d2h_op()(hcc_cpu, hcc, this->nbase_x * this->nbase_x);
+        syncmem_d2h_op()(scc_cpu, scc, this->nbase_x * this->nbase_x);
+        syncmem_d2h_op()(vcc_cpu, vcc, this->nbase_x * this->nbase_x);
 
         for (int i = 0; i < nbase; i++)
         {
@@ -754,9 +750,9 @@ void Diago_DavSubspace<T, Device>::refresh(const int& dim,
             vcc_cpu[i * this->nbase_x + i] = this->one[0];
         }
 
-        syncmem_h2d_op()(this->ctx, this->cpu_ctx, hcc, hcc_cpu, this->nbase_x * this->nbase_x);
-        syncmem_h2d_op()(this->ctx, this->cpu_ctx, scc, scc_cpu, this->nbase_x * this->nbase_x);
-        syncmem_h2d_op()(this->ctx, this->cpu_ctx, vcc, vcc_cpu, this->nbase_x * this->nbase_x);
+        syncmem_h2d_op()(hcc, hcc_cpu, this->nbase_x * this->nbase_x);
+        syncmem_h2d_op()(scc, scc_cpu, this->nbase_x * this->nbase_x);
+        syncmem_h2d_op()(vcc, vcc_cpu, this->nbase_x * this->nbase_x);
 
         base_device::memory::delete_memory_op<T, base_device::DEVICE_CPU>()(this->cpu_ctx, hcc_cpu);
         base_device::memory::delete_memory_op<T, base_device::DEVICE_CPU>()(this->cpu_ctx, scc_cpu);

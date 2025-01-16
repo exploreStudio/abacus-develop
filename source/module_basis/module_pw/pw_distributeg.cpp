@@ -205,7 +205,7 @@ void PW_Basis::get_ig2isz_is2fftixy(
 #if defined(__CUDA) || defined(__ROCM)
     if (this->device == "gpu") {
         resmem_int_op()(d_is2fftixy, this->nst);
-        syncmem_int_h2d_op()(gpu_ctx, cpu_ctx, this->d_is2fftixy, this->is2fftixy, this->nst);
+        syncmem_int_h2d_op()(this->d_is2fftixy, this->is2fftixy, this->nst);
     }
 #endif
     return;

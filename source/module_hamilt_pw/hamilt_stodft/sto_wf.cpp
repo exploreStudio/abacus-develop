@@ -374,9 +374,7 @@ void Stochastic_WF<T, Device>::sync_chi0()
     Device* ctx = {};
     if (base_device::get_device_type<Device>(ctx) == base_device::GpuDevice)
     {
-        syncmem_h2d_op()(this->chi0->get_device(),
-                         this->chi0_cpu->get_device(),
-                         this->chi0->get_pointer(),
+        syncmem_h2d_op()(this->chi0->get_pointer(),
                          this->chi0_cpu->get_pointer(),
                          this->chi0_cpu->size());
     }

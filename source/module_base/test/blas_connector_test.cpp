@@ -108,9 +108,9 @@ TEST(blas_connector, ScalGpu) {
     };
     for (int i = 0; i < size; i++)
         answer[i] = result[i] * scale;
-    syncmem_z2z_h2d_op()(gpu_ctx, cpu_ctx, result_gpu, result, sizeof(std::complex<double>) * 8);
+    syncmem_z2z_h2d_op()(result_gpu, result, sizeof(std::complex<double>) * 8);
     BlasConnector::scal(size,scale,result_gpu,incx,base_device::AbacusDevice_t::GpuDevice);
-    syncmem_z2z_d2h_op()(cpu_ctx, gpu_ctx, result, result_gpu, sizeof(std::complex<double>) * 8);
+    syncmem_z2z_d2h_op()(result, result_gpu, sizeof(std::complex<double>) * 8);
     delmem_zd_op()(gpu_ctx, result_gpu);
     // incx is the spacing between elements if result
     for (int i = 0; i < size; i++) {
@@ -210,10 +210,10 @@ TEST(blas_connector, AxpyGpu) {
     });
     for (int i = 0; i < size; i++)
         answer[i] = x_const[i] * scale + result[i];
-    syncmem_z2z_h2d_op()(gpu_ctx, cpu_ctx, result_gpu, result.data(), sizeof(std::complex<double>) * size);
-    syncmem_z2z_h2d_op()(gpu_ctx, cpu_ctx, x_gpu, x_const.data(), sizeof(std::complex<double>) * size);
+    syncmem_z2z_h2d_op()(result_gpu, result.data(), sizeof(std::complex<double>) * size);
+    syncmem_z2z_h2d_op()(x_gpu, x_const.data(), sizeof(std::complex<double>) * size);
     BlasConnector::axpy(size, scale, x_gpu, incx, result_gpu, incy, base_device::AbacusDevice_t::GpuDevice);
-    syncmem_z2z_d2h_op()(cpu_ctx, gpu_ctx, result.data(), result_gpu, sizeof(std::complex<double>) * size);
+    syncmem_z2z_d2h_op()(result.data(), result_gpu, sizeof(std::complex<double>) * size);
     delmem_zd_op()(gpu_ctx, result_gpu);
     delmem_zd_op()(gpu_ctx, x_gpu);
     for (int i = 0; i < size; i++) {
@@ -665,13 +665,13 @@ TEST(blas_connector, GemmGpu) {
                                   beta_const * result[i + j * ldc];
         }
     }
-    syncmem_z2z_h2d_op()(gpu_ctx, cpu_ctx, a_gpu, a_const.data(), sizeof(std::complex<double>) * size_k * lda);
-    syncmem_z2z_h2d_op()(gpu_ctx, cpu_ctx, b_gpu, b_const.data(), sizeof(std::complex<double>) * size_n * ldb);
-    syncmem_z2z_h2d_op()(gpu_ctx, cpu_ctx, result_gpu, result.data(), sizeof(std::complex<double>) * size_n * ldc);
+    syncmem_z2z_h2d_op()(a_gpu, a_const.data(), sizeof(std::complex<double>) * size_k * lda);
+    syncmem_z2z_h2d_op()(b_gpu, b_const.data(), sizeof(std::complex<double>) * size_n * ldb);
+    syncmem_z2z_h2d_op()(result_gpu, result.data(), sizeof(std::complex<double>) * size_n * ldc);
     BlasConnector::gemm_cm(transa_m, transb_m, size_m, size_n, size_k, alpha_const,
            a_gpu, lda, b_gpu, ldb, beta_const,
            result_gpu, ldc, base_device::AbacusDevice_t::GpuDevice);
-    syncmem_z2z_d2h_op()(cpu_ctx, gpu_ctx, result.data(), result_gpu, sizeof(std::complex<double>) * size_n * ldc);
+    syncmem_z2z_d2h_op()(result.data(), result_gpu, sizeof(std::complex<double>) * size_n * ldc);
     delmem_zd_op()(gpu_ctx, result_gpu);
     delmem_zd_op()(gpu_ctx, a_gpu);
     delmem_zd_op()(gpu_ctx, b_gpu);

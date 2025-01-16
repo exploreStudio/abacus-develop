@@ -161,9 +161,9 @@ void Structure_Factor::setup_structure_factor(const UnitCell* Ucell, const Paral
         resmem_zd_op()(this->z_eigts1, Ucell->nat * (2 * rho_basis->nx + 1));
         resmem_zd_op()(this->z_eigts2, Ucell->nat * (2 * rho_basis->ny + 1));
         resmem_zd_op()(this->z_eigts3, Ucell->nat * (2 * rho_basis->nz + 1));
-        syncmem_z2z_h2d_op()(gpu_ctx, cpu_ctx, this->z_eigts1, this->eigts1.c, Ucell->nat * (2 * rho_basis->nx + 1));
-        syncmem_z2z_h2d_op()(gpu_ctx, cpu_ctx, this->z_eigts2, this->eigts2.c, Ucell->nat * (2 * rho_basis->ny + 1));
-        syncmem_z2z_h2d_op()(gpu_ctx, cpu_ctx, this->z_eigts3, this->eigts3.c, Ucell->nat * (2 * rho_basis->nz + 1));
+        syncmem_z2z_h2d_op()(this->z_eigts1, this->eigts1.c, Ucell->nat * (2 * rho_basis->nx + 1));
+        syncmem_z2z_h2d_op()(this->z_eigts2, this->eigts2.c, Ucell->nat * (2 * rho_basis->ny + 1));
+        syncmem_z2z_h2d_op()(this->z_eigts3, this->eigts3.c, Ucell->nat * (2 * rho_basis->nz + 1));
     }
     else {
         if (PARAM.inp.precision == "single") {

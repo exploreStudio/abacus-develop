@@ -250,7 +250,7 @@ void Sto_Forces<FPTYPE, Device>::cal_sto_force_nl(
         nl_tools.cal_force(ik, max_nbands, nstobands, false, force, nksbands);
     } // end ik
 
-    syncmem_var_d2h_op()(this->cpu_ctx, this->ctx, forcenl.c, force, forcenl.nr * forcenl.nc);
+    syncmem_var_d2h_op()(forcenl.c, force, forcenl.nr * forcenl.nc);
     delmem_var_op()(this->ctx, force);
     // sum up forcenl from all processors
     Parallel_Reduce::reduce_all(forcenl.c, forcenl.nr * forcenl.nc);

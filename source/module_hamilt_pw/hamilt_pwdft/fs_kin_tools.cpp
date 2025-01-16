@@ -72,8 +72,8 @@ void FS_Kin_tools<FPTYPE, Device>::cal_gk(const int& ik)
     }
     if (this->device == base_device::GpuDevice)
     {
-        syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, d_gk, gk[0], 3 * npwk_max);
-        syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, d_kfac, kfac.data(), npwk_max);
+        syncmem_var_h2d_op()(d_gk, gk[0], 3 * npwk_max);
+        syncmem_var_h2d_op()(d_kfac, kfac.data(), npwk_max);
     }
 }
 

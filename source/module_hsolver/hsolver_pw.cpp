@@ -450,8 +450,6 @@ void HSolverPW<T, Device>::hamiltSolvePsiK(hamilt::Hamilt<T, Device>* hm,
             else
             {
                 base_device::memory::synchronize_memory_op<T, Device, Device>()(
-                    this->ctx,
-                    this->ctx,
                     spsi_out.data<T>(),
                     psi_in.data<T>(),
                     static_cast<size_t>((ndim == 1 ? 1 : psi_in.shape().dim_size(0))

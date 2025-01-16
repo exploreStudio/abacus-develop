@@ -105,13 +105,13 @@ TEST_F(TestModulePWPWMultiDevice, set_3d_fft_box_op_gpu)
     resize_memory_int_gpu_op()(d_box_index, box_index.size());
     resize_memory_complex_gpu_op()(d_res, res.size());
     resize_memory_complex_gpu_op()(d_in_1, in_1.size());
-    synchronize_memory_int_h2d_op()(gpu_ctx, cpu_ctx, d_box_index, box_index.data(), box_index.size());
-    synchronize_memory_complex_h2d_op()(gpu_ctx, cpu_ctx, d_res, res.data(), res.size());
-    synchronize_memory_complex_h2d_op()(gpu_ctx, cpu_ctx, d_in_1, in_1.data(), in_1.size());
+    synchronize_memory_int_h2d_op()(d_box_index, box_index.data(), box_index.size());
+    synchronize_memory_complex_h2d_op()(d_res, res.data(), res.size());
+    synchronize_memory_complex_h2d_op()(d_in_1, in_1.data(), in_1.size());
 
     set_3d_fft_box_gpu_op()(gpu_ctx, this->npwk, d_box_index, d_in_1, d_res);
 
-    synchronize_memory_complex_d2h_op()(cpu_ctx, gpu_ctx, res.data(), d_res, res.size());
+    synchronize_memory_complex_d2h_op()(res.data(), d_res, res.size());
 
     for (int ii = 0; ii < this->nxyz; ii++) {
         EXPECT_LT(fabs(res[ii] - out_1[ii]), 1e-12);
@@ -127,12 +127,12 @@ TEST_F(TestModulePWPWMultiDevice, set_recip_to_real_output_op_gpu)
     std::complex<double>* d_res = NULL, * d_in_2 = NULL;
     resize_memory_complex_gpu_op()(d_res, res.size());
     resize_memory_complex_gpu_op()(d_in_2, in_2.size());
-    synchronize_memory_complex_h2d_op()(gpu_ctx, cpu_ctx, d_res, res.data(), res.size());
-    synchronize_memory_complex_h2d_op()(gpu_ctx, cpu_ctx, d_in_2, in_2.data(), in_2.size());
+    synchronize_memory_complex_h2d_op()(d_res, res.data(), res.size());
+    synchronize_memory_complex_h2d_op()(d_in_2, in_2.data(), in_2.size());
 
     set_recip_to_real_output_gpu_op()(gpu_ctx, this->nxyz, this->add, this->factor, d_in_2, d_res);
 
-    synchronize_memory_complex_d2h_op()(cpu_ctx, gpu_ctx, res.data(), d_res, res.size());
+    synchronize_memory_complex_d2h_op()(res.data(), d_res, res.size());
 
     for (int ii = 0; ii < this->nxyz; ii++) {
         EXPECT_LT(fabs(res[ii] - out_2[ii]), 1e-12);
@@ -149,13 +149,13 @@ TEST_F(TestModulePWPWMultiDevice, set_real_to_recip_output_op_gpu)
     resize_memory_int_gpu_op()(d_box_index, box_index.size());
     resize_memory_complex_gpu_op()(d_res, res.size());
     resize_memory_complex_gpu_op()(d_in_3, in_3.size());
-    synchronize_memory_int_h2d_op()(gpu_ctx, cpu_ctx, d_box_index, box_index.data(), box_index.size());
-    synchronize_memory_complex_h2d_op()(gpu_ctx, cpu_ctx, d_res, res.data(), res.size());
-    synchronize_memory_complex_h2d_op()(gpu_ctx, cpu_ctx, d_in_3, in_3.data(), in_3.size());
+    synchronize_memory_int_h2d_op()(d_box_index, box_index.data(), box_index.size());
+    synchronize_memory_complex_h2d_op()(d_res, res.data(), res.size());
+    synchronize_memory_complex_h2d_op()(d_in_3, in_3.data(), in_3.size());
 
     set_real_to_recip_output_gpu_op()(gpu_ctx, this->npwk, this->nxyz, true, this->factor, d_box_index, d_in_3, d_res);
 
-    synchronize_memory_complex_d2h_op()(cpu_ctx, gpu_ctx, res.data(), d_res, res.size());
+    synchronize_memory_complex_d2h_op()(res.data(), d_res, res.size());
 
     for (int ii = 0; ii < out_3.size(); ii++) {
         EXPECT_LT(fabs(res[ii] - out_3[ii]), 5e-6);

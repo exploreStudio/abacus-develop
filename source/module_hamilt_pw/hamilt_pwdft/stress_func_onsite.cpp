@@ -68,7 +68,7 @@ void Stress_Func<FPTYPE, Device>::stress_onsite(ModuleBase::matrix& sigma,
         }
     }
     // transfer stress from device to host
-    syncmem_var_d2h_op()(this->cpu_ctx, this->ctx, sigma_onsite.data(), stress_device, 9);
+    syncmem_var_d2h_op()(sigma_onsite.data(), stress_device, 9);
     delmem_var_op()(this->ctx, stress_device);
     // sum up forcenl from all processors
     for (int l = 0; l < 3; l++)

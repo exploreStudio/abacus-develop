@@ -906,8 +906,6 @@ void matrixTranspose_op<double, base_device::DEVICE_GPU>::operator()(const base_
     }
 
     base_device::memory::synchronize_memory_op<double, base_device::DEVICE_GPU, base_device::DEVICE_GPU>()(
-        d,
-        d,
         output_matrix,
         device_temp,
         row * col);
@@ -947,8 +945,6 @@ void matrixTranspose_op<std::complex<float>, base_device::DEVICE_GPU>::operator(
     }
 
     base_device::memory::synchronize_memory_op<std::complex<float>, base_device::DEVICE_GPU, base_device::DEVICE_GPU>()(
-        d,
-        d,
         output_matrix,
         device_temp,
         row * col);
@@ -989,7 +985,7 @@ void matrixTranspose_op<std::complex<double>, base_device::DEVICE_GPU>::operator
 
     base_device::memory::synchronize_memory_op<std::complex<double>,
                                                base_device::DEVICE_GPU,
-                                               base_device::DEVICE_GPU>()(d, d, output_matrix, device_temp, row * col);
+                                               base_device::DEVICE_GPU>()(output_matrix, device_temp, row * col);
 
     base_device::memory::delete_memory_op<std::complex<double>, base_device::DEVICE_GPU>()(d, device_temp);
 }

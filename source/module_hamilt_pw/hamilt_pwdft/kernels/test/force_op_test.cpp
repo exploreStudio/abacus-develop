@@ -2922,9 +2922,9 @@ TEST_F(TestSrcPWForceMultiDevice, cal_vkb1_nl_op_gpu)
     resmem_complex_op()(d_res, res.size());
     resmem_complex_op()(d_vkb, vkb.size());
     resmem_var_op()(d_gcar, gcar.size());
-    syncmem_complex_h2d_op()(gpu_ctx, cpu_ctx, d_res, res.data(), res.size());
-    syncmem_complex_h2d_op()(gpu_ctx, cpu_ctx, d_vkb, vkb.data(), vkb.size());
-    syncmem_var_h2d_op()(gpu_ctx, cpu_ctx, d_gcar, gcar.data(), gcar.size());
+    syncmem_complex_h2d_op()(d_res, res.data(), res.size());
+    syncmem_complex_h2d_op()(d_vkb, vkb.data(), vkb.size());
+    syncmem_var_h2d_op()(d_gcar, gcar.data(), gcar.size());
 
     hamilt::cal_vkb1_nl_op<double, base_device::DEVICE_GPU>()(gpu_ctx,
                                                               nkb,
@@ -2936,7 +2936,7 @@ TEST_F(TestSrcPWForceMultiDevice, cal_vkb1_nl_op_gpu)
                                                               d_vkb,
                                                               d_gcar,
                                                               d_res);
-    syncmem_complex_d2h_op()(cpu_ctx, gpu_ctx, res.data(), d_res, res.size());
+    syncmem_complex_d2h_op()(res.data(), d_res, res.size());
 
     for (int ii = 0; ii < res.size(); ii++)
     {
@@ -2958,23 +2958,23 @@ TEST_F(TestSrcPWForceMultiDevice, cal_force_nl_op_gpu)
     resmem_var_op()(d_deeq, deeq.size());
     resmem_var_op()(d_ekb, ekb.size());
     resmem_var_op()(d_qq_nt, qq_nt.size());
-    syncmem_var_h2d_op()(gpu_ctx, cpu_ctx, d_wg, wg.data(), wg.size());
-    syncmem_var_h2d_op()(gpu_ctx, cpu_ctx, d_res, res.data(), res.size());
-    syncmem_var_h2d_op()(gpu_ctx, cpu_ctx, d_deeq, deeq.data(), deeq.size());
-    syncmem_var_h2d_op()(gpu_ctx, cpu_ctx, d_ekb, ekb.data(), ekb.size());
-    syncmem_var_h2d_op()(gpu_ctx, cpu_ctx, d_qq_nt, qq_nt.data(), qq_nt.size());
+    syncmem_var_h2d_op()(d_wg, wg.data(), wg.size());
+    syncmem_var_h2d_op()(d_res, res.data(), res.size());
+    syncmem_var_h2d_op()(d_deeq, deeq.data(), deeq.size());
+    syncmem_var_h2d_op()(d_ekb, ekb.data(), ekb.size());
+    syncmem_var_h2d_op()(d_qq_nt, qq_nt.data(), qq_nt.size());
 
     int *d_atom_nh = nullptr, *d_atom_na = nullptr;
     resmem_int_op()(d_atom_nh, atom_nh.size());
     resmem_int_op()(d_atom_na, atom_na.size());
-    syncmem_int_h2d_op()(gpu_ctx, cpu_ctx, d_atom_nh, atom_nh.data(), atom_nh.size());
-    syncmem_int_h2d_op()(gpu_ctx, cpu_ctx, d_atom_na, atom_na.data(), atom_na.size());
+    syncmem_int_h2d_op()(d_atom_nh, atom_nh.data(), atom_nh.size());
+    syncmem_int_h2d_op()(d_atom_na, atom_na.data(), atom_na.size());
 
     std::complex<double>*d_becp = nullptr, *d_dbecp = nullptr;
     resmem_complex_op()(d_becp, becp.size());
     resmem_complex_op()(d_dbecp, dbecp.size());
-    syncmem_complex_h2d_op()(gpu_ctx, cpu_ctx, d_becp, becp.data(), becp.size());
-    syncmem_complex_h2d_op()(gpu_ctx, cpu_ctx, d_dbecp, dbecp.data(), dbecp.size());
+    syncmem_complex_h2d_op()(d_becp, becp.data(), becp.size());
+    syncmem_complex_h2d_op()(d_dbecp, dbecp.data(), dbecp.size());
 
     hamilt::cal_force_nl_op<double, base_device::DEVICE_GPU>()(gpu_ctx,
                                                                multi_proj,
@@ -2998,7 +2998,7 @@ TEST_F(TestSrcPWForceMultiDevice, cal_force_nl_op_gpu)
                                                                d_becp,
                                                                d_dbecp,
                                                                d_res);
-    syncmem_var_d2h_op()(cpu_ctx, gpu_ctx, res.data(), d_res, res.size());
+    syncmem_var_d2h_op()(res.data(), d_res, res.size());
 
     for (int ii = 0; ii < res.size(); ii++)
     {

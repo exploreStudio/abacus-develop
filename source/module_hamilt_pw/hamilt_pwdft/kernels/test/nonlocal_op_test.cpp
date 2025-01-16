@@ -130,9 +130,9 @@ TEST_F(TestModuleHamiltNonlocal, nonlocal_pw_op_gpu)
   resize_memory_double_op()(deeq_dev, deeq.size());
   resize_memory_complex_double_op()(ps_dev, ps.size());
   resize_memory_complex_double_op()(becp_dev, becp.size());
-  syncmem_d_h2d_op()(gpu_ctx, cpu_ctx, deeq_dev, deeq.data(), deeq.size());
-  syncmem_cd_h2d_op()(gpu_ctx, cpu_ctx, ps_dev, ps.data(), ps.size());
-  syncmem_cd_h2d_op()(gpu_ctx, cpu_ctx, becp_dev, becp.data(), becp.size());
+  syncmem_d_h2d_op()(deeq_dev, deeq.data(), deeq.size());
+  syncmem_cd_h2d_op()(ps_dev, ps.data(), ps.size());
+  syncmem_cd_h2d_op()(becp_dev, becp.data(), becp.size());
   nonlocal_gpu_op()(
       gpu_ctx, 
       l1, l2, l3, 
@@ -141,7 +141,7 @@ TEST_F(TestModuleHamiltNonlocal, nonlocal_pw_op_gpu)
       deeq_dev,
       ps_dev, becp_dev);
 
-  syncmem_cd_d2h_op()(cpu_ctx, gpu_ctx, ps.data(), ps_dev, ps.size());
+  syncmem_cd_d2h_op()(ps.data(), ps_dev, ps.size());
   for (int ii = 0; ii < ps.size(); ii++) {
     EXPECT_LT(fabs(ps[ii] - expected_ps[ii]), 5 * 1e-6);
   }
@@ -160,9 +160,9 @@ TEST_F(TestModuleHamiltNonlocal, nonlocal_pw_spin_op_gpu)
   resize_memory_complex_double_op()(deeq_dev, deeq_spin.size());
   resize_memory_complex_double_op()(ps_dev, ps.size());
   resize_memory_complex_double_op()(becp_dev, becp_spin.size());
-  syncmem_cd_h2d_op()(gpu_ctx, cpu_ctx, deeq_dev, deeq_spin.data(), deeq_spin.size());
-  syncmem_cd_h2d_op()(gpu_ctx, cpu_ctx, ps_dev, ps.data(), ps.size());
-  syncmem_cd_h2d_op()(gpu_ctx, cpu_ctx, becp_dev, becp_spin.data(), becp_spin.size());
+  syncmem_cd_h2d_op()(deeq_dev, deeq_spin.data(), deeq_spin.size());
+  syncmem_cd_h2d_op()(ps_dev, ps.data(), ps.size());
+  syncmem_cd_h2d_op()(becp_dev, becp_spin.data(), becp_spin.size());
   nonlocal_gpu_op()(
       gpu_ctx, 
       l1, l2_spin, l3, 
@@ -171,7 +171,7 @@ TEST_F(TestModuleHamiltNonlocal, nonlocal_pw_spin_op_gpu)
       deeq_dev,
       ps_dev, becp_dev);
 
-  syncmem_cd_d2h_op()(cpu_ctx, gpu_ctx, ps.data(), ps_dev, ps.size());
+  syncmem_cd_d2h_op()(ps.data(), ps_dev, ps.size());
   for (int ii = 0; ii < ps.size(); ii++) {
     EXPECT_LT(fabs(ps[ii] - expected_ps_spin[ii]), 5 * 1e-6);
   }

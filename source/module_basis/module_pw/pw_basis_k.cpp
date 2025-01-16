@@ -103,7 +103,7 @@ void PW_Basis_K:: initparameters(
             castmem_d2s_h2d_op()(gpu_ctx, cpu_ctx, this->s_kvec_c, reinterpret_cast<double *>(&this->kvec_c[0][0]), this->nks * 3);
         }
         resmem_dd_op()(this->d_kvec_c, this->nks * 3);
-        syncmem_d2d_h2d_op()(gpu_ctx, cpu_ctx, this->d_kvec_c, reinterpret_cast<double *>(&this->kvec_c[0][0]), this->nks * 3);
+        syncmem_d2d_h2d_op()(this->d_kvec_c, reinterpret_cast<double *>(&this->kvec_c[0][0]), this->nks * 3);
     }
     else {
 #endif
@@ -165,7 +165,7 @@ void PW_Basis_K::setupIndGk()
 #if defined(__CUDA) || defined(__ROCM)
     if (this->device == "gpu") {
         resmem_int_op()(this->d_igl2isz_k, this->npwk_max * this->nks);
-        syncmem_int_h2d_op()(gpu_ctx, cpu_ctx, this->d_igl2isz_k, this->igl2isz_k, this->npwk_max * this->nks);
+        syncmem_int_h2d_op()(this->d_igl2isz_k, this->igl2isz_k, this->npwk_max * this->nks);
     }
 #endif
     this->get_ig2ixyz_k();
@@ -255,8 +255,8 @@ void PW_Basis_K::collect_local_pw(const double& erf_ecut_in, const double& erf_h
         else {
             resmem_dd_op()(this->d_gk2, this->npwk_max * this->nks);
             resmem_dd_op()(this->d_gcar, this->npwk_max * this->nks * 3);
-            syncmem_d2d_h2d_op()(gpu_ctx, cpu_ctx, this->d_gk2, this->gk2, this->npwk_max * this->nks);
-            syncmem_d2d_h2d_op()(gpu_ctx, cpu_ctx, this->d_gcar, reinterpret_cast<double *>(&this->gcar[0][0]), this->npwk_max * this->nks * 3);
+            syncmem_d2d_h2d_op()(this->d_gk2, this->gk2, this->npwk_max * this->nks);
+            syncmem_d2d_h2d_op()(this->d_gcar, reinterpret_cast<double *>(&this->gcar[0][0]), this->npwk_max * this->nks * 3);
         }
     }
     else {
@@ -356,7 +356,7 @@ void PW_Basis_K::get_ig2ixyz_k()
         }
     }
     resmem_int_op()(ig2ixyz_k, this->npwk_max * this->nks);
-    syncmem_int_h2d_op()(gpu_ctx, cpu_ctx, this->ig2ixyz_k, ig2ixyz_k_cpu, this->npwk_max * this->nks);
+    syncmem_int_h2d_op()(this->ig2ixyz_k, ig2ixyz_k_cpu, this->npwk_max * this->nks);
     delete[] ig2ixyz_k_cpu;
 }
 

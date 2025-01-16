@@ -44,7 +44,7 @@ void bcast_dev(const Device* ctx, T* object, const int& n, const MPI_Comm& comm,
         {
             object_cpu = tmp_space;
         }
-        base_device::memory::synchronize_memory_op<T, base_device::DEVICE_CPU, Device>()(cpu_ctx, ctx, object_cpu, object, n);
+        base_device::memory::synchronize_memory_op<T, base_device::DEVICE_CPU, Device>()(object_cpu, object, n);
     }
     else
     {
@@ -55,7 +55,7 @@ void bcast_dev(const Device* ctx, T* object, const int& n, const MPI_Comm& comm,
 
     if (base_device::get_device_type<Device>(ctx) == base_device::GpuDevice)
     {
-        base_device::memory::synchronize_memory_op<T, Device, base_device::DEVICE_CPU>()(ctx, cpu_ctx, object, object_cpu, n);
+        base_device::memory::synchronize_memory_op<T, Device, base_device::DEVICE_CPU>()(object, object_cpu, n);
         if(alloc)
         {
             base_device::memory::delete_memory_op<T, base_device::DEVICE_CPU>()(cpu_ctx, object_cpu);
@@ -81,7 +81,7 @@ void reduce_dev(const Device* ctx, T* object, const int& n, const MPI_Comm& comm
         {
             object_cpu = tmp_space;
         }
-        base_device::memory::synchronize_memory_op<T, base_device::DEVICE_CPU, Device>()(cpu_ctx, ctx, object_cpu, object, n);
+        base_device::memory::synchronize_memory_op<T, base_device::DEVICE_CPU, Device>()(object_cpu, object, n);
     }
     else
     {
@@ -92,7 +92,7 @@ void reduce_dev(const Device* ctx, T* object, const int& n, const MPI_Comm& comm
 
     if (base_device::get_device_type<Device>(ctx) == base_device::GpuDevice)
     {
-        base_device::memory::synchronize_memory_op<T, Device, base_device::DEVICE_CPU>()(ctx, cpu_ctx, object, object_cpu, n);
+        base_device::memory::synchronize_memory_op<T, Device, base_device::DEVICE_CPU>()(object, object_cpu, n);
         if(alloc)
         {
             base_device::memory::delete_memory_op<T, base_device::DEVICE_CPU>()(cpu_ctx, object_cpu);

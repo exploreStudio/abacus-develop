@@ -204,12 +204,12 @@ void Onsite_Proj_tools<FPTYPE, Device>::allocate_memory(const ModuleBase::matrix
     {
         resmem_var_op()(d_wg, wg.nr * wg.nc);
         resmem_var_op()(d_ekb, ekb.nr * ekb.nc);
-        syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, d_wg, wg.c, wg.nr * wg.nc);
-        syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, d_ekb, ekb.c, ekb.nr * ekb.nc);
+        syncmem_var_h2d_op()(d_wg, wg.c, wg.nr * wg.nc);
+        syncmem_var_h2d_op()(d_ekb, ekb.c, ekb.nr * ekb.nc);
         resmem_int_op()(atom_nh, this->ntype);
         resmem_int_op()(atom_na, this->ntype);
-        syncmem_int_h2d_op()(this->ctx, this->cpu_ctx, atom_nh, h_atom_nh.data(), this->ntype);
-        syncmem_int_h2d_op()(this->ctx, this->cpu_ctx, atom_na, h_atom_na.data(), this->ntype);
+        syncmem_int_h2d_op()(atom_nh, h_atom_nh.data(), this->ntype);
+        syncmem_int_h2d_op()(atom_na, h_atom_na.data(), this->ntype);
 
         resmem_var_op()(d_g_plus_k, max_npw * 5);
         resmem_var_op()(d_pref, max_nh);
@@ -347,8 +347,8 @@ void Onsite_Proj_tools<FPTYPE, Device>::cal_becp(int ik,
 
         if (this->device == base_device::GpuDevice)
         {
-            syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, d_g_plus_k, g_plus_k.data(), g_plus_k.size());
-            syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, d_vq_tab, this->tabtpr->ptr, this->tabtpr->getSize());
+            syncmem_var_h2d_op()(d_g_plus_k, g_plus_k.data(), g_plus_k.size());
+            syncmem_var_h2d_op()(d_vq_tab, this->tabtpr->ptr, this->tabtpr->getSize());
             gk = d_g_plus_k;
             vq_tb = d_vq_tab;
         }
@@ -390,8 +390,8 @@ void Onsite_Proj_tools<FPTYPE, Device>::cal_becp(int ik,
 
             if (this->device == base_device::GpuDevice)
             {
-                syncmem_int_h2d_op()(this->ctx, this->cpu_ctx, d_dvkb_indexes, dvkb_indexes.data(), nh * 4);
-                syncmem_complex_h2d_op()(this->ctx, this->cpu_ctx, d_pref_in, pref.data(), nh);
+                syncmem_int_h2d_op()(d_dvkb_indexes, dvkb_indexes.data(), nh * 4);
+                syncmem_complex_h2d_op()(d_pref_in, pref.data(), nh);
             }
 
             for (int ia = 0; ia < h_atom_na[it]; ia++)
@@ -444,9 +444,9 @@ void Onsite_Proj_tools<FPTYPE, Device>::cal_becp(int ik,
     {
         std::complex<FPTYPE>* h_becp = nullptr;
         resmem_complex_h_op()(h_becp, size_becp_act);
-        syncmem_complex_d2h_op()(this->cpu_ctx, this->ctx, h_becp, becp_tmp, size_becp_act);
+        syncmem_complex_d2h_op()(h_becp, becp_tmp, size_becp_act);
         Parallel_Reduce::reduce_pool(h_becp, size_becp_act);
-        syncmem_complex_h2d_op()(this->ctx, this->cpu_ctx, becp_tmp, h_becp, size_becp_act);
+        syncmem_complex_h2d_op()(becp_tmp, h_becp, size_becp_act);
         delmem_complex_h_op()(this->cpu_ctx, h_becp);
     }
     else
@@ -540,8 +540,8 @@ void Onsite_Proj_tools<FPTYPE, Device>::cal_dbecp_s(int ik, int npm, int ipol, i
                              this->dvkb_indexes.data());
         if (this->device == base_device::GpuDevice)
         {
-            syncmem_int_h2d_op()(this->ctx, this->cpu_ctx, d_dvkb_indexes, dvkb_indexes.data(), nh * 4);
-            syncmem_complex_h2d_op()(this->ctx, this->cpu_ctx, d_pref_in, pref.data(), nh);
+            syncmem_int_h2d_op()(d_dvkb_indexes, dvkb_indexes.data(), nh * 4);
+            syncmem_complex_h2d_op()(d_pref_in, pref.data(), nh);
         }
         for (int ia = 0; ia < h_atom_na[it]; ia++)
         {
@@ -801,8 +801,8 @@ void Onsite_Proj_tools<FPTYPE, Device>::transfer_gcar(int npw, int npw_max, cons
     const int max_count = std::max(gcar_zero_counts[0], std::max(gcar_zero_counts[1], gcar_zero_counts[2]));
     resmem_complex_op()(this->vkb_save, this->nkb * max_count);
     // transfer the gcar and gcar_zero_indexes to the device
-    syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, gcar, gcar_tmp.data(), 3 * npw_max);
-    syncmem_int_h2d_op()(this->ctx, this->cpu_ctx, gcar_zero_indexes, gcar_zero_indexes_tmp.data(), 3 * npw_max);
+    syncmem_var_h2d_op()(gcar, gcar_tmp.data(), 3 * npw_max);
+    syncmem_int_h2d_op()(gcar_zero_indexes, gcar_zero_indexes_tmp.data(), 3 * npw_max);
 }
 
 template <typename FPTYPE, typename Device>
@@ -820,10 +820,10 @@ void Onsite_Proj_tools<FPTYPE, Device>::cal_force_dftu(int ik,
     if (this->device == base_device::GpuDevice)
     {
         resmem_int_op()(orbital_corr_tmp, this->ucell_->ntype);
-        syncmem_int_h2d_op()(this->ctx, cpu_ctx, orbital_corr_tmp, orbital_corr, this->ucell_->ntype);
+        syncmem_int_h2d_op()(orbital_corr_tmp, orbital_corr, this->ucell_->ntype);
         resmem_complex_op()(vu_tmp, size_vu);
-        syncmem_complex_h2d_op()(this->ctx, cpu_ctx, vu_tmp, vu, size_vu);
-        syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, d_wg, h_wg, this->nbands * (ik+1));
+        syncmem_complex_h2d_op()(vu_tmp, vu, size_vu);
+        syncmem_var_h2d_op()(d_wg, h_wg, this->nbands * (ik+1));
     }
     else
 #endif
@@ -878,8 +878,8 @@ void Onsite_Proj_tools<FPTYPE, Device>::cal_force_dspin(int ik,
     if (this->device == base_device::GpuDevice)
     {
         resmem_var_op()(lambda_tmp, this->ucell_->nat * 3);
-        syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, lambda_tmp, lambda_array.data(), this->ucell_->nat * 3);
-        syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, d_wg, h_wg, this->nbands * (ik+1));
+        syncmem_var_h2d_op()(lambda_tmp, lambda_array.data(), this->ucell_->nat * 3);
+        syncmem_var_h2d_op()(d_wg, h_wg, this->nbands * (ik+1));
     }
     else
 #endif
@@ -928,10 +928,10 @@ void Onsite_Proj_tools<FPTYPE, Device>::cal_stress_dftu(int ik,
     if (this->device == base_device::GpuDevice)
     {
         resmem_int_op()(orbital_corr_tmp, this->ucell_->ntype);
-        syncmem_int_h2d_op()(this->ctx, cpu_ctx, orbital_corr_tmp, orbital_corr, this->ucell_->ntype);
+        syncmem_int_h2d_op()(orbital_corr_tmp, orbital_corr, this->ucell_->ntype);
         resmem_complex_op()(vu_tmp, size_vu);
-        syncmem_complex_h2d_op()(this->ctx, cpu_ctx, vu_tmp, vu, size_vu);
-        syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, d_wg, h_wg, this->nbands * (ik+1));
+        syncmem_complex_h2d_op()(vu_tmp, vu, size_vu);
+        syncmem_var_h2d_op()(d_wg, h_wg, this->nbands * (ik+1));
     }
     else
 #endif
@@ -982,8 +982,8 @@ void Onsite_Proj_tools<FPTYPE, Device>::cal_stress_dspin(int ik,
     if (this->device == base_device::GpuDevice)
     {
         resmem_var_op()(lambda_tmp, this->ucell_->nat * 3);
-        syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, lambda_tmp, lambda_array.data(), this->ucell_->nat * 3);
-        syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, d_wg, h_wg, this->nbands * (ik+1));
+        syncmem_var_h2d_op()(lambda_tmp, lambda_array.data(), this->ucell_->nat * 3);
+        syncmem_var_h2d_op()(d_wg, h_wg, this->nbands * (ik+1));
     }
     else
 #endif

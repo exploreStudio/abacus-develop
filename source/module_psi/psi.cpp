@@ -201,9 +201,7 @@ Psi<T, Device>::Psi(const Psi& psi_in)
     // this function will copy psi_in.psi to this->psi no matter the device types of each other.
 
     this->resize(psi_in.get_nk(), psi_in.get_nbands(), psi_in.get_nbasis());
-    base_device::memory::synchronize_memory_op<T, Device, Device>()(this->ctx,
-                                                                    psi_in.get_device(),
-                                                                    this->psi,
+    base_device::memory::synchronize_memory_op<T, Device, Device>()(this->psi,
                                                                     psi_in.get_pointer() - psi_in.get_psi_bias(),
                                                                     psi_in.size());
     this->psi_bias = psi_in.get_psi_bias();
@@ -245,9 +243,7 @@ Psi<T, Device>::Psi(const Psi<T_in, Device_in>& psi_in)
                                                                                  - psi_in.get_psi_bias(),
                                                                              psi_in.size());
         // synchronize the memory from CPU to GPU
-        base_device::memory::synchronize_memory_op<T, Device, Device_in>()(this->ctx,
-                                                                           psi_in.get_device(),
-                                                                           this->psi,
+        base_device::memory::synchronize_memory_op<T, Device, Device_in>()(this->psi,
                                                                            arr,
                                                                            psi_in.size());
         free(arr);
@@ -269,7 +265,7 @@ template <typename T, typename Device>
 void Psi<T, Device>::set_all_psi(const T* another_pointer, const std::size_t size_in)
 {
     assert(size_in == this->size());
-    synchronize_memory_op()(this->ctx, this->ctx, this->psi, another_pointer, this->size());
+    synchronize_memory_op()(this->psi, another_pointer, this->size());
 }
 
 template <typename T, typename Device>

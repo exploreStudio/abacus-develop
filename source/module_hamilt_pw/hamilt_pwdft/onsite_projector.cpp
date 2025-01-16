@@ -403,7 +403,7 @@ void projectors::OnsiteProjector<T, Device>::overlap_proj_psi(
     this->fs_tools->cal_becp(ik_, npm/npol, this->becp, ppsi); // in cal_becp, npm should be the one not multiplied by npol
     if(this->device == base_device::GpuDevice)
     {
-        syncmem_complex_d2h_op()(this->cpu_ctx, this->ctx, h_becp, this->becp, this->size_becp);
+        syncmem_complex_d2h_op()(h_becp, this->becp, this->size_becp);
     }
     ModuleBase::timer::tick("OnsiteProj", "overlap");
 }

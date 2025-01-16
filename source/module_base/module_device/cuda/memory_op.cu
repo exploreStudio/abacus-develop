@@ -87,8 +87,6 @@ void set_memory_op<FPTYPE, base_device::DEVICE_GPU>::operator()(FPTYPE* arr,
 
 template <typename FPTYPE>
 void synchronize_memory_op<FPTYPE, base_device::DEVICE_CPU, base_device::DEVICE_GPU>::operator()(
-    const base_device::DEVICE_CPU* dev_out,
-    const base_device::DEVICE_GPU* dev_in,
     FPTYPE* arr_out,
     const FPTYPE* arr_in,
     const size_t size)
@@ -98,8 +96,6 @@ void synchronize_memory_op<FPTYPE, base_device::DEVICE_CPU, base_device::DEVICE_
 
 template <typename FPTYPE>
 void synchronize_memory_op<FPTYPE, base_device::DEVICE_GPU, base_device::DEVICE_CPU>::operator()(
-    const base_device::DEVICE_GPU* dev_out,
-    const base_device::DEVICE_CPU* dev_in,
     FPTYPE* arr_out,
     const FPTYPE* arr_in,
     const size_t size)
@@ -109,8 +105,6 @@ void synchronize_memory_op<FPTYPE, base_device::DEVICE_GPU, base_device::DEVICE_
 
 template <typename FPTYPE>
 void synchronize_memory_op<FPTYPE, base_device::DEVICE_GPU, base_device::DEVICE_GPU>::operator()(
-    const base_device::DEVICE_GPU* dev_out,
-    const base_device::DEVICE_GPU* dev_in,
     FPTYPE* arr_out,
     const FPTYPE* arr_in,
     const size_t size)
@@ -150,9 +144,7 @@ struct cast_memory_op<FPTYPE_out, FPTYPE_in, base_device::DEVICE_GPU, base_devic
         // No need to cast the memory if the data types are the same.
         if (std::is_same<FPTYPE_out, FPTYPE_in>::value)
         {
-            synchronize_memory_op<FPTYPE_out, base_device::DEVICE_GPU, base_device::DEVICE_CPU>()(dev_out,
-                                                                                                  dev_in,
-                                                                                                  arr_out,
+            synchronize_memory_op<FPTYPE_out, base_device::DEVICE_GPU, base_device::DEVICE_CPU>()(arr_out,
                                                                                                   reinterpret_cast<const FPTYPE_out*>(arr_in),
                                                                                                   size);
             return;
@@ -178,9 +170,7 @@ struct cast_memory_op<FPTYPE_out, FPTYPE_in, base_device::DEVICE_CPU, base_devic
         // No need to cast the memory if the data types are the same.
         if (std::is_same<FPTYPE_out, FPTYPE_in>::value)
         {
-            synchronize_memory_op<FPTYPE_out, base_device::DEVICE_CPU, base_device::DEVICE_GPU>()(dev_out,
-                                                                                                  dev_in,
-                                                                                                  arr_out,
+            synchronize_memory_op<FPTYPE_out, base_device::DEVICE_CPU, base_device::DEVICE_GPU>()(arr_out,
                                                                                                   reinterpret_cast<const FPTYPE_out*>(arr_in),
                                                                                                   size);
             return;

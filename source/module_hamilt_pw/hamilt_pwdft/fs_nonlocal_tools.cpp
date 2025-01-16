@@ -83,21 +83,21 @@ void FS_Nonlocal_tools<FPTYPE, Device>::allocate_memory(const ModuleBase::matrix
     resmem_var_op()(this->hd_ylm_deri, 3 * (_lmax + 1) * (_lmax + 1) * max_npw);
     const int nks = this->kv_->get_nks();
     resmem_var_op()(d_wk, nks);
-    syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, d_wk, this->kv_->wk.data(), nks);
+    syncmem_var_h2d_op()(d_wk, this->kv_->wk.data(), nks);
 
     if (this->device == base_device::GpuDevice)
     {
         resmem_var_op()(d_wg, wg.nr * wg.nc);
-        syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, d_wg, wg.c, wg.nr * wg.nc);
+        syncmem_var_h2d_op()(d_wg, wg.c, wg.nr * wg.nc);
         if (p_ekb != nullptr)
         {
             resmem_var_op()(d_ekb, p_ekb->nr * p_ekb->nc);
-            syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, d_ekb, p_ekb->c, p_ekb->nr * p_ekb->nc);
+            syncmem_var_h2d_op()(d_ekb, p_ekb->c, p_ekb->nr * p_ekb->nc);
         }
         resmem_int_op()(atom_nh, this->ntype);
         resmem_int_op()(atom_na, this->ntype);
-        syncmem_int_h2d_op()(this->ctx, this->cpu_ctx, atom_nh, h_atom_nh.data(), this->ntype);
-        syncmem_int_h2d_op()(this->ctx, this->cpu_ctx, atom_na, h_atom_na.data(), this->ntype);
+        syncmem_int_h2d_op()(atom_nh, h_atom_nh.data(), this->ntype);
+        syncmem_int_h2d_op()(atom_na, h_atom_na.data(), this->ntype);
 
         resmem_var_op()(d_g_plus_k, max_npw * 5);
         resmem_var_op()(d_pref, max_nh);
@@ -191,8 +191,8 @@ void FS_Nonlocal_tools<FPTYPE, Device>::cal_vkb(const int& ik, const int& nbdall
     maths.cal_ylm(lmax_, npw, g_plus_k.data(), hd_ylm);
     if (this->device == base_device::GpuDevice)
     {
-        syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, d_g_plus_k, g_plus_k.data(), g_plus_k.size());
-        syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, d_vq_tab, this->nlpp_->tab.ptr, this->nlpp_->tab.getSize());
+        syncmem_var_h2d_op()(d_g_plus_k, g_plus_k.data(), g_plus_k.size());
+        syncmem_var_h2d_op()(d_vq_tab, this->nlpp_->tab.ptr, this->nlpp_->tab.getSize());
         gk = d_g_plus_k;
         vq_tb = d_vq_tab;
     }
@@ -229,8 +229,8 @@ void FS_Nonlocal_tools<FPTYPE, Device>::cal_vkb(const int& ik, const int& nbdall
                              this->dvkb_indexes.data());
         if (this->device == base_device::GpuDevice)
         {
-            syncmem_int_h2d_op()(this->ctx, this->cpu_ctx, d_dvkb_indexes, dvkb_indexes.data(), nh * 4);
-            syncmem_complex_h2d_op()(this->ctx, this->cpu_ctx, d_pref_in, pref.data(), nh);
+            syncmem_int_h2d_op()(d_dvkb_indexes, dvkb_indexes.data(), nh * 4);
+            syncmem_complex_h2d_op()(d_pref_in, pref.data(), nh);
         }
 
         for (int ia = 0; ia < h_atom_na[it]; ia++)
@@ -383,8 +383,8 @@ void FS_Nonlocal_tools<FPTYPE, Device>::cal_vkb_deri_s(const int& ik,
                              this->dvkb_indexes.data());
         if (this->device == base_device::GpuDevice)
         {
-            syncmem_int_h2d_op()(this->ctx, this->cpu_ctx, d_dvkb_indexes, dvkb_indexes.data(), nh * 4);
-            syncmem_complex_h2d_op()(this->ctx, this->cpu_ctx, d_pref_in, pref.data(), nh);
+            syncmem_int_h2d_op()(d_dvkb_indexes, dvkb_indexes.data(), nh * 4);
+            syncmem_complex_h2d_op()(d_pref_in, pref.data(), nh);
         }
         for (int ia = 0; ia < h_atom_na[it]; ia++)
         {
@@ -732,8 +732,8 @@ void FS_Nonlocal_tools<FPTYPE, Device>::transfer_gcar(const int& npw, const int&
     const int max_count = std::max(gcar_zero_counts[0], std::max(gcar_zero_counts[1], gcar_zero_counts[2]));
     resmem_complex_op()(this->vkb_save, this->nkb * max_count);
     // transfer the gcar and gcar_zero_indexes to the device
-    syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, gcar, gcar_tmp.data(), 3 * npw_max);
-    syncmem_int_h2d_op()(this->ctx, this->cpu_ctx, gcar_zero_indexes, gcar_zero_indexes_tmp.data(), 3 * npw_max);
+    syncmem_var_h2d_op()(gcar, gcar_tmp.data(), 3 * npw_max);
+    syncmem_int_h2d_op()(gcar_zero_indexes, gcar_zero_indexes_tmp.data(), 3 * npw_max);
 }
 
 // cal_force

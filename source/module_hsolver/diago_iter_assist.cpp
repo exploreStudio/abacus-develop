@@ -214,7 +214,7 @@ void DiagoIterAssist<T, Device>::diagH_subspace_init(hamilt::Hamilt<T, Device>* 
         for (int i = 0; i < nstart; i++)
         {
             // psi_temp is one band psi, psi is all bands psi, the range always is 1 for the only band in psi_temp
-            syncmem_complex_op()(ctx, ctx, ppsi, psi + i * psi_nc, psi_nc);
+            syncmem_complex_op()(ppsi, psi + i * psi_nc, psi_nc);
             psi::Range band_by_band_range(true, 0, 0, 0);
             hpsi_info hpsi_in(&psi_temp, band_by_band_range, hpsi);
 
@@ -229,7 +229,7 @@ void DiagoIterAssist<T, Device>::diagH_subspace_init(hamilt::Hamilt<T, Device>* 
         // do sPsi band by band
         for (int i = 0; i < nstart; i++)
         {
-            syncmem_complex_op()(ctx, ctx, ppsi, psi + i * psi_nc, psi_nc);
+            syncmem_complex_op()(ppsi, psi + i * psi_nc, psi_nc);
             pHamilt->sPsi(ppsi, spsi, dmin, dmin, 1);
 
             gemv_op<T, Device>()(ctx,
@@ -252,7 +252,7 @@ void DiagoIterAssist<T, Device>::diagH_subspace_init(hamilt::Hamilt<T, Device>* 
         psi::Psi<T, Device> psi_temp(1, nstart, psi_nc, dmin, true);
 
         T* ppsi = psi_temp.get_pointer();
-        syncmem_complex_op()(ctx, ctx, ppsi, psi, psi_temp.size());
+        syncmem_complex_op()(ppsi, psi, psi_temp.size());
         // hpsi and spsi share the temp space
         T* temp = nullptr;
         resmem_complex_op()(temp, nstart * psi_nc, "DiagSub::temp");
@@ -386,13 +386,13 @@ void DiagoIterAssist<T, Device>::diagH_LAPACK(const int nstart,
     {
 #if ((defined __CUDA) || (defined __ROCM))
         // set eigenvalues in GPU to e in CPU
-        syncmem_var_d2h_op()(cpu_ctx, gpu_ctx, e, eigenvalues, nbands);
+        syncmem_var_d2h_op()(e, eigenvalues, nbands);
 #endif
     }
     else if (base_device::get_device_type<Device>(ctx) == base_device::CpuDevice)
     {
         // set eigenvalues in CPU to e in CPU
-        syncmem_var_op()(ctx, ctx, e, eigenvalues, nbands);
+        syncmem_var_op()(e, eigenvalues, nbands);
     }
 
     delmem_var_op()(ctx, eigenvalues);

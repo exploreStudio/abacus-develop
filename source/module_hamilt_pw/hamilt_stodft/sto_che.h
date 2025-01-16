@@ -56,9 +56,7 @@ REAL vTMv(const REAL* v, const REAL* M, const int n)
     REAL* dot_device = nullptr;
     base_device::memory::resize_memory_op<REAL, Device>()(dot_device, 1);
     container::kernels::blas_dot<REAL, ct_Device>()(n, y, 1, v, 1, dot_device);
-    base_device::memory::synchronize_memory_op<REAL, base_device::DEVICE_CPU, Device>()(cpu_ctx,
-                                                                                        ctx,
-                                                                                        &result,
+    base_device::memory::synchronize_memory_op<REAL, base_device::DEVICE_CPU, Device>()(&result,
                                                                                         dot_device,
                                                                                         1);
     base_device::memory::delete_memory_op<REAL, Device>()(ctx, y);
