@@ -45,7 +45,7 @@ struct resize_memory_op<FPTYPE, base_device::DEVICE_CPU>
 template <typename FPTYPE>
 struct set_memory_op<FPTYPE, base_device::DEVICE_CPU>
 {
-    void operator()(const base_device::DEVICE_CPU* dev, FPTYPE* arr, const int var, const size_t size)
+    void operator()(FPTYPE* arr, const int var, const size_t size)
     {
         ModuleBase::OMP_PARALLEL([&](int num_thread, int thread_id) {
             int beg = 0, len = 0;
@@ -166,7 +166,7 @@ struct resize_memory_op<FPTYPE, base_device::DEVICE_GPU>
 template <typename FPTYPE>
 struct set_memory_op<FPTYPE, base_device::DEVICE_GPU>
 {
-    void operator()(const base_device::DEVICE_GPU* dev, FPTYPE* arr, const int var, const size_t size)
+    void operator()(FPTYPE* arr, const int var, const size_t size)
     {
     }
 };

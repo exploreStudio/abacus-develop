@@ -31,7 +31,7 @@ void Stress_Func<FPTYPE, Device>::stress_nl(ModuleBase::matrix& sigma,
 
     FPTYPE* stress_device = nullptr;
     resmem_var_op()(stress_device, 9);
-    setmem_var_op()(this->ctx, stress_device, 0, 9);
+    setmem_var_op()(stress_device, 0, 9);
     std::vector<FPTYPE> sigmanlc(9, 0.0);
 
     hamilt::FS_Nonlocal_tools<FPTYPE, Device> nl_tools(&nlpp_in, &ucell_in, p_kv, wfc_basis, p_sf, wg, &ekb);

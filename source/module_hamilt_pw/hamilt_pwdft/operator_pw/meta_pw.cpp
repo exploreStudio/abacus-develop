@@ -55,7 +55,7 @@ void Meta<OperatorPW<T, Device>>::act(
     ModuleBase::timer::tick("Operator", "MetaPW");
     if(is_first_node)
     {
-        setmem_complex_op()(this->ctx, tmhpsi, 0, nbasis*nbands/npol);
+        setmem_complex_op()(tmhpsi, 0, nbasis*nbands/npol);
     }
 
     const int current_spin = this->isk[this->ik];

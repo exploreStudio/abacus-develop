@@ -47,23 +47,23 @@ Diago_DavSubspace<T, Device>::Diago_DavSubspace(const std::vector<Real>& precond
 
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     resmem_complex_op()(this->psi_in_iter, this->nbase_x * this->dim, "DAV::psi_in_iter");
-    setmem_complex_op()(this->ctx, this->psi_in_iter, 0, this->nbase_x * this->dim);
+    setmem_complex_op()(this->psi_in_iter, 0, this->nbase_x * this->dim);
 
     // the product of H and psi in the reduced psi set
     resmem_complex_op()(this->hphi, this->nbase_x * this->dim, "DAV::hphi");
-    setmem_complex_op()(this->ctx, this->hphi, 0, this->nbase_x * this->dim);
+    setmem_complex_op()(this->hphi, 0, this->nbase_x * this->dim);
 
     // Hamiltonian on the reduced psi set
     resmem_complex_op()(this->hcc, this->nbase_x * this->nbase_x, "DAV::hcc");
-    setmem_complex_op()(this->ctx, this->hcc, 0, this->nbase_x * this->nbase_x);
+    setmem_complex_op()(this->hcc, 0, this->nbase_x * this->nbase_x);
 
     // Overlap on the reduced psi set
     resmem_complex_op()(this->scc, this->nbase_x * this->nbase_x, "DAV::scc");
-    setmem_complex_op()(this->ctx, this->scc, 0, this->nbase_x * this->nbase_x);
+    setmem_complex_op()(this->scc, 0, this->nbase_x * this->nbase_x);
 
     // Eigenvectors
     resmem_complex_op()(this->vcc, this->nbase_x * this->nbase_x, "DAV::vcc");
-    setmem_complex_op()(this->ctx, this->vcc, 0, this->nbase_x * this->nbase_x);
+    setmem_complex_op()(this->vcc, 0, this->nbase_x * this->nbase_x);
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 #if defined(__CUDA) || defined(__ROCM)
@@ -190,7 +190,7 @@ int Diago_DavSubspace<T, Device>::diag_once(const HPsiFunc& hpsi_func,
             ModuleBase::timer::tick("Diago_DavSubspace", "last");
 
             // updata eigenvectors of Hamiltonian
-            setmem_complex_op()(this->ctx, psi_in, 0, n_band * psi_in_dmax);
+            setmem_complex_op()(psi_in, 0, n_band * psi_in_dmax);
 
 #ifdef __DSP
     gemm_op_mt<T, Device>()  // In order to not coding another whole template, using this method to minimize the code change.
@@ -722,9 +722,9 @@ void Diago_DavSubspace<T, Device>::refresh(const int& dim,
     // set hcc/scc/vcc to 0
     for (size_t i = 0; i < nbase; i++)
     {
-        setmem_complex_op()(this->ctx, &hcc[this->nbase_x * i], 0, nbase);
-        setmem_complex_op()(this->ctx, &scc[this->nbase_x * i], 0, nbase);
-        setmem_complex_op()(this->ctx, &vcc[this->nbase_x * i], 0, nbase);
+        setmem_complex_op()(&hcc[this->nbase_x * i], 0, nbase);
+        setmem_complex_op()(&scc[this->nbase_x * i], 0, nbase);
+        setmem_complex_op()(&vcc[this->nbase_x * i], 0, nbase);
     }
 
     if (this->device == base_device::GpuDevice)

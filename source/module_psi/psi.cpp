@@ -496,7 +496,7 @@ template <typename T, typename Device>
 void Psi<T, Device>::zero_out()
 {
     // this->psi.assign(this->psi.size(), T(0));
-    set_memory_op()(this->ctx, this->psi, 0, this->size());
+    set_memory_op()(this->psi, 0, this->size());
 }
 
 template <typename T, typename Device>

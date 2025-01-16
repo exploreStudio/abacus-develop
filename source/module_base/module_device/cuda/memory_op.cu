@@ -53,7 +53,7 @@ __global__ void cast_memory(std::complex<FPTYPE_out>* out, const FPTYPE_in* in, 
 
 template <typename FPTYPE>
 void resize_memory_op<FPTYPE, base_device::DEVICE_GPU>::operator()(FPTYPE*& arr,
-                                                                     const size_t size,
+                                                                   const size_t size,
                                                                    const char* record_in)
 {
     if (arr != nullptr)
@@ -78,8 +78,7 @@ void resize_memory_op<FPTYPE, base_device::DEVICE_GPU>::operator()(FPTYPE*& arr,
 }
 
 template <typename FPTYPE>
-void set_memory_op<FPTYPE, base_device::DEVICE_GPU>::operator()(const base_device::DEVICE_GPU* dev,
-                                                                FPTYPE* arr,
+void set_memory_op<FPTYPE, base_device::DEVICE_GPU>::operator()(FPTYPE* arr,
                                                                 const int var,
                                                                 const size_t size)
 {

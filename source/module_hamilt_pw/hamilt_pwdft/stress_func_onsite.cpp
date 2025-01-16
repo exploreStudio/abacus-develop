@@ -23,7 +23,7 @@ void Stress_Func<FPTYPE, Device>::stress_onsite(ModuleBase::matrix& sigma,
 
     FPTYPE* stress_device = nullptr;
     resmem_var_op()(stress_device, 9);
-    setmem_var_op()(this->ctx, stress_device, 0, 9);
+    setmem_var_op()(stress_device, 0, 9);
     std::vector<FPTYPE> sigma_onsite(9, 0.0);
 
     auto* onsite_p = projectors::OnsiteProjector<FPTYPE, Device>::get_instance();

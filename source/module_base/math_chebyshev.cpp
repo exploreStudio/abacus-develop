@@ -437,7 +437,7 @@ void Chebyshev<REAL, Device>::calfinalvec_real(
     funA(arrayn_1, arrayn, m);
 
     // 0- & 1-st order
-    setmem_complex_op()(this->ctx, waveout, 0, ndmxt);
+    setmem_complex_op()(waveout, 0, ndmxt);
     std::complex<REAL> coef0 = std::complex<REAL>(coefr_cpu[0], 0);
     container::kernels::blas_axpy<std::complex<REAL>, ct_Device>()(ndmxt, &coef0, arrayn_1, 1, waveout, 1);
     std::complex<REAL> coef1 = std::complex<REAL>(coefr_cpu[1], 0);
@@ -505,7 +505,7 @@ void Chebyshev<REAL, Device>::calfinalvec_complex(
     funA(arrayn_1, arrayn, m);
 
     // 0- & 1-st order
-    setmem_complex_op()(this->ctx, waveout, 0, ndmxt);
+    setmem_complex_op()(waveout, 0, ndmxt);
     container::kernels::blas_axpy<std::complex<REAL>, ct_Device>()(ndmxt, &coefc_cpu[0], arrayn_1, 1, waveout, 1);
     container::kernels::blas_axpy<std::complex<REAL>, ct_Device>()(ndmxt, &coefc_cpu[1], arrayn, 1, waveout, 1);
     // for (int i = 0; i < ndmxt; ++i)

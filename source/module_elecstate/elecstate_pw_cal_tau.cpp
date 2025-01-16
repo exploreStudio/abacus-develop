@@ -9,7 +9,7 @@ void ElecStatePW<T, Device>::cal_tau(const psi::Psi<T, Device>& psi)
     ModuleBase::TITLE("ElecStatePW", "cal_tau");
     for(int is=0; is<PARAM.inp.nspin; is++)
 	{
-        setmem_var_op()(this->ctx, this->kin_r[is], 0,  this->charge->nrxx);
+        setmem_var_op()(this->kin_r[is], 0,  this->charge->nrxx);
 	}
 
     for (int ik = 0; ik < psi.get_nk(); ++ik)
@@ -31,7 +31,7 @@ void ElecStatePW<T, Device>::cal_tau(const psi::Psi<T, Device>& psi)
             // kinetic energy density
             for (int j = 0; j < 3; j++)
             {
-                setmem_complex_op()(this->ctx, this->wfcr, 0,  this->charge->nrxx);
+                setmem_complex_op()(this->wfcr, 0,  this->charge->nrxx);
 
                 meta_op()(this->ctx,
                             ik,

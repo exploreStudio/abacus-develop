@@ -32,13 +32,12 @@ struct set_memory_op
     /// @brief memset for multi-device
     ///
     /// Input Parameters
-    /// \param dev : the type of computing device
     /// \param var : the specified constant value
     /// \param size : array size
     ///
     /// Output Parameters
     /// \param arr : output array initialized by the input value
-    void operator()(const Device* dev, FPTYPE* arr, const int var, const size_t size);
+    void operator()(FPTYPE* arr, const int var, const size_t size);
 };
 
 template <typename FPTYPE, typename Device_out, typename Device_in>
@@ -120,7 +119,7 @@ struct resize_memory_op<FPTYPE, base_device::DEVICE_GPU>
 template <typename FPTYPE>
 struct set_memory_op<FPTYPE, base_device::DEVICE_GPU>
 {
-    void operator()(const base_device::DEVICE_GPU* dev, FPTYPE* arr, const int var, const size_t size);
+    void operator()(FPTYPE* arr, const int var, const size_t size);
 };
 
 template <typename FPTYPE>

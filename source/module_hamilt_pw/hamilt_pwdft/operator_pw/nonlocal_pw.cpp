@@ -75,7 +75,7 @@ void Nonlocal<OperatorPW<T, Device>>::add_nonlocal_pp(T *hpsi_in, const T *becp,
         resmem_complex_op()(this->ps, nkb * m, "Nonlocal<PW>::ps");
         this->nkb_m = m * nkb;
     }
-    setmem_complex_op()(this->ctx, this->ps, 0, nkb * m);
+    setmem_complex_op()(this->ps, 0, nkb * m);
 
     int sum = 0;
     int iat = 0;
@@ -221,7 +221,7 @@ void Nonlocal<OperatorPW<T, Device>>::act(
     ModuleBase::timer::tick("Operator", "NonlocalPW");
     if(is_first_node)
     {
-        setmem_complex_op()(this->ctx, tmhpsi, 0, nbasis*nbands/npol);
+        setmem_complex_op()(tmhpsi, 0, nbasis*nbands/npol);
     }
     if(!PARAM.inp.use_paw)
     {

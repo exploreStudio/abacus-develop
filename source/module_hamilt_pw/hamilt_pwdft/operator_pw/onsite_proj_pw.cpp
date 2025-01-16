@@ -130,7 +130,7 @@ void OnsiteProj<OperatorPW<T, Device>>::cal_ps_delta_spin(const int npol, const 
         resmem_complex_op()(this->ps, tnp * m, "OnsiteProj<PW>::ps");
         this->nkb_m = m * tnp;
     }
-    setmem_complex_op()(this->ctx, this->ps, 0, tnp * m);
+    setmem_complex_op()(this->ps, 0, tnp * m);
 
     if(!this->init_delta_spin)
     {
@@ -230,7 +230,7 @@ void OnsiteProj<OperatorPW<T, Device>>::cal_ps_dftu(const int npol, const int m)
     }
     if(!this->has_delta_spin) 
     {
-        setmem_complex_op()(this->ctx, this->ps, 0, tnp * m);
+        setmem_complex_op()(this->ps, 0, tnp * m);
     }
 
     if(!this->init_dftu)

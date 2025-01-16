@@ -1080,7 +1080,7 @@ void pseudopot_cell_vnl::radial_fft_q(Device* ctx,
     const int ivl = nhtolm(itype, ih);
     const int jvl = nhtolm(itype, jh);
 
-    setmem_complex_op()(ctx, qg, 0, ng);
+    setmem_complex_op()(qg, 0, ng);
 
     const double* qnorm_double = reinterpret_cast<const double*>(qnorm);
 

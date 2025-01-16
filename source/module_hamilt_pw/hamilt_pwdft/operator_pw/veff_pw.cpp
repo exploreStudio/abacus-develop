@@ -48,7 +48,7 @@ void Veff<OperatorPW<T, Device>>::act(
     ModuleBase::timer::tick("Operator", "VeffPW");
     if(is_first_node)
     {
-        setmem_complex_op()(this->ctx, tmhpsi, 0, nbasis*nbands/npol);
+        setmem_complex_op()(tmhpsi, 0, nbasis*nbands/npol);
     }
 
     int max_npw = nbasis / npol;

@@ -168,7 +168,7 @@ void Sto_Stress_PW<FPTYPE, Device>::sto_stress_nl(ModuleBase::matrix& sigma,
     // allocate memory for the stress
     FPTYPE* stress_device = nullptr;
     resmem_var_op()(stress_device, 9);
-    setmem_var_op()(this->ctx, stress_device, 0, 9);
+    setmem_var_op()(stress_device, 0, 9);
     std::vector<FPTYPE> sigmanlc(9, 0.0);
 
     hamilt::FS_Nonlocal_tools<FPTYPE, Device> nl_tools(&nlpp, &ucell, p_kv, wfc_basis, p_sf, wg, nullptr);

@@ -362,7 +362,7 @@ void Stochastic_Iter<T, Device>::calPn(const int& ik, Stochastic_WF<T, Device>& 
         }
         else
         {
-            setmem_var_op()(this->ctx, spolyv, 0, norder * norder);
+            setmem_var_op()(spolyv, 0, norder * norder);
         }
     }
     T* pchi;
@@ -597,7 +597,7 @@ void Stochastic_Iter<T, Device>::cal_storho(const UnitCell& ucell,
     }
     for (int is = 0; is < nspin; is++)
     {
-        setmem_var_op()(this->ctx, pes->rho[is], 0, nrxx);
+        setmem_var_op()(pes->rho[is], 0, nrxx);
     }
     for (int ik = 0; ik < this->pkv->get_nks(); ++ik)
     {

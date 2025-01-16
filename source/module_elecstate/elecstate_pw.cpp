@@ -118,15 +118,15 @@ void ElecStatePW<T, Device>::psiToRho(const psi::Psi<T, Device>& psi)
 	{
         // denghui replaced at 20221110
 		// ModuleBase::GlobalFunc::ZEROS(this->rho[is], this->charge->nrxx);
-        setmem_var_op()(this->ctx, this->rho[is], 0,  this->charge->nrxx);
+        setmem_var_op()(this->rho[is], 0,  this->charge->nrxx);
         if (get_xc_func_type() == 3)
         {
             // ModuleBase::GlobalFunc::ZEROS(this->charge->kin_r[is], this->charge->nrxx);
-            setmem_var_op()(this->ctx, this->kin_r[is], 0,  this->charge->nrxx);
+            setmem_var_op()(this->kin_r[is], 0,  this->charge->nrxx);
         }
         if (PARAM.globalv.double_grid || PARAM.globalv.use_uspp)
         {
-            setmem_complex_op()(this->ctx, this->rhog[is], 0, this->charge->rhopw->npw);
+            setmem_complex_op()(this->rhog[is], 0, this->charge->rhopw->npw);
         }
     }
 
@@ -244,7 +244,7 @@ void ElecStatePW<T, Device>::rhoBandK(const psi::Psi<T, Device>& psi)
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    setmem_complex_op()(this->ctx, this->wfcr, 0,  this->charge->nrxx);
+                    setmem_complex_op()(this->wfcr, 0,  this->charge->nrxx);
 
                     meta_op()(this->ctx,
                               ik,
@@ -280,7 +280,7 @@ void ElecStatePW<T, Device>::cal_becsum(const psi::Psi<T, Device>& psi)
     resmem_complex_op()(becp, nbands * nkb, "ElecState<PW>::becp");
     const int nh_tot = this->ppcell->nhm * (this->ppcell->nhm + 1) / 2;
     resmem_var_op()(becsum, nh_tot * ucell->nat * PARAM.inp.nspin, "ElecState<PW>::becsum");
-    setmem_var_op()(this->ctx, becsum, 0, nh_tot * ucell->nat * PARAM.inp.nspin);
+    setmem_var_op()(becsum, 0, nh_tot * ucell->nat * PARAM.inp.nspin);
 
     for (int ik = 0; ik < psi.get_nk(); ++ik)
     {

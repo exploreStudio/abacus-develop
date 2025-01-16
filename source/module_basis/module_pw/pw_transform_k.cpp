@@ -413,7 +413,6 @@ void PW_Basis_K::recip_to_real(const base_device::DEVICE_GPU* ctx,
     assert(this->poolnproc == 1);
     // ModuleBase::GlobalFunc::ZEROS(fft_bundle.get_auxr_3d_data<float>(), this->nxyz);
     base_device::memory::set_memory_op<std::complex<float>, base_device::DEVICE_GPU>()(
-        ctx,
         this->fft_bundle.get_auxr_3d_data<float>(),
         0,
         this->nxyz);
@@ -450,7 +449,6 @@ void PW_Basis_K::recip_to_real(const base_device::DEVICE_GPU* ctx,
     assert(this->poolnproc == 1);
     // ModuleBase::GlobalFunc::ZEROS(fft_bundle.get_auxr_3d_data<double>(), this->nxyz);
     base_device::memory::set_memory_op<std::complex<double>, base_device::DEVICE_GPU>()(
-        ctx,
         this->fft_bundle.get_auxr_3d_data<double>(),
         0,
         this->nxyz);

@@ -60,25 +60,24 @@ DiagoDavid<T, Device>::DiagoDavid(const Real* precondition_in,
 
     // the lowest N eigenvalues
     base_device::memory::resize_memory_op<Real, base_device::DEVICE_CPU>()(this->eigenvalue, nbase_x, "DAV::eig");
-    base_device::memory::set_memory_op<Real, base_device::DEVICE_CPU>()(
-                        this->cpu_ctx, this->eigenvalue, 0, nbase_x);
+    base_device::memory::set_memory_op<Real, base_device::DEVICE_CPU>()(this->eigenvalue, 0, nbase_x);
 
     // basis(dim, nbase_x), leading dimension = dim
     resmem_complex_op()(basis, nbase_x * dim, "DAV::basis");
-    setmem_complex_op()(this->ctx, basis, 0, nbase_x * dim);
+    setmem_complex_op()(basis, 0, nbase_x * dim);
 
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     // hpsi(nbase_x, dim); // the product of H and psi in the reduced basis set
     resmem_complex_op()(this->hpsi, nbase_x * dim, "DAV::hpsi");
-    setmem_complex_op()(this->ctx, this->hpsi, 0, nbase_x * dim);
+    setmem_complex_op()(this->hpsi, 0, nbase_x * dim);
 
     // spsi(nbase_x, dim); // the Product of S and psi in the reduced basis set
     resmem_complex_op()(this->spsi, nbase_x * dim, "DAV::spsi");
-    setmem_complex_op()(this->ctx, this->spsi, 0, nbase_x * dim);
+    setmem_complex_op()(this->spsi, 0, nbase_x * dim);
 
     // hcc(nbase_x, nbase_x); // Hamiltonian on the reduced basis
     resmem_complex_op()(this->hcc, nbase_x * nbase_x, "DAV::hcc");
-    setmem_complex_op()(this->ctx, this->hcc, 0, nbase_x * nbase_x);
+    setmem_complex_op()(this->hcc, 0, nbase_x * nbase_x);
 
     // scc(nbase_x, nbase_x); // Overlap on the reduced basis
     // resmem_complex_op()(this->ctx, this->scc, nbase_x * nbase_x, "DAV::scc");
@@ -86,12 +85,12 @@ DiagoDavid<T, Device>::DiagoDavid(const Real* precondition_in,
 
     // vcc(nbase_x, nbase_x); // Eigenvectors of hcc
     resmem_complex_op()(this->vcc, nbase_x * nbase_x, "DAV::vcc");
-    setmem_complex_op()(this->ctx, this->vcc, 0, nbase_x * nbase_x);
+    setmem_complex_op()(this->vcc, 0, nbase_x * nbase_x);
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     
     // lagrange_matrix(nband, nband); // for orthogonalization
     resmem_complex_op()(this->lagrange_matrix, nband * nband);
-    setmem_complex_op()(this->ctx, this->lagrange_matrix, 0, nband * nband);
+    setmem_complex_op()(this->lagrange_matrix, 0, nband * nband);
 
 #if defined(__CUDA) || defined(__ROCM)
     // device precondition array
@@ -265,7 +264,7 @@ int DiagoDavid<T, Device>::diag_once(const HPsiFunc& hpsi_func,
 
             // update eigenvectors of Hamiltonian
 
-            setmem_complex_op()(this->ctx, psi_in, 0, nband * ld_psi);
+            setmem_complex_op()(psi_in, 0, nband * ld_psi);
             //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
             gemm_op<T, Device>()(this->ctx,
                                       'N',
@@ -353,7 +352,7 @@ void DiagoDavid<T, Device>::cal_grad(const HPsiFunc& hpsi_func,
     // eigenvectors of unconverged index extracted from vcc
     T* vc_ev_vector = nullptr;
     resmem_complex_op()(vc_ev_vector, notconv * nbase);
-    setmem_complex_op()(this->ctx, vc_ev_vector, 0, notconv * nbase);
+    setmem_complex_op()(vc_ev_vector, 0, notconv * nbase);
 
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     // for (int m = 0; m < notconv; m++)
@@ -499,7 +498,7 @@ void DiagoDavid<T, Device>::cal_grad(const HPsiFunc& hpsi_func,
     // plan for SchmidtOrth
     T* lagrange = nullptr;
     resmem_complex_op()(lagrange, notconv * (nbase + notconv));
-    setmem_complex_op()(this->ctx, lagrange, 0, notconv * (nbase + notconv));
+    setmem_complex_op()(lagrange, 0, notconv * (nbase + notconv));
 
     std::vector<int> pre_matrix_mm_m(notconv, 0);
     std::vector<int> pre_matrix_mv_m(notconv, 1);
@@ -751,7 +750,7 @@ void DiagoDavid<T, Device>::refresh(const int& dim,
     ModuleBase::timer::tick("DiagoDavid", "refresh");
 
     // update hp,sp
-    setmem_complex_op()(this->ctx, basis , 0, nbase_x * dim);
+    setmem_complex_op()(basis , 0, nbase_x * dim);
 
     // basis(dim, nband) = hpsi(dim, nbase) * vcc(nbase, nband)
     gemm_op<T, Device>()(this->ctx,
@@ -800,7 +799,7 @@ void DiagoDavid<T, Device>::refresh(const int& dim,
     }*/
 
     // update basis
-    setmem_complex_op()(this->ctx, basis , 0, nbase_x * dim);
+    setmem_complex_op()(basis , 0, nbase_x * dim);
 
     for (int m = 0; m < nband; m++)
     {
@@ -813,7 +812,7 @@ void DiagoDavid<T, Device>::refresh(const int& dim,
     // basis set size reset to nband
     nbase = nband;
 
-    setmem_complex_op()(this->ctx, hcc, 0, nbase_x * nbase_x);
+    setmem_complex_op()(hcc, 0, nbase_x * nbase_x);
 
     // setmem_complex_op()(this->ctx, scc, 0, nbase_x * nbase_x);
 

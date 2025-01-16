@@ -295,7 +295,7 @@ void HamiltPW<T, Device>::sPsi(const T* psi_in, // psi
         }
 
         resmem_complex_op()(ps, this->ppcell->nkb * nbands, "Hamilt<PW>::ps");
-        setmem_complex_op()(this->ctx, ps, 0, this->ppcell->nkb * nbands);
+        setmem_complex_op()(ps, 0, this->ppcell->nkb * nbands);
 
         // spsi = psi + sum qq <beta|psi> |beta>
         if (PARAM.inp.noncolin)
