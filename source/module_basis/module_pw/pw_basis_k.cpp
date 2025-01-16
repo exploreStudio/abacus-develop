@@ -100,7 +100,7 @@ void PW_Basis_K:: initparameters(
     if (this->device == "gpu") {
         if (this->precision == "single") {
             resmem_sd_op()(this->s_kvec_c, this->nks * 3);
-            castmem_d2s_h2d_op()(gpu_ctx, cpu_ctx, this->s_kvec_c, reinterpret_cast<double *>(&this->kvec_c[0][0]), this->nks * 3);
+            castmem_d2s_h2d_op()(this->s_kvec_c, reinterpret_cast<double *>(&this->kvec_c[0][0]), this->nks * 3);
         }
         resmem_dd_op()(this->d_kvec_c, this->nks * 3);
         syncmem_d2d_h2d_op()(this->d_kvec_c, reinterpret_cast<double *>(&this->kvec_c[0][0]), this->nks * 3);
@@ -109,7 +109,7 @@ void PW_Basis_K:: initparameters(
 #endif
         if (this->precision == "single") {
             resmem_sh_op()(this->s_kvec_c, this->nks * 3);
-            castmem_d2s_h2h_op()(cpu_ctx, cpu_ctx, this->s_kvec_c, reinterpret_cast<double *>(&this->kvec_c[0][0]), this->nks * 3);
+            castmem_d2s_h2h_op()(this->s_kvec_c, reinterpret_cast<double *>(&this->kvec_c[0][0]), this->nks * 3);
         }
         this->d_kvec_c = reinterpret_cast<double *>(&this->kvec_c[0][0]);
         // There's no need to allocate double pointers while in a CPU environment.
@@ -249,8 +249,8 @@ void PW_Basis_K::collect_local_pw(const double& erf_ecut_in, const double& erf_h
         if (this->precision == "single") {
             resmem_sd_op()(this->s_gk2, this->npwk_max * this->nks);
             resmem_sd_op()(this->s_gcar, this->npwk_max * this->nks * 3);
-            castmem_d2s_h2d_op()(gpu_ctx, cpu_ctx, this->s_gk2, this->gk2, this->npwk_max * this->nks);
-            castmem_d2s_h2d_op()(gpu_ctx, cpu_ctx, this->s_gcar, reinterpret_cast<double *>(&this->gcar[0][0]), this->npwk_max * this->nks * 3);
+            castmem_d2s_h2d_op()(this->s_gk2, this->gk2, this->npwk_max * this->nks);
+            castmem_d2s_h2d_op()(this->s_gcar, reinterpret_cast<double *>(&this->gcar[0][0]), this->npwk_max * this->nks * 3);
         }
         else {
             resmem_dd_op()(this->d_gk2, this->npwk_max * this->nks);
@@ -264,8 +264,8 @@ void PW_Basis_K::collect_local_pw(const double& erf_ecut_in, const double& erf_h
         if (this->precision == "single") {
             resmem_sh_op()(this->s_gk2, this->npwk_max * this->nks, "PW_B_K::s_gk2");
             resmem_sh_op()(this->s_gcar, this->npwk_max * this->nks * 3, "PW_B_K::s_gcar");
-            castmem_d2s_h2h_op()(cpu_ctx, cpu_ctx, this->s_gk2, this->gk2, this->npwk_max * this->nks);
-            castmem_d2s_h2h_op()(cpu_ctx, cpu_ctx, this->s_gcar, reinterpret_cast<double *>(&this->gcar[0][0]), this->npwk_max * this->nks * 3);
+            castmem_d2s_h2h_op()(this->s_gk2, this->gk2, this->npwk_max * this->nks);
+            castmem_d2s_h2h_op()(this->s_gcar, reinterpret_cast<double *>(&this->gcar[0][0]), this->npwk_max * this->nks * 3);
         }
         else {
             this->d_gcar = reinterpret_cast<double *>(&this->gcar[0][0]);

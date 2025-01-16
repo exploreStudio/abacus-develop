@@ -52,7 +52,7 @@ void ElecStatePW<T, Device>::cal_tau(const psi::Psi<T, Device>& psi)
     }
     if (PARAM.inp.device == "gpu" || PARAM.inp.precision == "single") {
         for (int ii = 0; ii < PARAM.inp.nspin; ii++) {
-            castmem_var_d2h_op()(cpu_ctx, this->ctx, this->charge->kin_r[ii], this->kin_r[ii], this->charge->nrxx);
+            castmem_var_d2h_op()(this->charge->kin_r[ii], this->kin_r[ii], this->charge->nrxx);
         }
     }
     this->parallelK();

@@ -476,7 +476,7 @@ void pseudopot_cell_vnl::getvnl(Device* ctx,
         syncmem_int_op()(atom_na, h_atom_na, ucell.ntype);
 
         resmem_var_op()(gk, npw * 3);
-        castmem_var_h2d_op()(ctx, cpu_ctx, gk, reinterpret_cast<double*>(_gk), npw * 3);
+        castmem_var_h2d_op()(gk, reinterpret_cast<double*>(_gk), npw * 3);
     }
     else
     {
@@ -486,7 +486,7 @@ void pseudopot_cell_vnl::getvnl(Device* ctx,
         if (PARAM.inp.precision == "single")
         {
             resmem_var_op()(gk, npw * 3);
-            castmem_var_h2h_op()(cpu_ctx, cpu_ctx, gk, reinterpret_cast<double*>(_gk), npw * 3);
+            castmem_var_h2h_op()(gk, reinterpret_cast<double*>(_gk), npw * 3);
         }
         else
         {
@@ -872,12 +872,12 @@ void pseudopot_cell_vnl::init_vnl(UnitCell& cell, const ModulePW::PW_Basis* rho_
     {
         if (PARAM.inp.precision == "single")
         {
-            castmem_d2s_h2d_op()(gpu_ctx, cpu_ctx, this->s_indv, this->indv.c, this->indv.nr * this->indv.nc);
-            castmem_d2s_h2d_op()(gpu_ctx, cpu_ctx, this->s_nhtol, this->nhtol.c, this->nhtol.nr * this->nhtol.nc);
-            castmem_d2s_h2d_op()(gpu_ctx, cpu_ctx, this->s_nhtolm, this->nhtolm.c, this->nhtolm.nr * this->nhtolm.nc);
-            castmem_d2s_h2d_op()(gpu_ctx, cpu_ctx, this->s_tab, this->tab.ptr, this->tab.getSize());
-            castmem_d2s_h2d_op()(gpu_ctx, cpu_ctx, this->s_qq_nt, this->qq_nt.ptr, this->qq_nt.getSize());
-            castmem_z2c_h2d_op()(gpu_ctx, cpu_ctx, this->c_qq_so, this->qq_so.ptr, this->qq_so.getSize());
+            castmem_d2s_h2d_op()(this->s_indv, this->indv.c, this->indv.nr * this->indv.nc);
+            castmem_d2s_h2d_op()(this->s_nhtol, this->nhtol.c, this->nhtol.nr * this->nhtol.nc);
+            castmem_d2s_h2d_op()(this->s_nhtolm, this->nhtolm.c, this->nhtolm.nr * this->nhtolm.nc);
+            castmem_d2s_h2d_op()(this->s_tab, this->tab.ptr, this->tab.getSize());
+            castmem_d2s_h2d_op()(this->s_qq_nt, this->qq_nt.ptr, this->qq_nt.getSize());
+            castmem_z2c_h2d_op()(this->c_qq_so, this->qq_so.ptr, this->qq_so.getSize());
         }
         else
         {
@@ -896,12 +896,12 @@ void pseudopot_cell_vnl::init_vnl(UnitCell& cell, const ModulePW::PW_Basis* rho_
     {
         if (PARAM.inp.precision == "single")
         {
-            castmem_d2s_h2h_op()(cpu_ctx, cpu_ctx, this->s_indv, this->indv.c, this->indv.nr * this->indv.nc);
-            castmem_d2s_h2h_op()(cpu_ctx, cpu_ctx, this->s_nhtol, this->nhtol.c, this->nhtol.nr * this->nhtol.nc);
-            castmem_d2s_h2h_op()(cpu_ctx, cpu_ctx, this->s_nhtolm, this->nhtolm.c, this->nhtolm.nr * this->nhtolm.nc);
-            castmem_d2s_h2h_op()(cpu_ctx, cpu_ctx, this->s_tab, this->tab.ptr, this->tab.getSize());
-            castmem_d2s_h2h_op()(cpu_ctx, cpu_ctx, this->s_qq_nt, this->qq_nt.ptr, this->qq_nt.getSize());
-            castmem_z2c_h2h_op()(cpu_ctx, cpu_ctx, this->c_qq_so, this->qq_so.ptr, this->qq_so.getSize());
+            castmem_d2s_h2h_op()(this->s_indv, this->indv.c, this->indv.nr * this->indv.nc);
+            castmem_d2s_h2h_op()(this->s_nhtol, this->nhtol.c, this->nhtol.nr * this->nhtol.nc);
+            castmem_d2s_h2h_op()(this->s_nhtolm, this->nhtolm.c, this->nhtolm.nr * this->nhtolm.nc);
+            castmem_d2s_h2h_op()(this->s_tab, this->tab.ptr, this->tab.getSize());
+            castmem_d2s_h2h_op()(this->s_qq_nt, this->qq_nt.ptr, this->qq_nt.getSize());
+            castmem_z2c_h2h_op()(this->c_qq_so, this->qq_so.ptr, this->qq_so.getSize());
         }
         // There's no need to synchronize double precision pointers while in a CPU environment.
     }
@@ -1490,14 +1490,10 @@ void pseudopot_cell_vnl::cal_effective_D(const ModuleBase::matrix& veff,
     {
         if (PARAM.inp.precision == "single")
         {
-            castmem_d2s_h2d_op()(gpu_ctx,
-                                 cpu_ctx,
-                                 this->s_deeq,
+            castmem_d2s_h2d_op()(this->s_deeq,
                                  this->deeq.ptr,
                                  PARAM.inp.nspin * cell.nat * this->nhm * this->nhm);
-            castmem_z2c_h2d_op()(gpu_ctx,
-                                 cpu_ctx,
-                                 this->c_deeq_nc,
+            castmem_z2c_h2d_op()(this->c_deeq_nc,
                                  this->deeq_nc.ptr,
                                  PARAM.inp.nspin * cell.nat * this->nhm * this->nhm);
         }
@@ -1515,14 +1511,10 @@ void pseudopot_cell_vnl::cal_effective_D(const ModuleBase::matrix& veff,
     {
         if (PARAM.inp.precision == "single")
         {
-            castmem_d2s_h2h_op()(cpu_ctx,
-                                 cpu_ctx,
-                                 this->s_deeq,
+            castmem_d2s_h2h_op()(this->s_deeq,
                                  this->deeq.ptr,
                                  PARAM.inp.nspin * cell.nat * this->nhm * this->nhm);
-            castmem_z2c_h2h_op()(cpu_ctx,
-                                 cpu_ctx,
-                                 this->c_deeq_nc,
+            castmem_z2c_h2h_op()(this->c_deeq_nc,
                                  this->deeq_nc.ptr,
                                  PARAM.inp.nspin * cell.nat * this->nhm * this->nhm);
         }

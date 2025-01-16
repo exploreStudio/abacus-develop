@@ -154,9 +154,9 @@ void Structure_Factor::setup_structure_factor(const UnitCell* Ucell, const Paral
             resmem_cd_op()(this->c_eigts1, Ucell->nat * (2 * rho_basis->nx + 1));
             resmem_cd_op()(this->c_eigts2, Ucell->nat * (2 * rho_basis->ny + 1));
             resmem_cd_op()(this->c_eigts3, Ucell->nat * (2 * rho_basis->nz + 1));
-            castmem_z2c_h2d_op()(gpu_ctx, cpu_ctx, this->c_eigts1, this->eigts1.c, Ucell->nat * (2 * rho_basis->nx + 1));
-            castmem_z2c_h2d_op()(gpu_ctx, cpu_ctx, this->c_eigts2, this->eigts2.c, Ucell->nat * (2 * rho_basis->ny + 1));
-            castmem_z2c_h2d_op()(gpu_ctx, cpu_ctx, this->c_eigts3, this->eigts3.c, Ucell->nat * (2 * rho_basis->nz + 1));
+            castmem_z2c_h2d_op()(this->c_eigts1, this->eigts1.c, Ucell->nat * (2 * rho_basis->nx + 1));
+            castmem_z2c_h2d_op()(this->c_eigts2, this->eigts2.c, Ucell->nat * (2 * rho_basis->ny + 1));
+            castmem_z2c_h2d_op()(this->c_eigts3, this->eigts3.c, Ucell->nat * (2 * rho_basis->nz + 1));
         }
         resmem_zd_op()(this->z_eigts1, Ucell->nat * (2 * rho_basis->nx + 1));
         resmem_zd_op()(this->z_eigts2, Ucell->nat * (2 * rho_basis->ny + 1));
@@ -170,9 +170,9 @@ void Structure_Factor::setup_structure_factor(const UnitCell* Ucell, const Paral
             resmem_ch_op()(this->c_eigts1, Ucell->nat * (2 * rho_basis->nx + 1));
             resmem_ch_op()(this->c_eigts2, Ucell->nat * (2 * rho_basis->ny + 1));
             resmem_ch_op()(this->c_eigts3, Ucell->nat * (2 * rho_basis->nz + 1));
-            castmem_z2c_h2h_op()(cpu_ctx, cpu_ctx, this->c_eigts1, this->eigts1.c, Ucell->nat * (2 * rho_basis->nx + 1));
-            castmem_z2c_h2h_op()(cpu_ctx, cpu_ctx, this->c_eigts2, this->eigts2.c, Ucell->nat * (2 * rho_basis->ny + 1));
-            castmem_z2c_h2h_op()(cpu_ctx, cpu_ctx, this->c_eigts3, this->eigts3.c, Ucell->nat * (2 * rho_basis->nz + 1));
+            castmem_z2c_h2h_op()(this->c_eigts1, this->eigts1.c, Ucell->nat * (2 * rho_basis->nx + 1));
+            castmem_z2c_h2h_op()(this->c_eigts2, this->eigts2.c, Ucell->nat * (2 * rho_basis->ny + 1));
+            castmem_z2c_h2h_op()(this->c_eigts3, this->eigts3.c, Ucell->nat * (2 * rho_basis->nz + 1));
         }
         this->z_eigts1 = this->eigts1.c;
         this->z_eigts2 = this->eigts2.c;

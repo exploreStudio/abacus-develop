@@ -69,9 +69,7 @@ struct cast_memory_op
     ///
     /// Output Parameters
     /// \param arr_out : output array initialized by the input array
-    void operator()(const Device_out* dev_out,
-                    const Device_in* dev_in,
-                    FPTYPE_out* arr_out,
+    void operator()(FPTYPE_out* arr_out,
                     const FPTYPE_in* arr_in,
                     const size_t size);
 };

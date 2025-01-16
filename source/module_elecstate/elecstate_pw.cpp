@@ -142,10 +142,10 @@ void ElecStatePW<T, Device>::psiToRho(const psi::Psi<T, Device>& psi)
     {
         for (int ii = 0; ii < PARAM.inp.nspin; ii++)
         {
-            castmem_var_d2h_op()(cpu_ctx, this->ctx, this->charge->rho[ii], this->rho[ii], this->charge->nrxx);
+            castmem_var_d2h_op()(this->charge->rho[ii], this->rho[ii], this->charge->nrxx);
             if (get_xc_func_type() == 3)
             {
-                castmem_var_d2h_op()(cpu_ctx, this->ctx, this->charge->kin_r[ii], this->kin_r[ii], this->charge->nrxx);
+                castmem_var_d2h_op()(this->charge->kin_r[ii], this->kin_r[ii], this->charge->nrxx);
             }
         }
     }

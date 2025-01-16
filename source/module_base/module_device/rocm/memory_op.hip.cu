@@ -87,9 +87,7 @@ void synchronize_memory_op<FPTYPE, base_device::DEVICE_GPU, base_device::DEVICE_
 
 template <typename FPTYPE_out, typename FPTYPE_in>
 struct cast_memory_op<FPTYPE_out, FPTYPE_in, base_device::DEVICE_GPU, base_device::DEVICE_GPU> {
-    void operator()(const base_device::DEVICE_GPU* dev_out,
-                    const base_device::DEVICE_GPU* dev_in,
-                    FPTYPE_out* arr_out,
+    void operator()(FPTYPE_out* arr_out,
                     const FPTYPE_in* arr_in,
                     const size_t size) {
 
@@ -102,9 +100,7 @@ struct cast_memory_op<FPTYPE_out, FPTYPE_in, base_device::DEVICE_GPU, base_devic
 
 template <typename FPTYPE_out, typename FPTYPE_in>
 struct cast_memory_op<FPTYPE_out, FPTYPE_in, base_device::DEVICE_GPU, base_device::DEVICE_CPU> {
-    void operator()(const base_device::DEVICE_GPU* dev_out,
-                    const base_device::DEVICE_CPU* dev_in,
-                    FPTYPE_out* arr_out,
+    void operator()(FPTYPE_out* arr_out,
                     const FPTYPE_in* arr_in,
                     const size_t size) {
 
@@ -131,9 +127,7 @@ struct cast_memory_op<FPTYPE_out, FPTYPE_in, base_device::DEVICE_GPU, base_devic
 
 template <typename FPTYPE_out, typename FPTYPE_in>
 struct cast_memory_op<FPTYPE_out, FPTYPE_in, base_device::DEVICE_CPU, base_device::DEVICE_GPU> {
-    void operator()(const base_device::DEVICE_CPU* dev_out,
-                    const base_device::DEVICE_GPU* dev_in,
-                    FPTYPE_out* arr_out,
+    void operator()(FPTYPE_out* arr_out,
                     const FPTYPE_in* arr_in,
                     const size_t size) {
 

@@ -181,14 +181,10 @@ void Potential::update_from_charge(const Charge*const chg, const UnitCell*const 
 
     if (PARAM.inp.basis_type == "pw" && PARAM.inp.device == "gpu") {
         if (PARAM.inp.precision == "single") {
-            castmem_d2s_h2d_op()(gpu_ctx,
-                                 cpu_ctx,
-                                 s_veff_smooth,
+            castmem_d2s_h2d_op()(s_veff_smooth,
                                  this->veff_smooth.c,
                                  this->veff_smooth.nr * this->veff_smooth.nc);
-            castmem_d2s_h2d_op()(gpu_ctx,
-                                 cpu_ctx,
-                                 s_vofk_smooth,
+            castmem_d2s_h2d_op()(s_vofk_smooth,
                                  this->vofk_smooth.c,
                                  this->vofk_smooth.nr * this->vofk_smooth.nc);
         }
@@ -203,14 +199,10 @@ void Potential::update_from_charge(const Charge*const chg, const UnitCell*const 
     }
     else {
         if (PARAM.inp.precision == "single") {
-            castmem_d2s_h2h_op()(cpu_ctx,
-                                 cpu_ctx,
-                                 s_veff_smooth,
+            castmem_d2s_h2h_op()(s_veff_smooth,
                                  this->veff_smooth.c,
                                  this->veff_smooth.nr * this->veff_smooth.nc);
-            castmem_d2s_h2h_op()(cpu_ctx,
-                                 cpu_ctx,
-                                 s_vofk_smooth,
+            castmem_d2s_h2h_op()(s_vofk_smooth,
                                  this->vofk_smooth.c,
                                  this->vofk_smooth.nr * this->vofk_smooth.nc);
         }

@@ -236,9 +236,7 @@ Psi<T, Device>::Psi(const Psi<T_in, Device_in>& psi_in)
     {
         auto* arr = (T*)malloc(sizeof(T) * psi_in.size());
         // cast the memory from T_in to T in CPU
-        base_device::memory::cast_memory_op<T, T_in, Device_in, Device_in>()(psi_in.get_device(),
-                                                                             psi_in.get_device(),
-                                                                             arr,
+        base_device::memory::cast_memory_op<T, T_in, Device_in, Device_in>()(arr,
                                                                              psi_in.get_pointer()
                                                                                  - psi_in.get_psi_bias(),
                                                                              psi_in.size());
@@ -250,9 +248,7 @@ Psi<T, Device>::Psi(const Psi<T_in, Device_in>& psi_in)
     }
     else
     {
-        base_device::memory::cast_memory_op<T, T_in, Device, Device_in>()(this->ctx,
-                                                                          psi_in.get_device(),
-                                                                          this->psi,
+        base_device::memory::cast_memory_op<T, T_in, Device, Device_in>()(this->psi,
                                                                           psi_in.get_pointer() - psi_in.get_psi_bias(),
                                                                           psi_in.size());
     }

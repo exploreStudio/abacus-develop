@@ -624,7 +624,7 @@ void Stochastic_Iter<T, Device>::cal_storho(const UnitCell& ucell,
     if (PARAM.inp.device == "gpu" || PARAM.inp.precision == "single") {
         for(int is = 0; is < nspin; ++is)
         {
-            castmem_var_d2h_op()(this->cpu_ctx, this->ctx, sto_rho[is], pes->rho[is], nrxx);
+            castmem_var_d2h_op()(sto_rho[is], pes->rho[is], nrxx);
         }
     }
     else
@@ -736,7 +736,7 @@ void Stochastic_Iter<T, Device>::calTnchi_ik(const int& ik, Stochastic_WF<T, Dev
         const int N = p_che->norder;
         T* coef_real = nullptr;
         resmem_complex_op()(coef_real, N);
-        castmem_d2z_op()(this->ctx, this->ctx, coef_real, p_che->coef_real, p_che->norder);
+        castmem_d2z_op()(coef_real, p_che->coef_real, p_che->norder);
         gemv_op()(this->ctx, transa, M, N, &one, stowf.chiallorder[ik].get_pointer(), LDA, coef_real, inc, &zero, out, inc);
         // zgemv_(&transa, &M, &N, &one, stowf.chiallorder[ik].get_pointer(), &LDA, coef_real, &inc, &zero, out, &inc);
         delmem_complex_op()(this->ctx, coef_real);
