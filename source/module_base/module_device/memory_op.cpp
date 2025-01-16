@@ -400,13 +400,13 @@ template struct delete_memory_op_mt<std::complex<double>, base_device::DEVICE_CP
 #endif
 
 template <typename FPTYPE>
-void resize_memory(FPTYPE* arr, base_device::AbacusDevice_t device_type)
+void resize_memory(FPTYPE* arr, const size_t size, base_device::AbacusDevice_t device_type)
 {
     if (device_type == base_device::AbacusDevice_t::CpuDevice){
-        resize_memory_op<FPTYPE, base_device::DEVICE_CPU>()(arr);
+        resize_memory_op<FPTYPE, base_device::DEVICE_CPU>()(arr, size);
     }
     else if (device_type == base_device::AbacusDevice_t::GpuDevice){
-        resize_memory_op<FPTYPE, base_device::DEVICE_GPU>()(arr);
+        resize_memory_op<FPTYPE, base_device::DEVICE_GPU>()(arr, size);
     }
 }
 
