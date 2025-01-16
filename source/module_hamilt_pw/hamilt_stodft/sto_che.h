@@ -59,8 +59,8 @@ REAL vTMv(const REAL* v, const REAL* M, const int n)
     base_device::memory::synchronize_memory_op<REAL, base_device::DEVICE_CPU, Device>()(&result,
                                                                                         dot_device,
                                                                                         1);
-    base_device::memory::delete_memory_op<REAL, Device>()(ctx, y);
-    base_device::memory::delete_memory_op<REAL, Device>()(ctx, dot_device);
+    base_device::memory::delete_memory_op<REAL, Device>()(y);
+    base_device::memory::delete_memory_op<REAL, Device>()(dot_device);
     return result;
 }
 

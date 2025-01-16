@@ -34,7 +34,7 @@ Meta<OperatorPW<T, Device>>::Meta(Real tpiba_in,
 template<typename T, typename Device>
 Meta<OperatorPW<T, Device>>::~Meta()
 {
-    delmem_complex_op()(this->ctx, this->porter);
+    delmem_complex_op()(this->porter);
 }
 
 template<typename T, typename Device>

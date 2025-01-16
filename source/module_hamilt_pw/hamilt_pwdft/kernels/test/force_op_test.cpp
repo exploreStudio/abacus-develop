@@ -2943,9 +2943,9 @@ TEST_F(TestSrcPWForceMultiDevice, cal_vkb1_nl_op_gpu)
         EXPECT_LT(fabs(res[ii] - expected_vkb1[ii]), 6e-5);
     }
 
-    delmem_complex_op()(gpu_ctx, d_res);
-    delmem_complex_op()(gpu_ctx, d_vkb);
-    delmem_var_op()(gpu_ctx, d_gcar);
+    delmem_complex_op()(d_res);
+    delmem_complex_op()(d_vkb);
+    delmem_var_op()(d_gcar);
 }
 
 TEST_F(TestSrcPWForceMultiDevice, cal_force_nl_op_gpu)
@@ -3005,16 +3005,16 @@ TEST_F(TestSrcPWForceMultiDevice, cal_force_nl_op_gpu)
         EXPECT_LT(fabs(res[ii] - expected_force[ii]), 6e-5);
     }
 
-    delmem_var_op()(gpu_ctx, d_wg);
-    delmem_var_op()(gpu_ctx, d_res);
-    delmem_var_op()(gpu_ctx, d_deeq);
-    delmem_var_op()(gpu_ctx, d_ekb);
-    delmem_var_op()(gpu_ctx, d_qq_nt);
+    delmem_var_op()(d_wg);
+    delmem_var_op()(d_res);
+    delmem_var_op()(d_deeq);
+    delmem_var_op()(d_ekb);
+    delmem_var_op()(d_qq_nt);
 
-    delmem_int_op()(gpu_ctx, d_atom_nh);
-    delmem_int_op()(gpu_ctx, d_atom_na);
+    delmem_int_op()(d_atom_nh);
+    delmem_int_op()(d_atom_na);
 
-    delmem_complex_op()(gpu_ctx, d_becp);
-    delmem_complex_op()(gpu_ctx, d_dbecp);
+    delmem_complex_op()(d_becp);
+    delmem_complex_op()(d_dbecp);
 }
 #endif // __CUDA || __UT_USE_CUDA || __ROCM || __UT_USE_ROCM

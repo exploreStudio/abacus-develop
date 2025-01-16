@@ -147,9 +147,9 @@ TEST_F(TestModuleHamiltNonlocal, nonlocal_pw_op_gpu)
   }
   EXPECT_EQ(sum, expected_sum);
   EXPECT_EQ(iat, expected_iat);
-  delete_memory_double_op()(gpu_ctx, deeq_dev);
-  delete_memory_complex_double_op()(gpu_ctx, ps_dev);
-  delete_memory_complex_double_op()(gpu_ctx, becp_dev);
+  delete_memory_double_op()(deeq_dev);
+  delete_memory_complex_double_op()(ps_dev);
+  delete_memory_complex_double_op()(becp_dev);
 }
 
 TEST_F(TestModuleHamiltNonlocal, nonlocal_pw_spin_op_gpu)
@@ -177,8 +177,8 @@ TEST_F(TestModuleHamiltNonlocal, nonlocal_pw_spin_op_gpu)
   }
   EXPECT_EQ(sum, expected_sum);
   EXPECT_EQ(iat, expected_iat);
-  delete_memory_complex_double_op()(gpu_ctx, deeq_dev);
-  delete_memory_complex_double_op()(gpu_ctx, ps_dev);
-  delete_memory_complex_double_op()(gpu_ctx, becp_dev);
+  delete_memory_complex_double_op()(deeq_dev);
+  delete_memory_complex_double_op()(ps_dev);
+  delete_memory_complex_double_op()(becp_dev);
 }
 #endif // __CUDA || __UT_USE_CUDA || __ROCM || __UT_USE_ROCM

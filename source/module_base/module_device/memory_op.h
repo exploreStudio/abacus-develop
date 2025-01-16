@@ -62,8 +62,6 @@ struct cast_memory_op
     /// @brief memcpy for multi-device
     ///
     /// Input Parameters
-    /// \param dev_out : the type of computing device of arr_out
-    /// \param dev_in : the type of computing device of arr_in
     /// \param arr_in : input array
     /// \param size : array size
     ///
@@ -80,9 +78,8 @@ struct delete_memory_op
     /// @brief free memory for multi-device
     ///
     /// Input Parameters
-    /// \param dev : the type of computing device
     /// \param arr : the input array
-    void operator()(const Device* dev, FPTYPE* arr);
+    void operator()(FPTYPE* arr);
 };
 
 template <typename FPTYPE>
@@ -141,7 +138,7 @@ struct synchronize_memory_op<FPTYPE, base_device::DEVICE_GPU, base_device::DEVIC
 template <typename FPTYPE>
 struct delete_memory_op<FPTYPE, base_device::DEVICE_GPU>
 {
-    void operator()(const base_device::DEVICE_GPU* dev, FPTYPE* arr);
+    void operator()(FPTYPE* arr);
 };
 #endif // __CUDA || __UT_USE_CUDA || __ROCM || __UT_USE_ROCM
 
@@ -153,13 +150,12 @@ struct resize_memory_op_mt
     /// @brief Allocate memory for a given pointer. Note this op will free the pointer first.
     ///
     /// Input Parameters
-    /// \param dev : the type of computing device
     /// \param size : array size
     /// \param record_string : label for memory record
     ///
     /// Output Parameters
     /// \param arr : allocated array
-    void operator()(const Device* dev, FPTYPE*& arr, const size_t size, const char* record_in = nullptr);
+    void operator()(FPTYPE*& arr, const size_t size, const char* record_in = nullptr);
 };
 
 template <typename FPTYPE, typename Device>
@@ -168,9 +164,8 @@ struct delete_memory_op_mt
     /// @brief free memory for multi-device
     ///
     /// Input Parameters
-    /// \param dev : the type of computing device
     /// \param arr : the input array
-    void operator()(const Device* dev, FPTYPE* arr);
+    void operator()(FPTYPE* arr);
 };
 
 #endif // __DSP

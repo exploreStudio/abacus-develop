@@ -42,8 +42,8 @@ FS_Kin_tools<FPTYPE, Device>::~FS_Kin_tools()
 {
     if (this->device == base_device::GpuDevice)
     {
-        delmem_var_op()(this->ctx, d_gk);
-        delmem_var_op()(this->ctx, d_kfac);
+        delmem_var_op()(d_gk);
+        delmem_var_op()(d_kfac);
     }
 }
 

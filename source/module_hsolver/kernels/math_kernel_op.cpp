@@ -341,7 +341,7 @@ struct matrixTranspose_op<T, base_device::DEVICE_CPU>
         {
             output_matrix[i] = temp[i];
         }
-        base_device::memory::delete_memory_op<T, base_device::DEVICE_CPU>()(d, temp);
+        base_device::memory::delete_memory_op<T, base_device::DEVICE_CPU>()(temp);
     }
 };
 

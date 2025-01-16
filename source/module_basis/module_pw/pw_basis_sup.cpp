@@ -318,7 +318,7 @@ void PW_Basis_Sup::get_ig2isz_is2fftixy(
 #if defined(__CUDA) || defined(__ROCM)
         if (this->device == "gpu")
         {
-            delmem_int_op()(gpu_ctx, this->d_is2fftixy);
+            delmem_int_op()(this->d_is2fftixy);
             d_is2fftixy = nullptr;
         }
 #endif

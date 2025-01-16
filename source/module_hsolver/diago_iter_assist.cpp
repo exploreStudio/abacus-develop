@@ -140,11 +140,11 @@ void DiagoIterAssist<T, Device>::diagH_subspace(const hamilt::Hamilt<T, Device>*
     if (!in_place)
     {
         matrixSetToAnother<T, Device>()(ctx, n_band, temp, ld_temp, evc.get_pointer(), dmax);
-        delmem_complex_op()(ctx, temp);
+        delmem_complex_op()(temp);
     }
-    delmem_complex_op()(ctx, hcc);
-    delmem_complex_op()(ctx, scc);
-    delmem_complex_op()(ctx, vcc);
+    delmem_complex_op()(hcc);
+    delmem_complex_op()(scc);
+    delmem_complex_op()(vcc);
 
     ModuleBase::timer::tick("DiagoIterAssist", "diagH_subspace");
 }
@@ -245,7 +245,7 @@ void DiagoIterAssist<T, Device>::diagH_subspace_init(hamilt::Hamilt<T, Device>* 
                                  scc + i * nstart,
                                  1);
         }
-        delmem_complex_op()(ctx, temp);
+        delmem_complex_op()(temp);
     }
     else if (base_device::get_device_type(ctx) == base_device::CpuDevice)
     {
@@ -271,7 +271,7 @@ void DiagoIterAssist<T, Device>::diagH_subspace_init(hamilt::Hamilt<T, Device>* 
         pHamilt->sPsi(ppsi, spsi, psi_temp.get_nbasis(), psi_temp.get_nbasis(), psi_temp.get_nbands());
 
         gemm_op<T, Device>()(ctx, 'C', 'N', nstart, nstart, dmin, &one, ppsi, dmax, spsi, dmax, &zero, scc, nstart);
-        delmem_complex_op()(ctx, temp);
+        delmem_complex_op()(temp);
 
         add_to_hcc(hcc, nstart);
 
@@ -358,9 +358,9 @@ void DiagoIterAssist<T, Device>::diagH_subspace_init(hamilt::Hamilt<T, Device>* 
         // delmem_complex_op()(ctx, evctemp);
     }
 
-    delmem_complex_op()(ctx, hcc);
-    delmem_complex_op()(ctx, scc);
-    delmem_complex_op()(ctx, vcc);
+    delmem_complex_op()(hcc);
+    delmem_complex_op()(scc);
+    delmem_complex_op()(vcc);
     ModuleBase::timer::tick("DiagoIterAssist", "diagH_subspace_init");
 }
 
@@ -395,7 +395,7 @@ void DiagoIterAssist<T, Device>::diagH_LAPACK(const int nstart,
         syncmem_var_op()(e, eigenvalues, nbands);
     }
 
-    delmem_var_op()(ctx, eigenvalues);
+    delmem_var_op()(eigenvalues);
 
     // const bool all_eigenvalues = (nstart == nbands);
     // if (all_eigenvalues) {
@@ -483,7 +483,7 @@ void DiagoIterAssist<T, Device>::cal_hs_subspace(const hamilt::Hamilt<T, Device>
         Parallel_Reduce::reduce_pool(scc, nstart * nstart);
     }
 
-    delmem_complex_op()(ctx, temp);
+    delmem_complex_op()(temp);
 }
 
 template <typename T, typename Device>
@@ -525,7 +525,7 @@ void DiagoIterAssist<T, Device>::diag_responce( const T* hcc,
                              mat_col);
     }
 
-    delmem_complex_op()(ctx, vcc);
+    delmem_complex_op()(vcc);
 
     ModuleBase::timer::tick("DiagoIterAssist", "diag_responce");
 }
@@ -572,10 +572,10 @@ void DiagoIterAssist<T, Device>::diag_subspace_psi(const T* hcc,
                              temp,
                              dmin);
         matrixSetToAnother<T, Device>()(ctx, n_band, temp, dmin, evc.get_pointer(), dmax);
-        delmem_complex_op()(ctx, temp);
+        delmem_complex_op()(temp);
     }
 
-    delmem_complex_op()(ctx, vcc);
+    delmem_complex_op()(vcc);
 
     ModuleBase::timer::tick("DiagoIterAssist", "diag_subspace_psi");
 }

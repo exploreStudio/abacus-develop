@@ -100,8 +100,8 @@ TEST_F(TestModuleHamiltVeff, veff_pw_op_gpu)
     for (int ii = 0; ii < res.size(); ii++) {
         EXPECT_LT(fabs(res[ii] - expected_out[ii]), 6e-5);
     }
-    delete_memory_double_op()(gpu_ctx, d_in);
-    delete_memory_complex_op()(gpu_ctx, d_res);
+    delete_memory_double_op()(d_in);
+    delete_memory_complex_op()(d_res);
 }
 
 TEST_F(TestModuleHamiltVeff, veff_pw_spin_op_gpu)
@@ -132,8 +132,8 @@ TEST_F(TestModuleHamiltVeff, veff_pw_spin_op_gpu)
         EXPECT_LT(fabs(res[ii] - expected_out_spin[ii]), 7.5e-5);
         EXPECT_LT(fabs(res1[ii] - expected_out1_spin[ii]), 6e-5);
     }
-    delete_memory_double_op()(gpu_ctx, d_in);
-    delete_memory_complex_op()(gpu_ctx, d_res);
-    delete_memory_complex_op()(gpu_ctx, d_res1);
+    delete_memory_double_op()(d_in);
+    delete_memory_complex_op()(d_res);
+    delete_memory_complex_op()(d_res1);
 }
 #endif // __CUDA || __UT_USE_CUDA || __ROCM || __UT_USE_ROCM

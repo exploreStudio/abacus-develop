@@ -30,22 +30,22 @@ OnsiteProj<OperatorPW<T, Device>>::OnsiteProj(const int* isk_in,
 
 template<typename T, typename Device>
 OnsiteProj<OperatorPW<T, Device>>::~OnsiteProj() {
-    delmem_complex_op()(this->ctx, this->ps);
+    delmem_complex_op()(this->ps);
     if(this->init_delta_spin)
     {
-        delmem_int_op()(this->ctx, this->ip_iat);
-        delmem_complex_op()(this->ctx, this->lambda_coeff);
+        delmem_int_op()(this->ip_iat);
+        delmem_complex_op()(this->lambda_coeff);
     }
     if(this->has_dftu)
     {
         if(!init_delta_spin)
         {
-            delmem_int_op()(this->ctx, this->ip_iat);
+            delmem_int_op()(this->ip_iat);
         }
-        delmem_int_op()(this->ctx, this->orb_l_iat);
-        delmem_int_op()(this->ctx, this->ip_m);
-        delmem_int_op()(this->ctx, this->vu_begin_iat);
-        delmem_complex_op()(this->ctx, this->vu_device);
+        delmem_int_op()(this->orb_l_iat);
+        delmem_int_op()(this->ip_m);
+        delmem_int_op()(this->vu_begin_iat);
+        delmem_complex_op()(this->vu_device);
     }
 }
 

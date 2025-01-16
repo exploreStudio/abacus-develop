@@ -84,8 +84,8 @@ Chebyshev<REAL, Device>::~Chebyshev()
     delete[] polytrace;
     if (base_device::get_device_type<Device>(this->ctx) == base_device::GpuDevice)
     {
-        delmem_var_op()(this->ctx, this->coef_real);
-        delmem_complex_op()(this->ctx, this->coef_complex);
+        delmem_var_op()(this->coef_real);
+        delmem_complex_op()(this->coef_complex);
     }
     else
     {
@@ -132,7 +132,7 @@ REAL Chebyshev<REAL, Device>::ddot_real(const std::complex<REAL>* psi_L,
         resmem_var_op()(dot_device, 1);
         container::kernels::blas_dot<REAL, ct_Device>()(dim2, pL, 1, pR, 1, dot_device);
         syncmem_var_d2h_op()(&result, dot_device, 1);
-        delmem_var_op()(this->ctx, dot_device);
+        delmem_var_op()(dot_device);
     }
     else
     {
@@ -151,7 +151,7 @@ REAL Chebyshev<REAL, Device>::ddot_real(const std::complex<REAL>* psi_L,
             pL += 2 * LDA;
             pR += 2 * LDA;
         }
-        delmem_var_op()(this->ctx, dot_device);
+        delmem_var_op()(dot_device);
     }
     return result;
 }
@@ -462,9 +462,9 @@ void Chebyshev<REAL, Device>::calfinalvec_real(
         arrayn = arraynp1;
         arraynp1 = tem;
     }
-    delmem_complex_op()(this->ctx, arraynp1);
-    delmem_complex_op()(this->ctx, arrayn);
-    delmem_complex_op()(this->ctx, arrayn_1);
+    delmem_complex_op()(arraynp1);
+    delmem_complex_op()(arrayn);
+    delmem_complex_op()(arrayn_1);
     return;
 }
 
@@ -527,9 +527,9 @@ void Chebyshev<REAL, Device>::calfinalvec_complex(
         arrayn = arraynp1;
         arraynp1 = tem;
     }
-    delmem_complex_op()(this->ctx, arraynp1);
-    delmem_complex_op()(this->ctx, arrayn);
-    delmem_complex_op()(this->ctx, arrayn_1);
+    delmem_complex_op()(arraynp1);
+    delmem_complex_op()(arrayn);
+    delmem_complex_op()(arrayn_1);
     return;
 }
 
@@ -618,9 +618,9 @@ void Chebyshev<REAL, Device>::tracepolyA(
         arraynp1 = tem;
     }
 
-    delmem_complex_op()(this->ctx, arraynp1);
-    delmem_complex_op()(this->ctx, arrayn);
-    delmem_complex_op()(this->ctx, arrayn_1);
+    delmem_complex_op()(arraynp1);
+    delmem_complex_op()(arrayn);
+    delmem_complex_op()(arrayn_1);
     return;
 }
 
@@ -754,9 +754,9 @@ bool Chebyshev<REAL, Device>::checkconverge(
         arraynp1 = tem;
     }
 
-    delmem_complex_op()(this->ctx, arraynp1);
-    delmem_complex_op()(this->ctx, arrayn);
-    delmem_complex_op()(this->ctx, arrayn_1);
+    delmem_complex_op()(arraynp1);
+    delmem_complex_op()(arrayn);
+    delmem_complex_op()(arrayn_1);
     return converge;
 }
 

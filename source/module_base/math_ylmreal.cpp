@@ -342,9 +342,9 @@ void YlmReal::Ylm_Real(Device * ctx, const int lmax2, const int ng, const FPTYPE
         p,
         ylm);
 
-    delmem_var_op()(ctx, p);
-    delmem_var_op()(ctx, phi);
-    delmem_var_op()(ctx, cost);
+    delmem_var_op()(p);
+    delmem_var_op()(phi);
+    delmem_var_op()(cost);
 } // end subroutine ylmr2
 
 //==========================================================

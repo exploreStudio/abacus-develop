@@ -116,9 +116,9 @@ TEST_F(TestModulePWPWMultiDevice, set_3d_fft_box_op_gpu)
     for (int ii = 0; ii < this->nxyz; ii++) {
         EXPECT_LT(fabs(res[ii] - out_1[ii]), 1e-12);
     }
-    delete_memory_int_gpu_op()(gpu_ctx, d_box_index);
-    delete_memory_complex_gpu_op()(gpu_ctx, d_res);
-    delete_memory_complex_gpu_op()(gpu_ctx, d_in_1);
+    delete_memory_int_gpu_op()(d_box_index);
+    delete_memory_complex_gpu_op()(d_res);
+    delete_memory_complex_gpu_op()(d_in_1);
 }
 
 TEST_F(TestModulePWPWMultiDevice, set_recip_to_real_output_op_gpu)
@@ -137,8 +137,8 @@ TEST_F(TestModulePWPWMultiDevice, set_recip_to_real_output_op_gpu)
     for (int ii = 0; ii < this->nxyz; ii++) {
         EXPECT_LT(fabs(res[ii] - out_2[ii]), 1e-12);
     }
-    delete_memory_complex_gpu_op()(gpu_ctx, d_res);
-    delete_memory_complex_gpu_op()(gpu_ctx, d_in_2);
+    delete_memory_complex_gpu_op()(d_res);
+    delete_memory_complex_gpu_op()(d_in_2);
 }
 
 TEST_F(TestModulePWPWMultiDevice, set_real_to_recip_output_op_gpu)
@@ -160,9 +160,9 @@ TEST_F(TestModulePWPWMultiDevice, set_real_to_recip_output_op_gpu)
     for (int ii = 0; ii < out_3.size(); ii++) {
         EXPECT_LT(fabs(res[ii] - out_3[ii]), 5e-6);
     }
-    delete_memory_int_gpu_op()(gpu_ctx, d_box_index);
-    delete_memory_complex_gpu_op()(gpu_ctx, d_res);
-    delete_memory_complex_gpu_op()(gpu_ctx, d_in_3);
+    delete_memory_int_gpu_op()(d_box_index);
+    delete_memory_complex_gpu_op()(d_res);
+    delete_memory_complex_gpu_op()(d_in_3);
 }
 
 #endif // __UT_USE_CUDA || __UT_USE_ROCM

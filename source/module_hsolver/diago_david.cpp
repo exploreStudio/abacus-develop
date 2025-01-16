@@ -105,19 +105,19 @@ DiagoDavid<T, Device>::DiagoDavid(const Real* precondition_in,
 template <typename T, typename Device>
 DiagoDavid<T, Device>::~DiagoDavid()
 {
-    delmem_complex_op()(this->ctx, this->basis);
-    delmem_complex_op()(this->ctx, this->hpsi);
-    delmem_complex_op()(this->ctx, this->spsi);
-    delmem_complex_op()(this->ctx, this->hcc);
+    delmem_complex_op()(this->basis);
+    delmem_complex_op()(this->hpsi);
+    delmem_complex_op()(this->spsi);
+    delmem_complex_op()(this->hcc);
     // delmem_complex_op()(this->ctx, this->scc);
-    delmem_complex_op()(this->ctx, this->vcc);
-    delmem_complex_op()(this->ctx, this->lagrange_matrix);
-    base_device::memory::delete_memory_op<Real, base_device::DEVICE_CPU>()(this->cpu_ctx, this->eigenvalue);
+    delmem_complex_op()(this->vcc);
+    delmem_complex_op()(this->lagrange_matrix);
+    base_device::memory::delete_memory_op<Real, base_device::DEVICE_CPU>()(this->eigenvalue);
     // If the device is a GPU device, free the d_precondition array.
 #if defined(__CUDA) || defined(__ROCM)
     if (this->device == base_device::GpuDevice)
     {
-        delmem_var_op()(this->ctx, this->d_precondition);
+        delmem_var_op()(this->d_precondition);
     }
 #endif
 }
@@ -422,7 +422,7 @@ void DiagoDavid<T, Device>::cal_grad(const HPsiFunc& hpsi_func,
                                                    vc_ev_vector + m * nbase,
                                                    vc_ev_vector + m * nbase,
                                                    e_temp_gpu);
-            delmem_var_op()(this->ctx, e_temp_gpu);
+            delmem_var_op()(e_temp_gpu);
 #endif
         }
         else
@@ -565,8 +565,8 @@ void DiagoDavid<T, Device>::cal_grad(const HPsiFunc& hpsi_func,
     // hpsi[:, nbase:nbase+notcnv] = H basis[:, nbase:nbase+notcnv]
     hpsi_func(basis + nbase * dim, hpsi + nbase * dim, dim, notconv);
 
-    delmem_complex_op()(this->ctx, lagrange);
-    delmem_complex_op()(this->ctx, vc_ev_vector);
+    delmem_complex_op()(lagrange);
+    delmem_complex_op()(vc_ev_vector);
 
     ModuleBase::timer::tick("DiagoDavid", "cal_grad");
     return;
@@ -702,7 +702,7 @@ void DiagoDavid<T, Device>::diag_zhegvx(const int& nbase,
             dnevx_op<T, Device>()(this->ctx, nbase, nbase_x, hcc, nband, eigenvalue_gpu, vcc);
 
             syncmem_var_d2h_op()(this->eigenvalue, eigenvalue_gpu, nbase_x);
-            delmem_var_op()(this->ctx, eigenvalue_gpu);
+            delmem_var_op()(eigenvalue_gpu);
 #endif
         }
         else
@@ -846,9 +846,9 @@ void DiagoDavid<T, Device>::refresh(const int& dim,
         // syncmem_h2d_op()(this->ctx, this->cpu_ctx, scc, scc_cpu, nbase_x * nbase_x);
         syncmem_h2d_op()(vcc, vcc_cpu, nbase_x * nbase_x);
 
-        base_device::memory::delete_memory_op<T, base_device::DEVICE_CPU>()(this->cpu_ctx, hcc_cpu);
+        base_device::memory::delete_memory_op<T, base_device::DEVICE_CPU>()(hcc_cpu);
         // base_device::memory::delete_memory_op<T, base_device::DEVICE_CPU>()(this->cpu_ctx, scc_cpu);
-        base_device::memory::delete_memory_op<T, base_device::DEVICE_CPU>()(this->cpu_ctx, vcc_cpu);
+        base_device::memory::delete_memory_op<T, base_device::DEVICE_CPU>()(vcc_cpu);
 #endif
     }
     else

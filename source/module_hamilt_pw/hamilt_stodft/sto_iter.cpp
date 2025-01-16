@@ -30,7 +30,7 @@ void Stochastic_Iter<T, Device>::dot(const int& n, const Real* x, const int& inc
     resmem_var_op()(result_device, 1);
     container::kernels::blas_dot<Real, ct_Device>()(n, p_che->coef_real, 1, spolyv, 1, result_device);
     syncmem_var_d2h_op()(&result, result_device, 1);
-    delmem_var_op()(this->ctx, result_device);
+    delmem_var_op()(result_device);
 }
 
 template <typename T, typename Device>
@@ -109,7 +109,7 @@ void Stochastic_Iter<T, Device>::orthog(const int& ik, psi::Psi<T, Device>& psi,
                                       &ModuleBase::ONE,
                                       wfgout,
                                       npwx);
-        delmem_complex_op()(this->ctx, sum);
+        delmem_complex_op()(sum);
     }
     ModuleBase::timer::tick("Stochastic_Iter", "orthog");
 }
@@ -549,7 +549,7 @@ void Stochastic_Iter<T, Device>::sum_stoeband(Stochastic_WF<T, Device>& stowf,
                 tmpin += npwx;
                 tmpout += npwx;
             }
-            delmem_complex_op()(this->ctx, hshchi);
+            delmem_complex_op()(hshchi);
         }
     }
 #ifdef __MPI
@@ -633,7 +633,7 @@ void Stochastic_Iter<T, Device>::cal_storho(const UnitCell& ucell,
         pes->rho = reinterpret_cast<Real **>(pes->charge->rho);
     }
 
-    delmem_complex_op()(this->ctx, porter);
+    delmem_complex_op()(porter);
 #ifdef __MPI
     if(GlobalV::KPAR > 1)
     {
@@ -739,7 +739,7 @@ void Stochastic_Iter<T, Device>::calTnchi_ik(const int& ik, Stochastic_WF<T, Dev
         castmem_d2z_op()(coef_real, p_che->coef_real, p_che->norder);
         gemv_op()(this->ctx, transa, M, N, &one, stowf.chiallorder[ik].get_pointer(), LDA, coef_real, inc, &zero, out, inc);
         // zgemv_(&transa, &M, &N, &one, stowf.chiallorder[ik].get_pointer(), &LDA, coef_real, &inc, &zero, out, &inc);
-        delmem_complex_op()(this->ctx, coef_real);
+        delmem_complex_op()(coef_real);
     }
     else
     {

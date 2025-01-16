@@ -179,15 +179,15 @@ TEST(TestSrcPWStressMultiDevice, cal_dbecp_noevc_nl_op_gpu)
         EXPECT_LT(fabs(dbecp_noevc[ii] - expected_dbecpnoevc[ii]), 6e-5);
     }
 
-    delmem_zd_op()(gpu_ctx, d_vkb0i);
-    delmem_zd_op()(gpu_ctx, d_vkb0j);
-    delmem_zd_op()(gpu_ctx, d_vkb);
-    delmem_zd_op()(gpu_ctx, d_vkb1);
-    delmem_zd_op()(gpu_ctx, d_vkb2);
-    delmem_zd_op()(gpu_ctx, d_dbecp_noevc);
+    delmem_zd_op()(d_vkb0i);
+    delmem_zd_op()(d_vkb0j);
+    delmem_zd_op()(d_vkb);
+    delmem_zd_op()(d_vkb1);
+    delmem_zd_op()(d_vkb2);
+    delmem_zd_op()(d_dbecp_noevc);
 
-    delmem_dd_op()(gpu_ctx, d_gcar);
-    delmem_dd_op()(gpu_ctx, d_kvec_c);
+    delmem_dd_op()(d_gcar);
+    delmem_dd_op()(d_kvec_c);
 }
 
 TEST(TestSrcPWStressMultiDevice, cal_stress_nl_op_gpu)
@@ -290,16 +290,16 @@ TEST(TestSrcPWStressMultiDevice, cal_stress_nl_op_gpu)
         EXPECT_LT(fabs(stress[ii] - expected_stress[ii]), 6e-5);
     }
 
-    delmem_zd_op()(gpu_ctx, d_becp);
-    delmem_zd_op()(gpu_ctx, d_dbecp);
+    delmem_zd_op()(d_becp);
+    delmem_zd_op()(d_dbecp);
 
-    delmem_dd_op()(gpu_ctx, d_wg);
-    delmem_dd_op()(gpu_ctx, d_deeq);
-    delmem_dd_op()(gpu_ctx, d_stress);
-    delmem_dd_op()(gpu_ctx, d_ekb);
-    delmem_dd_op()(gpu_ctx, d_qq_nt);
+    delmem_dd_op()(d_wg);
+    delmem_dd_op()(d_deeq);
+    delmem_dd_op()(d_stress);
+    delmem_dd_op()(d_ekb);
+    delmem_dd_op()(d_qq_nt);
 
-    delmem_int_op()(gpu_ctx, d_atom_nh);
-    delmem_int_op()(gpu_ctx, d_atom_na);
+    delmem_int_op()(d_atom_nh);
+    delmem_int_op()(d_atom_na);
 }
 #endif // __CUDA || __UT_USE_CUDA || __ROCM || __UT_USE_ROCM

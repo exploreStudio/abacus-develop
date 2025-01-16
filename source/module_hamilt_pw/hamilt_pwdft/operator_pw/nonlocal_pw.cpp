@@ -35,8 +35,8 @@ Nonlocal<OperatorPW<T, Device>>::Nonlocal(const int* isk_in,
 
 template<typename T, typename Device>
 Nonlocal<OperatorPW<T, Device>>::~Nonlocal() {
-    delmem_complex_op()(this->ctx, this->ps);
-    delmem_complex_op()(this->ctx, this->becp);
+    delmem_complex_op()(this->ps);
+    delmem_complex_op()(this->becp);
 }
 
 template<typename T, typename Device>

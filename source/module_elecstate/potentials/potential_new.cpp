@@ -50,18 +50,18 @@ Potential::~Potential()
     }
     if (PARAM.inp.basis_type == "pw" && PARAM.inp.device == "gpu") {
         if (PARAM.inp.precision == "single") {
-            delmem_sd_op()(gpu_ctx, s_veff_smooth);
-            delmem_sd_op()(gpu_ctx, s_vofk_smooth);
+            delmem_sd_op()(s_veff_smooth);
+            delmem_sd_op()(s_vofk_smooth);
         }
         else {
-            delmem_dd_op()(gpu_ctx, d_veff_smooth);
-            delmem_dd_op()(gpu_ctx, d_vofk_smooth);
+            delmem_dd_op()(d_veff_smooth);
+            delmem_dd_op()(d_vofk_smooth);
         }
     }
     else {
         if (PARAM.inp.precision == "single") {
-            delmem_sh_op()(cpu_ctx, s_veff_smooth);
-            delmem_sh_op()(cpu_ctx, s_vofk_smooth);
+            delmem_sh_op()(s_veff_smooth);
+            delmem_sh_op()(s_vofk_smooth);
         }
     }
 }

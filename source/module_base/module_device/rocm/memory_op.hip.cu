@@ -45,7 +45,7 @@ void resize_memory_op<FPTYPE, base_device::DEVICE_GPU>::operator()(FPTYPE*& arr,
 {
     if (arr != nullptr)
     {
-        delete_memory_op<FPTYPE, base_device::DEVICE_GPU>()(dev, arr);
+        delete_memory_op<FPTYPE, base_device::DEVICE_GPU>()(arr);
     }
     hipErrcheck(hipMalloc((void**)&arr, sizeof(FPTYPE) * size));
 }
@@ -152,7 +152,7 @@ struct cast_memory_op<FPTYPE_out, FPTYPE_in, base_device::DEVICE_CPU, base_devic
 };
 
 template <typename FPTYPE>
-void delete_memory_op<FPTYPE, base_device::DEVICE_GPU>::operator()(const base_device::DEVICE_GPU* dev, FPTYPE* arr)
+void delete_memory_op<FPTYPE, base_device::DEVICE_GPU>::operator()(FPTYPE* arr)
 {
     hipErrcheck(hipFree(arr));
 }

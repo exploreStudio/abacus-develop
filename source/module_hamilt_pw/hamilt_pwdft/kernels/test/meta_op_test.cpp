@@ -75,9 +75,9 @@ TEST_F(TestModuleHamiltMeta, meta_pw_op_gpu)
     for (int ii = 0; ii < res.size(); ii++) {
         EXPECT_LT(fabs(res[ii] - expected_out[ii]), 6e-5);
     }
-    delmem_var_op()(gpu_ctx, d_gcar);
-    delmem_var_op()(gpu_ctx, d_kvec_c);
-    delmem_complex_op()(gpu_ctx, d_in);
-    delmem_complex_op()(gpu_ctx, d_res);
+    delmem_var_op()(d_gcar);
+    delmem_var_op()(d_kvec_c);
+    delmem_complex_op()(d_in);
+    delmem_complex_op()(d_res);
 }
 #endif // __CUDA || __UT_USE_CUDA || __ROCM || __UT_USE_ROCM

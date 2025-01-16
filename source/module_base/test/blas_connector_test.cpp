@@ -111,7 +111,7 @@ TEST(blas_connector, ScalGpu) {
     syncmem_z2z_h2d_op()(result_gpu, result, sizeof(std::complex<double>) * 8);
     BlasConnector::scal(size,scale,result_gpu,incx,base_device::AbacusDevice_t::GpuDevice);
     syncmem_z2z_d2h_op()(result, result_gpu, sizeof(std::complex<double>) * 8);
-    delmem_zd_op()(gpu_ctx, result_gpu);
+    delmem_zd_op()(result_gpu);
     // incx is the spacing between elements if result
     for (int i = 0; i < size; i++) {
         EXPECT_DOUBLE_EQ(answer[i].real(), result[i].real());
@@ -214,8 +214,8 @@ TEST(blas_connector, AxpyGpu) {
     syncmem_z2z_h2d_op()(x_gpu, x_const.data(), sizeof(std::complex<double>) * size);
     BlasConnector::axpy(size, scale, x_gpu, incx, result_gpu, incy, base_device::AbacusDevice_t::GpuDevice);
     syncmem_z2z_d2h_op()(result.data(), result_gpu, sizeof(std::complex<double>) * size);
-    delmem_zd_op()(gpu_ctx, result_gpu);
-    delmem_zd_op()(gpu_ctx, x_gpu);
+    delmem_zd_op()(result_gpu);
+    delmem_zd_op()(x_gpu);
     for (int i = 0; i < size; i++) {
         EXPECT_DOUBLE_EQ(answer[i].real(), result[i].real());
         EXPECT_DOUBLE_EQ(answer[i].imag(), result[i].imag());
@@ -672,9 +672,9 @@ TEST(blas_connector, GemmGpu) {
            a_gpu, lda, b_gpu, ldb, beta_const,
            result_gpu, ldc, base_device::AbacusDevice_t::GpuDevice);
     syncmem_z2z_d2h_op()(result.data(), result_gpu, sizeof(std::complex<double>) * size_n * ldc);
-    delmem_zd_op()(gpu_ctx, result_gpu);
-    delmem_zd_op()(gpu_ctx, a_gpu);
-    delmem_zd_op()(gpu_ctx, b_gpu);
+    delmem_zd_op()(result_gpu);
+    delmem_zd_op()(a_gpu);
+    delmem_zd_op()(b_gpu);
     for (int i = 0; i < size_m; i++)
         for (int j = 0; j < size_n; j++) {
             EXPECT_DOUBLE_EQ(answer[i + j * ldc].real(),

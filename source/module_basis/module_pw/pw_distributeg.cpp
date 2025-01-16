@@ -164,7 +164,7 @@ void PW_Basis::get_ig2isz_is2fftixy(
         delete[] this->is2fftixy; this->is2fftixy = nullptr; // map is (index of sticks) to ixy (iy + ix * fftny).
 #if defined(__CUDA) || defined(__ROCM)
         if (this->device == "gpu") {
-            delmem_int_op()(gpu_ctx, this->d_is2fftixy);
+            delmem_int_op()(this->d_is2fftixy);
             d_is2fftixy = nullptr;
         }
 #endif

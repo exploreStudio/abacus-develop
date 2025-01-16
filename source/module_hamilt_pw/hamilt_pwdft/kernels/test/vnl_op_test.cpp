@@ -4108,19 +4108,19 @@ TEST_F(TestSrcPWVnlMultiDevice, cal_vnl_op_gpu)
         EXPECT_LT(fabs(vkb[ii] - expected_vkb[ii]), 6e-5);
     }
 
-    delmem_int_op()(gpu_ctx, d_atom_na);
-    delmem_int_op()(gpu_ctx, d_atom_nh);
-    delmem_int_op()(gpu_ctx, d_atom_nb);
+    delmem_int_op()(d_atom_na);
+    delmem_int_op()(d_atom_nh);
+    delmem_int_op()(d_atom_nb);
 
-    delmem_var_op()(gpu_ctx, d_gk);
-    delmem_var_op()(gpu_ctx, d_ylm);
-    delmem_var_op()(gpu_ctx, d_indv);
-    delmem_var_op()(gpu_ctx, d_nhtol);
-    delmem_var_op()(gpu_ctx, d_nhtolm);
-    delmem_var_op()(gpu_ctx, d_tab);
-    delmem_var_op()(gpu_ctx, d_vkb1);
+    delmem_var_op()(d_gk);
+    delmem_var_op()(d_ylm);
+    delmem_var_op()(d_indv);
+    delmem_var_op()(d_nhtol);
+    delmem_var_op()(d_nhtolm);
+    delmem_var_op()(d_tab);
+    delmem_var_op()(d_vkb1);
 
-    delmem_complex_op()(gpu_ctx, d_sk);
-    delmem_complex_op()(gpu_ctx, d_vkb);
+    delmem_complex_op()(d_sk);
+    delmem_complex_op()(d_vkb);
 }
 #endif // __CUDA || __UT_USE_CUDA || __ROCM || __UT_USE_ROCM

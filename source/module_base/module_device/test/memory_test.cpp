@@ -161,13 +161,13 @@ TEST_F(TestModulePsiMemory, synchronize_memory_op_complex_double_cpu_to_cpu)
 TEST_F(TestModulePsiMemory, delete_memory_op_double_cpu)
 {
     double* h_xx = (double*)malloc(sizeof(double) * xx.size());
-    delete_memory_double_cpu_op()(cpu_ctx, h_xx);
+    delete_memory_double_cpu_op()(h_xx);
 }
 
 TEST_F(TestModulePsiMemory, delete_memory_op_complex_double_cpu)
 {
     std::complex<double>* hz_xx = (std::complex<double>*)malloc(sizeof(std::complex<double>) * z_xx.size());
-    delete_memory_complex_double_cpu_op()(cpu_ctx, hz_xx);
+    delete_memory_complex_double_cpu_op()(hz_xx);
 }
 
 #if __UT_USE_CUDA || __UT_USE_ROCM
@@ -338,13 +338,13 @@ TEST_F(TestModulePsiMemory, synchronize_memory_op_complex_double_gpu_to_gpu)
 TEST_F(TestModulePsiMemory, delete_memory_op_double_gpu)
 {
     thrust::device_ptr<double> d_xx = thrust::device_malloc<double>(xx.size());
-    delete_memory_double_gpu_op()(gpu_ctx, thrust::raw_pointer_cast(d_xx));
+    delete_memory_double_gpu_op()(thrust::raw_pointer_cast(d_xx));
 }
 
 TEST_F(TestModulePsiMemory, delete_memory_op_complex_double_gpu)
 {
     thrust::device_ptr<std::complex<double>> dz_xx = thrust::device_malloc<std::complex<double>>(z_xx.size());
-    delete_memory_complex_double_gpu_op()(gpu_ctx, thrust::raw_pointer_cast(dz_xx));
+    delete_memory_complex_double_gpu_op()(thrust::raw_pointer_cast(dz_xx));
 }
 
 #endif // __UT_USE_CUDA || __UT_USE_ROCM

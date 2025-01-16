@@ -58,7 +58,7 @@ void bcast_dev(const Device* ctx, T* object, const int& n, const MPI_Comm& comm,
         base_device::memory::synchronize_memory_op<T, Device, base_device::DEVICE_CPU>()(object, object_cpu, n);
         if(alloc)
         {
-            base_device::memory::delete_memory_op<T, base_device::DEVICE_CPU>()(cpu_ctx, object_cpu);
+            base_device::memory::delete_memory_op<T, base_device::DEVICE_CPU>()(object_cpu);
         }
     }
     return;
@@ -95,7 +95,7 @@ void reduce_dev(const Device* ctx, T* object, const int& n, const MPI_Comm& comm
         base_device::memory::synchronize_memory_op<T, Device, base_device::DEVICE_CPU>()(object, object_cpu, n);
         if(alloc)
         {
-            base_device::memory::delete_memory_op<T, base_device::DEVICE_CPU>()(cpu_ctx, object_cpu);
+            base_device::memory::delete_memory_op<T, base_device::DEVICE_CPU>()(object_cpu);
         }
     }
     return;

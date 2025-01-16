@@ -33,26 +33,26 @@ ElecStatePW<T, Device>::~ElecStatePW()
 {
     if (PARAM.inp.device == "gpu" || PARAM.inp.precision == "single")
     {
-        delmem_var_op()(this->ctx, this->rho_data);
+        delmem_var_op()(this->rho_data);
         delete[] this->rho;
 
         if (PARAM.globalv.double_grid || PARAM.globalv.use_uspp)
         {
-            delmem_complex_op()(this->ctx, this->rhog_data);
+            delmem_complex_op()(this->rhog_data);
             delete[] this->rhog;
         }
         if (get_xc_func_type() == 3 || PARAM.inp.out_elf[0] > 0)
         {
-            delmem_var_op()(this->ctx, this->kin_r_data);
+            delmem_var_op()(this->kin_r_data);
             delete[] this->kin_r;
         }
     }
     if (PARAM.globalv.use_uspp)
     {
-        delmem_var_op()(this->ctx, this->becsum);
+        delmem_var_op()(this->becsum);
     }
-    delmem_complex_op()(this->ctx, this->wfcr);
-    delmem_complex_op()(this->ctx, this->wfcr_another_spin);
+    delmem_complex_op()(this->wfcr);
+    delmem_complex_op()(this->wfcr_another_spin);
 }
 
 template<typename T, typename Device>
@@ -413,13 +413,13 @@ void ElecStatePW<T, Device>::cal_becsum(const psi::Psi<T, Device>& psi)
                         }
                     }
                 }
-                delmem_complex_op()(this->ctx, auxk1);
-                delmem_complex_op()(this->ctx, auxk2);
-                delmem_complex_op()(this->ctx, aux_gk);
+                delmem_complex_op()(auxk1);
+                delmem_complex_op()(auxk2);
+                delmem_complex_op()(aux_gk);
             }
         }
     }
-    delmem_complex_op()(this->ctx, becp);
+    delmem_complex_op()(becp);
 }
 
 template <typename T, typename Device>
@@ -547,15 +547,15 @@ void ElecStatePW<T, Device>::addusdens_g(const Real* becsum, T** rhog)
                     }
                 }
             }
-            delmem_complex_op()(this->ctx, skk);
-            delmem_complex_op()(this->ctx, aux2);
-            delmem_complex_op()(this->ctx, tbecsum);
+            delmem_complex_op()(skk);
+            delmem_complex_op()(aux2);
+            delmem_complex_op()(tbecsum);
         }
     }
 
-    delmem_var_op()(this->ctx, qmod);
-    delmem_complex_op()(this->ctx, qgm);
-    delmem_var_op()(this->ctx, ylmk0);
+    delmem_var_op()(qmod);
+    delmem_complex_op()(qgm);
+    delmem_var_op()(ylmk0);
 }
 
 template class ElecStatePW<std::complex<float>, base_device::DEVICE_CPU>;

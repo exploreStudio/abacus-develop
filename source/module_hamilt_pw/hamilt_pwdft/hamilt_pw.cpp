@@ -344,7 +344,7 @@ void HamiltPW<T, Device>::sPsi(const T* psi_in, // psi
                                   &ps[this->ppcell->indv_ijkb0[iat]],
                                   this->ppcell->nkb);
                     }
-                    delmem_complex_op()(ctx, qqc);
+                    delmem_complex_op()(qqc);
                 }
             }
 
@@ -382,8 +382,8 @@ void HamiltPW<T, Device>::sPsi(const T* psi_in, // psi
                           nrow);
             }
         }
-        delmem_complex_op()(this->ctx, ps);
-        delmem_complex_op()(this->ctx, becp);
+        delmem_complex_op()(ps);
+        delmem_complex_op()(becp);
     }
 }
 

@@ -49,7 +49,7 @@ void FFT_ROCM<float>::clear()
     this->cleanFFT();
     if (c_auxr_3d != nullptr)
     {
-        delmem_cd_op()(gpu_ctx, c_auxr_3d);
+        delmem_cd_op()(c_auxr_3d);
         c_auxr_3d = nullptr;
     }
 }
@@ -59,7 +59,7 @@ void FFT_ROCM<double>::clear()
     this->cleanFFT();
     if (z_auxr_3d != nullptr)
     {
-        delmem_zd_op()(gpu_ctx, z_auxr_3d);
+        delmem_zd_op()(z_auxr_3d);
         z_auxr_3d = nullptr;
     }
 }

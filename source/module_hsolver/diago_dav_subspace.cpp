@@ -78,17 +78,17 @@ Diago_DavSubspace<T, Device>::Diago_DavSubspace(const std::vector<Real>& precond
 template <typename T, typename Device>
 Diago_DavSubspace<T, Device>::~Diago_DavSubspace()
 {
-    delmem_complex_op()(this->ctx, this->psi_in_iter);
+    delmem_complex_op()(this->psi_in_iter);
 
-    delmem_complex_op()(this->ctx, this->hphi);
-    delmem_complex_op()(this->ctx, this->hcc);
-    delmem_complex_op()(this->ctx, this->scc);
-    delmem_complex_op()(this->ctx, this->vcc);
+    delmem_complex_op()(this->hphi);
+    delmem_complex_op()(this->hcc);
+    delmem_complex_op()(this->scc);
+    delmem_complex_op()(this->vcc);
 
 #if defined(__CUDA) || defined(__ROCM)
     if (this->device == base_device::GpuDevice)
     {
-        delmem_real_op()(this->ctx, this->d_precondition);
+        delmem_real_op()(this->d_precondition);
     }
 #endif
 }
@@ -316,7 +316,7 @@ void Diago_DavSubspace<T, Device>::cal_grad(const HPsiFunc& hpsi_func,
     }
     if(this->device == base_device::GpuDevice)
     {
-        delmem_real_op()(this->ctx, e_temp_hd);
+        delmem_real_op()(e_temp_hd);
     }
 
 #ifdef __DSP
@@ -560,13 +560,13 @@ void Diago_DavSubspace<T, Device>::diag_zhegvx(const int& nbase,
             {
                 base_device::memory::synchronize_memory_op<T, Device, Device>()(vcc + i * nbase_x, vcc_gpu + i * nbase, nbase);
             }
-            delmem_complex_op()(this->ctx, hcc_gpu);
-            delmem_complex_op()(this->ctx, scc_gpu);
-            delmem_complex_op()(this->ctx, vcc_gpu);
+            delmem_complex_op()(hcc_gpu);
+            delmem_complex_op()(scc_gpu);
+            delmem_complex_op()(vcc_gpu);
 
             syncmem_var_d2h_op()((*eigenvalue_iter).data(), eigenvalue_gpu, this->nbase_x);
 
-            delmem_real_op()(this->ctx, eigenvalue_gpu);
+            delmem_real_op()(eigenvalue_gpu);
         }
 #endif
     }
@@ -754,9 +754,9 @@ void Diago_DavSubspace<T, Device>::refresh(const int& dim,
         syncmem_h2d_op()(scc, scc_cpu, this->nbase_x * this->nbase_x);
         syncmem_h2d_op()(vcc, vcc_cpu, this->nbase_x * this->nbase_x);
 
-        base_device::memory::delete_memory_op<T, base_device::DEVICE_CPU>()(this->cpu_ctx, hcc_cpu);
-        base_device::memory::delete_memory_op<T, base_device::DEVICE_CPU>()(this->cpu_ctx, scc_cpu);
-        base_device::memory::delete_memory_op<T, base_device::DEVICE_CPU>()(this->cpu_ctx, vcc_cpu);
+        base_device::memory::delete_memory_op<T, base_device::DEVICE_CPU>()(hcc_cpu);
+        base_device::memory::delete_memory_op<T, base_device::DEVICE_CPU>()(scc_cpu);
+        base_device::memory::delete_memory_op<T, base_device::DEVICE_CPU>()(vcc_cpu);
 #endif
     }
     else

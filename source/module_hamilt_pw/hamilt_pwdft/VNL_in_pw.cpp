@@ -36,42 +36,42 @@ void pseudopot_cell_vnl::release_memory()
     {
         if (PARAM.inp.precision == "single")
         {
-            delmem_sd_op()(gpu_ctx, this->s_deeq);
-            delmem_sd_op()(gpu_ctx, this->s_nhtol);
-            delmem_sd_op()(gpu_ctx, this->s_nhtolm);
-            delmem_sd_op()(gpu_ctx, this->s_indv);
-            delmem_sd_op()(gpu_ctx, this->s_tab);
-            delmem_sd_op()(gpu_ctx, this->s_qq_nt);
-            delmem_cd_op()(gpu_ctx, this->c_deeq_nc);
-            delmem_cd_op()(gpu_ctx, this->c_vkb);
-            delmem_cd_op()(gpu_ctx, this->c_qq_so);
+            delmem_sd_op()(this->s_deeq);
+            delmem_sd_op()(this->s_nhtol);
+            delmem_sd_op()(this->s_nhtolm);
+            delmem_sd_op()(this->s_indv);
+            delmem_sd_op()(this->s_tab);
+            delmem_sd_op()(this->s_qq_nt);
+            delmem_cd_op()(this->c_deeq_nc);
+            delmem_cd_op()(this->c_vkb);
+            delmem_cd_op()(this->c_qq_so);
         }
         else
         {
-            delmem_zd_op()(gpu_ctx, this->z_deeq_nc);
-            delmem_zd_op()(gpu_ctx, this->z_qq_so);
+            delmem_zd_op()(this->z_deeq_nc);
+            delmem_zd_op()(this->z_qq_so);
         }
-        delmem_dd_op()(gpu_ctx, this->d_deeq);
-        delmem_zd_op()(gpu_ctx, this->z_vkb);
-        delmem_dd_op()(gpu_ctx, this->d_tab);
-        delmem_dd_op()(gpu_ctx, this->d_indv);
-        delmem_dd_op()(gpu_ctx, this->d_nhtol);
-        delmem_dd_op()(gpu_ctx, this->d_nhtolm);
-        delmem_dd_op()(gpu_ctx, this->d_qq_nt);
+        delmem_dd_op()(this->d_deeq);
+        delmem_zd_op()(this->z_vkb);
+        delmem_dd_op()(this->d_tab);
+        delmem_dd_op()(this->d_indv);
+        delmem_dd_op()(this->d_nhtol);
+        delmem_dd_op()(this->d_nhtolm);
+        delmem_dd_op()(this->d_qq_nt);
     }
     else
     {
         if (PARAM.inp.precision == "single")
         {
-            delmem_sh_op()(cpu_ctx, this->s_deeq);
-            delmem_sh_op()(cpu_ctx, this->s_nhtol);
-            delmem_sh_op()(cpu_ctx, this->s_nhtolm);
-            delmem_sh_op()(cpu_ctx, this->s_indv);
-            delmem_sh_op()(cpu_ctx, this->s_tab);
-            delmem_sh_op()(cpu_ctx, this->s_qq_nt);
-            delmem_ch_op()(cpu_ctx, this->c_deeq_nc);
-            delmem_ch_op()(cpu_ctx, this->c_vkb);
-            delmem_ch_op()(cpu_ctx, this->c_qq_so);
+            delmem_sh_op()(this->s_deeq);
+            delmem_sh_op()(this->s_nhtol);
+            delmem_sh_op()(this->s_nhtolm);
+            delmem_sh_op()(this->s_indv);
+            delmem_sh_op()(this->s_tab);
+            delmem_sh_op()(this->s_qq_nt);
+            delmem_ch_op()(this->c_deeq_nc);
+            delmem_ch_op()(this->c_vkb);
+            delmem_ch_op()(this->c_qq_so);
         }
         // There's no need to delete double precision pointers while in a CPU environment.
     }
@@ -402,7 +402,7 @@ void pseudopot_cell_vnl::getvnl(const int& ik, const UnitCell& ucell, ModuleBase
 
     delete[] gk;
     delete[] vq;
-    delmem_complex_op()(ctx, sk);
+    delmem_complex_op()(sk);
     ModuleBase::timer::tick("pp_cell_vnl", "getvnl");
 
     return;
@@ -527,18 +527,18 @@ void pseudopot_cell_vnl::getvnl(Device* ctx,
     delete[] h_atom_nh;
     delete[] h_atom_na;
     delete[] h_atom_nb;
-    delmem_var_op()(ctx, ylm);
-    delmem_var_op()(ctx, vkb1);
-    delmem_complex_op()(ctx, sk);
+    delmem_var_op()(ylm);
+    delmem_var_op()(vkb1);
+    delmem_complex_op()(sk);
     if (PARAM.inp.device == "gpu" || PARAM.inp.precision == "single")
     {
-        delmem_var_op()(ctx, gk);
+        delmem_var_op()(gk);
     }
     if (PARAM.inp.device == "gpu")
     {
-        delmem_int_op()(ctx, atom_nh);
-        delmem_int_op()(ctx, atom_nb);
-        delmem_int_op()(ctx, atom_na);
+        delmem_int_op()(atom_nh);
+        delmem_int_op()(atom_nb);
+        delmem_int_op()(atom_na);
     }
     ModuleBase::timer::tick("pp_cell_vnl", "getvnl");
 } // end subroutine getvnl

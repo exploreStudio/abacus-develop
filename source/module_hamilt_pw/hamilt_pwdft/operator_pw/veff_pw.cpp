@@ -31,8 +31,8 @@ Veff<OperatorPW<T, Device>>::Veff(const int* isk_in,
 template<typename T, typename Device>
 Veff<OperatorPW<T, Device>>::~Veff()
 {
-    delmem_complex_op()(this->ctx, this->porter);
-    delmem_complex_op()(this->ctx, this->porter1);
+    delmem_complex_op()(this->porter);
+    delmem_complex_op()(this->porter1);
 }
 
 template<typename T, typename Device>

@@ -124,40 +124,40 @@ void FS_Nonlocal_tools<FPTYPE, Device>::delete_memory()
 {
     // delete memory
 
-    delmem_var_op()(this->ctx, hd_vq);
-    delmem_var_op()(this->ctx, hd_vq_deri);
-    delmem_var_op()(this->ctx, hd_ylm);
-    delmem_var_op()(this->ctx, hd_ylm_deri);
-    delmem_var_op()(this->ctx, d_wk);
+    delmem_var_op()(hd_vq);
+    delmem_var_op()(hd_vq_deri);
+    delmem_var_op()(hd_ylm);
+    delmem_var_op()(hd_ylm_deri);
+    delmem_var_op()(d_wk);
 
     // delete memory on GPU
     if (this->device == base_device::GpuDevice)
     {
-        delmem_var_op()(this->ctx, d_wg);
-        delmem_var_op()(this->ctx, d_ekb);
-        delmem_int_op()(this->ctx, atom_nh);
-        delmem_int_op()(this->ctx, atom_na);
-        delmem_var_op()(this->ctx, d_g_plus_k);
-        delmem_var_op()(this->ctx, d_pref);
-        delmem_var_op()(this->ctx, d_vq_tab);
-        delmem_complex_op()(this->ctx, this->d_pref_in);
-        delmem_int_op()(this->ctx, d_dvkb_indexes);
+        delmem_var_op()(d_wg);
+        delmem_var_op()(d_ekb);
+        delmem_int_op()(atom_nh);
+        delmem_int_op()(atom_na);
+        delmem_var_op()(d_g_plus_k);
+        delmem_var_op()(d_pref);
+        delmem_var_op()(d_vq_tab);
+        delmem_complex_op()(this->d_pref_in);
+        delmem_int_op()(d_dvkb_indexes);
     }
 
     if (becp != nullptr)
     {
-        delmem_complex_op()(this->ctx, becp);
-        delmem_complex_op()(this->ctx, hd_sk);
+        delmem_complex_op()(becp);
+        delmem_complex_op()(hd_sk);
     }
     if (dbecp != nullptr)
     {
-        delmem_complex_op()(this->ctx, dbecp);
+        delmem_complex_op()(dbecp);
     }
     if (this->pre_ik_f != -1)
     {
-        delmem_int_op()(this->ctx, gcar_zero_indexes);
-        delmem_complex_op()(this->ctx, vkb_save);
-        delmem_var_op()(this->ctx, gcar);
+        delmem_int_op()(gcar_zero_indexes);
+        delmem_complex_op()(vkb_save);
+        delmem_var_op()(gcar);
     }
 }
 

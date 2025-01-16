@@ -332,9 +332,9 @@ TEST_F(TestModuleBaseMathMultiDevice, cal_ylm_real_op_gpu)
         EXPECT_LT(fabs(ylm[ii] - expected_ylm[ii]), 6e-5);
     }
 
-    delmem_var_op()(gpu_ctx, d_g);
-    delmem_var_op()(gpu_ctx, d_p);
-    delmem_var_op()(gpu_ctx, d_ylm);
+    delmem_var_op()(d_g);
+    delmem_var_op()(d_p);
+    delmem_var_op()(d_ylm);
 }
 
 #endif // __CUDA || __UT_USE_CUDA || __ROCM || __UT_USE_ROCM

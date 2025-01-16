@@ -213,12 +213,12 @@ void Forces<FPTYPE, Device>::cal_force_cc(ModuleBase::matrix& forcecc,
     }
     if (this->device == base_device::GpuDevice)
     {
-        delmem_var_op()(this->ctx, gv_x_d);
-        delmem_var_op()(this->ctx, gv_y_d);
-        delmem_var_op()(this->ctx, gv_z_d);
-        delmem_var_op()(this->ctx, force_d);
-        delmem_var_op()(this->ctx, rhocgigg_vec_d);
-        delmem_complex_op()(this->ctx, psiv_d);
+        delmem_var_op()(gv_x_d);
+        delmem_var_op()(gv_y_d);
+        delmem_var_op()(gv_z_d);
+        delmem_var_op()(force_d);
+        delmem_var_op()(rhocgigg_vec_d);
+        delmem_complex_op()(psiv_d);
     }
     delete[] rhocg;
 
@@ -334,11 +334,11 @@ void Forces<FPTYPE, Device>::deriv_drhoc
 			r,rhoc,gx_arr.data()+igl0,rab,drhocg+igl0,mesh,igl0,rho_basis->ngg-igl0,ucell_in.omega,type);
     }
 
-    delmem_var_op()(this->ctx, r_d);
-    delmem_var_op()(this->ctx, rhoc_d);
-    delmem_var_op()(this->ctx, rab_d);
-    delmem_var_op()(this->ctx, gx_arr_d);
-    delmem_var_op()(this->ctx, drhocg_d);
+    delmem_var_op()(r_d);
+    delmem_var_op()(rhoc_d);
+    delmem_var_op()(rab_d);
+    delmem_var_op()(gx_arr_d);
+    delmem_var_op()(drhocg_d);
     return;
 }
 

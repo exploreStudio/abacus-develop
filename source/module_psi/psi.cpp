@@ -40,7 +40,7 @@ Psi<T, Device>::~Psi()
 {
     if (this->allocate_inside)
     {
-        delete_memory_op()(this->ctx, this->psi);
+        delete_memory_op()(this->psi);
     }
 }
 

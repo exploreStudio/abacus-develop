@@ -27,19 +27,19 @@ Structure_Factor::~Structure_Factor()
 {
     if (device == "gpu") {
         if (PARAM.inp.precision == "single") {
-            delmem_cd_op()(gpu_ctx, this->c_eigts1);
-            delmem_cd_op()(gpu_ctx, this->c_eigts2);
-            delmem_cd_op()(gpu_ctx, this->c_eigts3);
+            delmem_cd_op()(this->c_eigts1);
+            delmem_cd_op()(this->c_eigts2);
+            delmem_cd_op()(this->c_eigts3);
         }
-        delmem_zd_op()(gpu_ctx, this->z_eigts1);
-        delmem_zd_op()(gpu_ctx, this->z_eigts2);
-        delmem_zd_op()(gpu_ctx, this->z_eigts3);
+        delmem_zd_op()(this->z_eigts1);
+        delmem_zd_op()(this->z_eigts2);
+        delmem_zd_op()(this->z_eigts3);
     }
     else {
         if (PARAM.inp.precision == "single") {
-            delmem_ch_op()(cpu_ctx, this->c_eigts1);
-            delmem_ch_op()(cpu_ctx, this->c_eigts2);
-            delmem_ch_op()(cpu_ctx, this->c_eigts3);
+            delmem_ch_op()(this->c_eigts1);
+            delmem_ch_op()(this->c_eigts2);
+            delmem_ch_op()(this->c_eigts3);
         }
         // There's no need to delete double precision pointers while in a CPU environment.
     }

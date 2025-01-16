@@ -66,7 +66,7 @@ void Forces<FPTYPE, Device>::cal_force_onsite(ModuleBase::matrix& force_onsite,
     } // end ik
 
     syncmem_var_d2h_op()(force_onsite.c, force, force_onsite.nr * force_onsite.nc);
-    delmem_var_op()(this->ctx, force);
+    delmem_var_op()(force);
     // sum up force_onsite from all processors
     Parallel_Reduce::reduce_all(force_onsite.c, force_onsite.nr * force_onsite.nc);
 

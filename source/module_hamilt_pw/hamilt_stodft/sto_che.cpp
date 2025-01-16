@@ -9,7 +9,7 @@ StoChe<REAL, Device>::~StoChe()
 {
     delete p_che;
     delete[] spolyv_cpu;
-    delmem_var_op()(this->ctx, spolyv);
+    delmem_var_op()(spolyv);
 }
 
 template <typename REAL, typename Device>

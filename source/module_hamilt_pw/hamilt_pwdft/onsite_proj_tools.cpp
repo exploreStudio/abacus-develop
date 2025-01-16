@@ -230,39 +230,39 @@ void Onsite_Proj_tools<FPTYPE, Device>::delete_memory()
 {
     // delete memory
 
-    delmem_var_op()(this->ctx, hd_vq);
-    delmem_var_op()(this->ctx, hd_vq_deri);
-    delmem_var_op()(this->ctx, hd_ylm);
-    delmem_var_op()(this->ctx, hd_ylm_deri);
+    delmem_var_op()(hd_vq);
+    delmem_var_op()(hd_vq_deri);
+    delmem_var_op()(hd_ylm);
+    delmem_var_op()(hd_ylm_deri);
 
     // delete memory on GPU
     if (this->device == base_device::GpuDevice)
     {
-        delmem_var_op()(this->ctx, d_wg);
-        delmem_var_op()(this->ctx, d_ekb);
-        delmem_int_op()(this->ctx, atom_nh);
-        delmem_int_op()(this->ctx, atom_na);
-        delmem_var_op()(this->ctx, d_g_plus_k);
-        delmem_var_op()(this->ctx, d_pref);
-        delmem_var_op()(this->ctx, d_vq_tab);
-        delmem_complex_op()(this->ctx, this->d_pref_in);
-        delmem_int_op()(this->ctx, d_dvkb_indexes);
+        delmem_var_op()(d_wg);
+        delmem_var_op()(d_ekb);
+        delmem_int_op()(atom_nh);
+        delmem_int_op()(atom_na);
+        delmem_var_op()(d_g_plus_k);
+        delmem_var_op()(d_pref);
+        delmem_var_op()(d_vq_tab);
+        delmem_complex_op()(this->d_pref_in);
+        delmem_int_op()(d_dvkb_indexes);
     }
 
     if (becp != nullptr)
     {
-        delmem_complex_op()(this->ctx, becp);
-        delmem_complex_op()(this->ctx, hd_sk);
+        delmem_complex_op()(becp);
+        delmem_complex_op()(hd_sk);
     }
     if (dbecp != nullptr)
     {
-        delmem_complex_op()(this->ctx, dbecp);
+        delmem_complex_op()(dbecp);
     }
     if (this->pre_ik_f != -1)
     {
-        delmem_int_op()(this->ctx, gcar_zero_indexes);
-        delmem_complex_op()(this->ctx, vkb_save);
-        delmem_var_op()(this->ctx, gcar);
+        delmem_int_op()(gcar_zero_indexes);
+        delmem_complex_op()(vkb_save);
+        delmem_var_op()(gcar);
     }
 }
 
@@ -447,7 +447,7 @@ void Onsite_Proj_tools<FPTYPE, Device>::cal_becp(int ik,
         syncmem_complex_d2h_op()(h_becp, becp_tmp, size_becp_act);
         Parallel_Reduce::reduce_pool(h_becp, size_becp_act);
         syncmem_complex_h2d_op()(becp_tmp, h_becp, size_becp_act);
-        delmem_complex_h_op()(this->cpu_ctx, h_becp);
+        delmem_complex_h_op()(h_becp);
     }
     else
     {
@@ -853,8 +853,8 @@ void Onsite_Proj_tools<FPTYPE, Device>::cal_force_dftu(int ik,
 #if defined(__CUDA) || defined(__ROCM)
     if (this->device == base_device::GpuDevice)
     {
-        delmem_complex_op()(this->ctx, vu_tmp);
-        delmem_int_op()(this->ctx, orbital_corr_tmp);
+        delmem_complex_op()(vu_tmp);
+        delmem_int_op()(orbital_corr_tmp);
     }
 #endif
 }
@@ -908,7 +908,7 @@ void Onsite_Proj_tools<FPTYPE, Device>::cal_force_dspin(int ik,
 #if defined(__CUDA) || defined(__ROCM)
     if (this->device == base_device::GpuDevice)
     {
-        delmem_var_op()(this->ctx, lambda_tmp);
+        delmem_var_op()(lambda_tmp);
     }
 #endif
 }
@@ -957,8 +957,8 @@ void Onsite_Proj_tools<FPTYPE, Device>::cal_stress_dftu(int ik,
 #if defined(__CUDA) || defined(__ROCM)
     if (this->device == base_device::GpuDevice)
     {
-        delmem_complex_op()(this->ctx, vu_tmp);
-        delmem_int_op()(this->ctx, orbital_corr_tmp);
+        delmem_complex_op()(vu_tmp);
+        delmem_int_op()(orbital_corr_tmp);
     }
 #endif
 }
@@ -1009,7 +1009,7 @@ void Onsite_Proj_tools<FPTYPE, Device>::cal_stress_dspin(int ik,
 #if defined(__CUDA) || defined(__ROCM)
     if (this->device == base_device::GpuDevice)
     {
-        delmem_var_op()(this->ctx, lambda_tmp);
+        delmem_var_op()(lambda_tmp);
     }
 #endif
 }

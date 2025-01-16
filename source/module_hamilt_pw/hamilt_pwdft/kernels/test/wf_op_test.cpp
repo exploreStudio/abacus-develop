@@ -465,16 +465,16 @@ TEST_F(TestSrcPWWfMultiDevice, cal_sk_op_gpu)
         EXPECT_LT(fabs(sk[ii] - expected_sk[ii]), 6e-5);
     }
 
-    delmem_int_op()(gpu_ctx, d_atom_na);
-    delmem_int_op()(gpu_ctx, d_igl2isz);
-    delmem_int_op()(gpu_ctx, d_is2fftixy);
+    delmem_int_op()(d_atom_na);
+    delmem_int_op()(d_igl2isz);
+    delmem_int_op()(d_is2fftixy);
 
-    delmem_var_op()(gpu_ctx, d_kvec_c);
-    delmem_var_op()(gpu_ctx, d_atom_tau);
+    delmem_var_op()(d_kvec_c);
+    delmem_var_op()(d_atom_tau);
 
-    delmem_complex_op()(gpu_ctx, d_sk);
-    delmem_complex_op()(gpu_ctx, d_eigts1);
-    delmem_complex_op()(gpu_ctx, d_eigts2);
-    delmem_complex_op()(gpu_ctx, d_eigts3);
+    delmem_complex_op()(d_sk);
+    delmem_complex_op()(d_eigts1);
+    delmem_complex_op()(d_eigts2);
+    delmem_complex_op()(d_eigts3);
 }
 #endif // __CUDA || __UT_USE_CUDA || __ROCM || __UT_USE_ROCM

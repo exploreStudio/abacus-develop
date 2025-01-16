@@ -25,24 +25,24 @@ PW_Basis_K::~PW_Basis_K()
 #if defined(__CUDA) || defined(__ROCM)
     if (this->device == "gpu") {
         if (this->precision == "single") {
-            delmem_sd_op()(gpu_ctx, this->s_kvec_c);
-            delmem_sd_op()(gpu_ctx, this->s_gcar);
-            delmem_sd_op()(gpu_ctx, this->s_gk2);
+            delmem_sd_op()(this->s_kvec_c);
+            delmem_sd_op()(this->s_gcar);
+            delmem_sd_op()(this->s_gk2);
         }
         else {
-            delmem_dd_op()(gpu_ctx, this->d_gcar);
-            delmem_dd_op()(gpu_ctx, this->d_gk2);
+            delmem_dd_op()(this->d_gcar);
+            delmem_dd_op()(this->d_gk2);
         }
-        delmem_dd_op()(gpu_ctx, this->d_kvec_c);
-        delmem_int_op()(gpu_ctx, this->ig2ixyz_k);
-        delmem_int_op()(gpu_ctx, this->d_igl2isz_k);
+        delmem_dd_op()(this->d_kvec_c);
+        delmem_int_op()(this->ig2ixyz_k);
+        delmem_int_op()(this->d_igl2isz_k);
     }
     else {
 #endif
         if (this->precision == "single") {
-            delmem_sh_op()(cpu_ctx, this->s_kvec_c);
-            delmem_sh_op()(cpu_ctx, this->s_gcar);
-            delmem_sh_op()(cpu_ctx, this->s_gk2);
+            delmem_sh_op()(this->s_kvec_c);
+            delmem_sh_op()(this->s_gcar);
+            delmem_sh_op()(this->s_gk2);
         }
         // There's no need to delete double pointers while in a CPU environment.
 #if defined(__CUDA) || defined(__ROCM)

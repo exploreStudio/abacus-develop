@@ -95,8 +95,8 @@ TEST_F(TestModuleHamiltEkinetic, ekinetic_pw_op_gpu)
   for (int ii = 0; ii < hpsi.size(); ii++) {
     EXPECT_LT(fabs(hpsi[ii] - expected_hpsi[ii]), 1e-6);
   }
-  delete_memory_double_op()(gpu_ctx, gk2_dev);
-  delete_memory_complex_double_op()(gpu_ctx, psi_dev);
-  delete_memory_complex_double_op()(gpu_ctx, hpsi_dev);
+  delete_memory_double_op()(gk2_dev);
+  delete_memory_complex_double_op()(psi_dev);
+  delete_memory_complex_double_op()(hpsi_dev);
 }
 #endif // __CUDA || __UT_USE_CUDA || __ROCM || __UT_USE_ROCM

@@ -910,7 +910,7 @@ void matrixTranspose_op<double, base_device::DEVICE_GPU>::operator()(const base_
         device_temp,
         row * col);
 
-    base_device::memory::delete_memory_op<double, base_device::DEVICE_GPU>()(d, device_temp);
+    base_device::memory::delete_memory_op<double, base_device::DEVICE_GPU>()(device_temp);
 }
 
 template <>
@@ -949,7 +949,7 @@ void matrixTranspose_op<std::complex<float>, base_device::DEVICE_GPU>::operator(
         device_temp,
         row * col);
 
-    base_device::memory::delete_memory_op<std::complex<float>, base_device::DEVICE_GPU>()(d, device_temp);
+    base_device::memory::delete_memory_op<std::complex<float>, base_device::DEVICE_GPU>()(device_temp);
 
     cudaCheckOnDebug();
 
@@ -987,7 +987,7 @@ void matrixTranspose_op<std::complex<double>, base_device::DEVICE_GPU>::operator
                                                base_device::DEVICE_GPU,
                                                base_device::DEVICE_GPU>()(output_matrix, device_temp, row * col);
 
-    base_device::memory::delete_memory_op<std::complex<double>, base_device::DEVICE_GPU>()(d, device_temp);
+    base_device::memory::delete_memory_op<std::complex<double>, base_device::DEVICE_GPU>()(device_temp);
 }
 
 template <>
