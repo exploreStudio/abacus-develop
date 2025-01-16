@@ -73,36 +73,36 @@ void FS_Nonlocal_tools<FPTYPE, Device>::allocate_memory(const ModuleBase::matrix
     // allocate the memory for vkb and vkb_deri.
     if (this->device == base_device::GpuDevice)
     {
-        resmem_int_op()(this->ctx, this->d_dvkb_indexes, max_nh * 4);
+        resmem_int_op()(this->d_dvkb_indexes, max_nh * 4);
     }
 
-    resmem_var_op()(this->ctx, this->hd_vq, max_nbeta * max_npw);
-    resmem_var_op()(this->ctx, this->hd_vq_deri, max_nbeta * max_npw);
+    resmem_var_op()(this->hd_vq, max_nbeta * max_npw);
+    resmem_var_op()(this->hd_vq_deri, max_nbeta * max_npw);
     const int _lmax = this->nlpp_->lmaxkb;
-    resmem_var_op()(this->ctx, this->hd_ylm, (_lmax + 1) * (_lmax + 1) * max_npw);
-    resmem_var_op()(this->ctx, this->hd_ylm_deri, 3 * (_lmax + 1) * (_lmax + 1) * max_npw);
+    resmem_var_op()(this->hd_ylm, (_lmax + 1) * (_lmax + 1) * max_npw);
+    resmem_var_op()(this->hd_ylm_deri, 3 * (_lmax + 1) * (_lmax + 1) * max_npw);
     const int nks = this->kv_->get_nks();
-    resmem_var_op()(this->ctx, d_wk, nks);
+    resmem_var_op()(d_wk, nks);
     syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, d_wk, this->kv_->wk.data(), nks);
 
     if (this->device == base_device::GpuDevice)
     {
-        resmem_var_op()(this->ctx, d_wg, wg.nr * wg.nc);
+        resmem_var_op()(d_wg, wg.nr * wg.nc);
         syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, d_wg, wg.c, wg.nr * wg.nc);
         if (p_ekb != nullptr)
         {
-            resmem_var_op()(this->ctx, d_ekb, p_ekb->nr * p_ekb->nc);
+            resmem_var_op()(d_ekb, p_ekb->nr * p_ekb->nc);
             syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, d_ekb, p_ekb->c, p_ekb->nr * p_ekb->nc);
         }
-        resmem_int_op()(this->ctx, atom_nh, this->ntype);
-        resmem_int_op()(this->ctx, atom_na, this->ntype);
+        resmem_int_op()(atom_nh, this->ntype);
+        resmem_int_op()(atom_na, this->ntype);
         syncmem_int_h2d_op()(this->ctx, this->cpu_ctx, atom_nh, h_atom_nh.data(), this->ntype);
         syncmem_int_h2d_op()(this->ctx, this->cpu_ctx, atom_na, h_atom_na.data(), this->ntype);
 
-        resmem_var_op()(this->ctx, d_g_plus_k, max_npw * 5);
-        resmem_var_op()(this->ctx, d_pref, max_nh);
-        resmem_var_op()(this->ctx, d_vq_tab, this->nlpp_->tab.getSize());
-        resmem_complex_op()(this->ctx, d_pref_in, max_nh);
+        resmem_var_op()(d_g_plus_k, max_npw * 5);
+        resmem_var_op()(d_pref, max_nh);
+        resmem_var_op()(d_vq_tab, this->nlpp_->tab.getSize());
+        resmem_complex_op()(d_pref_in, max_nh);
 
         this->ppcell_vkb = this->nlpp_->template get_vkb_data<FPTYPE>();
     }
@@ -170,7 +170,7 @@ void FS_Nonlocal_tools<FPTYPE, Device>::cal_vkb(const int& ik, const int& nbdall
     const int size_becp = nbdall * npol * this->nkb;
     if (this->becp == nullptr)
     {
-        resmem_complex_op()(this->ctx, becp, size_becp);
+        resmem_complex_op()(becp, size_becp);
     }
 
     // prepare math tools
@@ -183,7 +183,7 @@ void FS_Nonlocal_tools<FPTYPE, Device>::cal_vkb(const int& ik, const int& nbdall
     this->g_plus_k = maths.cal_gk(ik, this->wfc_basis_);
     FPTYPE *gk = g_plus_k.data(), *vq_tb = this->nlpp_->tab.ptr;
     // calculate sk
-    resmem_complex_op()(ctx, hd_sk, this->ucell_->nat * npw);
+    resmem_complex_op()(hd_sk, this->ucell_->nat * npw);
     this->sf_->get_sk(ctx, ik, this->wfc_basis_, hd_sk);
     std::complex<FPTYPE>* d_sk = this->hd_sk;
     // prepare ylm，size: (lmax+1)^2 * this->max_npw
@@ -312,7 +312,7 @@ void FS_Nonlocal_tools<FPTYPE, Device>::cal_vkb_deri_s(const int& ik,
     const int size_becp = nbdall * npol * this->nkb;
     if (this->dbecp == nullptr)
     {
-        resmem_complex_op()(this->ctx, dbecp, size_becp);
+        resmem_complex_op()(dbecp, size_becp);
     }
 
     // prepare math tools
@@ -538,7 +538,7 @@ void FS_Nonlocal_tools<FPTYPE, Device>::cal_vkb_deri_f(const int& ik, const int&
     const int size_becp = nbdall * npol * this->nkb;
     if (this->dbecp == nullptr)
     {
-        resmem_complex_op()(this->ctx, dbecp, 3 * size_becp);
+        resmem_complex_op()(dbecp, 3 * size_becp);
     }
 
     const std::complex<FPTYPE>* vkb_ptr = this->ppcell_vkb;
@@ -547,8 +547,8 @@ void FS_Nonlocal_tools<FPTYPE, Device>::cal_vkb_deri_f(const int& ik, const int&
     const int npw = this->wfc_basis_->npwk[ik];
     if (this->pre_ik_f == -1)
     {
-        resmem_var_op()(this->ctx, gcar, 3 * this->wfc_basis_->npwk_max);
-        resmem_int_op()(this->ctx, gcar_zero_indexes, 3 * this->wfc_basis_->npwk_max);
+        resmem_var_op()(gcar, 3 * this->wfc_basis_->npwk_max);
+        resmem_int_op()(gcar_zero_indexes, 3 * this->wfc_basis_->npwk_max);
     }
 
     if (this->pre_ik_f != ik)
@@ -730,7 +730,7 @@ void FS_Nonlocal_tools<FPTYPE, Device>::transfer_gcar(const int& npw, const int&
     }
     // prepare the memory for vkb_save
     const int max_count = std::max(gcar_zero_counts[0], std::max(gcar_zero_counts[1], gcar_zero_counts[2]));
-    resmem_complex_op()(this->ctx, this->vkb_save, this->nkb * max_count);
+    resmem_complex_op()(this->vkb_save, this->nkb * max_count);
     // transfer the gcar and gcar_zero_indexes to the device
     syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, gcar, gcar_tmp.data(), 3 * npw_max);
     syncmem_int_h2d_op()(this->ctx, this->cpu_ctx, gcar_zero_indexes, gcar_zero_indexes_tmp.data(), 3 * npw_max);

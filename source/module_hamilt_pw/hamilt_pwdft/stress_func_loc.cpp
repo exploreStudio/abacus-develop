@@ -244,13 +244,13 @@ const UnitCell& ucell_in
     double *aux_d = nullptr;
 	double *drhocg_d = nullptr;
     if (this->device == base_device::GpuDevice) {
-        resmem_var_op()(this->ctx, r_d, msh);
-        resmem_var_op()(this->ctx, rhoc_d, msh);
-        resmem_var_op()(this->ctx, rab_d, msh);
+        resmem_var_op()(r_d, msh);
+        resmem_var_op()(rhoc_d, msh);
+        resmem_var_op()(rab_d, msh);
 
-        resmem_var_op()(this->ctx, aux_d, msh);
-        resmem_var_op()(this->ctx, gx_arr_d, rho_basis->ngg+1);
-        resmem_var_op()(this->ctx, drhocg_d, rho_basis->ngg);
+        resmem_var_op()(aux_d, msh);
+        resmem_var_op()(gx_arr_d, rho_basis->ngg+1);
+        resmem_var_op()(drhocg_d, rho_basis->ngg);
 
         syncmem_var_h2d_op()(this->ctx,
                              this->cpu_ctx,

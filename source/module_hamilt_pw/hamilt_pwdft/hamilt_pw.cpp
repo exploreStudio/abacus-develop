@@ -254,7 +254,7 @@ void HamiltPW<T, Device>::sPsi(const T* psi_in, // psi
         // psi updated, thus update <beta|psi>
         if (this->ppcell->nkb > 0)
         {
-            resmem_complex_op()(this->ctx, becp, nbands * this->ppcell->nkb, "Hamilt<PW>::becp");
+            resmem_complex_op()(becp, nbands * this->ppcell->nkb, "Hamilt<PW>::becp");
             char transa = 'C';
             char transb = 'N';
             if (nbands == 1)
@@ -294,7 +294,7 @@ void HamiltPW<T, Device>::sPsi(const T* psi_in, // psi
             Parallel_Reduce::reduce_pool(becp, this->ppcell->nkb * nbands);
         }
 
-        resmem_complex_op()(this->ctx, ps, this->ppcell->nkb * nbands, "Hamilt<PW>::ps");
+        resmem_complex_op()(ps, this->ppcell->nkb * nbands, "Hamilt<PW>::ps");
         setmem_complex_op()(this->ctx, ps, 0, this->ppcell->nkb * nbands);
 
         // spsi = psi + sum qq <beta|psi> |beta>
@@ -316,7 +316,7 @@ void HamiltPW<T, Device>::sPsi(const T* psi_in, // psi
                 {
                     const int nh = atoms->ncpp.nh;
                     T* qqc = nullptr;
-                    resmem_complex_op()(this->ctx, qqc, nh * nh, "Hamilt<PW>::qqc");
+                    resmem_complex_op()(qqc, nh * nh, "Hamilt<PW>::qqc");
                     Real* qq_now = &qq_nt[it * this->ppcell->nhm * this->ppcell->nhm];
                     for (int i = 0; i < nh; i++)
                     {

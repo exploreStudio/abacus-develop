@@ -27,7 +27,7 @@ void Forces<FPTYPE, Device>::cal_force_nl(ModuleBase::matrix& forcenl,
 
     // allocate memory for the force
     FPTYPE* force = nullptr;
-    resmem_var_op()(this->ctx, force, ucell_in.nat * 3);
+    resmem_var_op()(force, ucell_in.nat * 3);
     base_device::memory::set_memory_op<FPTYPE, Device>()(this->ctx, force, 0.0, ucell_in.nat * 3);
 
     hamilt::FS_Nonlocal_tools<FPTYPE, Device> nl_tools(&nlpp, &ucell_in, p_kv, wfc_basis, p_sf, wg, &ekb);

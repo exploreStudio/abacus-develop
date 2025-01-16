@@ -140,7 +140,7 @@ TEST_F(TestModuleHsolverMathDngvd, transpose_gpu)
         // {-0.351417,-1.73472}, {-8.32667,2.3744}, {4.16334,3.64292}
     };
     std::complex<double>* device_transpose = nullptr;
-    resize_memory_op_Z()(gpu_ctx, device_transpose, matrix_size);
+    resize_memory_op_Z()(device_transpose, matrix_size);
     synchronize_memory_op_C2G_Z()(gpu_ctx, cpu_ctx, device_transpose, transpose.data(), transpose.size());
 
     // run

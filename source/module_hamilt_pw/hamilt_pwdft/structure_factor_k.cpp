@@ -91,10 +91,10 @@ void Structure_Factor::get_sk(Device* ctx,
     }
     if (device == base_device::GpuDevice)
     {
-        resmem_int_op()(ctx, atom_na, ucell->ntype);
+        resmem_int_op()(atom_na, ucell->ntype);
         syncmem_int_op()(ctx, cpu_ctx, atom_na, h_atom_na, ucell->ntype);
 
-        resmem_var_op()(ctx, atom_tau, ucell->nat * 3);
+        resmem_var_op()(atom_tau, ucell->nat * 3);
         syncmem_var_op()(ctx, cpu_ctx, atom_tau, h_atom_tau, ucell->nat * 3);
 
         igl2isz = wfc_basis->d_igl2isz_k;

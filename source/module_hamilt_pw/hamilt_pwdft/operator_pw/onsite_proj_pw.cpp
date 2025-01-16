@@ -127,7 +127,7 @@ void OnsiteProj<OperatorPW<T, Device>>::cal_ps_delta_spin(const int npol, const 
     // T *ps = new T[tnp * m];
     // ModuleBase::GlobalFunc::ZEROS(ps, m * tnp);
     if (this->nkb_m < m * tnp) {
-        resmem_complex_op()(this->ctx, this->ps, tnp * m, "OnsiteProj<PW>::ps");
+        resmem_complex_op()(this->ps, tnp * m, "OnsiteProj<PW>::ps");
         this->nkb_m = m * tnp;
     }
     setmem_complex_op()(this->ctx, this->ps, 0, tnp * m);
@@ -136,8 +136,8 @@ void OnsiteProj<OperatorPW<T, Device>>::cal_ps_delta_spin(const int npol, const 
     {
         this->init_delta_spin = true;
         //prepare ip_iat and lambda_coeff
-        resmem_int_op()(this->ctx, this->ip_iat, onsite_p->get_tot_nproj());
-        resmem_complex_op()(this->ctx, this->lambda_coeff, this->ucell->nat * 4);
+        resmem_int_op()(this->ip_iat, onsite_p->get_tot_nproj());
+        resmem_complex_op()(this->lambda_coeff, this->ucell->nat * 4);
         std::vector<int> ip_iat0(onsite_p->get_tot_nproj());
         int ip0 = 0;
         for(int iat=0;iat<this->ucell->nat;iat++)
@@ -225,7 +225,7 @@ void OnsiteProj<OperatorPW<T, Device>>::cal_ps_dftu(const int npol, const int m)
     // T *ps = new T[tnp * m];
     // ModuleBase::GlobalFunc::ZEROS(ps, m * tnp);
     if (this->nkb_m < m * tnp) {
-        resmem_complex_op()(this->ctx, this->ps, tnp * m, "OnsiteProj<PW>::ps");
+        resmem_complex_op()(this->ps, tnp * m, "OnsiteProj<PW>::ps");
         this->nkb_m = m * tnp;
     }
     if(!this->has_delta_spin) 
@@ -237,11 +237,11 @@ void OnsiteProj<OperatorPW<T, Device>>::cal_ps_dftu(const int npol, const int m)
     {
         this->init_dftu = true;
         //prepare orb_l_iat, ip_m, vu_begin_iat and vu_device
-        resmem_int_op()(this->ctx, this->orb_l_iat, this->ucell->nat);
-        resmem_int_op()(this->ctx, this->ip_m, onsite_p->get_tot_nproj());
-        resmem_int_op()(this->ctx, this->vu_begin_iat, this->ucell->nat);
+        resmem_int_op()(this->orb_l_iat, this->ucell->nat);
+        resmem_int_op()(this->ip_m, onsite_p->get_tot_nproj());
+        resmem_int_op()(this->vu_begin_iat, this->ucell->nat);
         // recal the ip_iat
-        resmem_int_op()(this->ctx, this->ip_iat, onsite_p->get_tot_nproj());
+        resmem_int_op()(this->ip_iat, onsite_p->get_tot_nproj());
         std::vector<int> ip_iat0(onsite_p->get_tot_nproj());
         std::vector<int> ip_m0(onsite_p->get_tot_nproj());
         std::vector<int> vu_begin_iat0(this->ucell->nat);
@@ -290,7 +290,7 @@ void OnsiteProj<OperatorPW<T, Device>>::cal_ps_dftu(const int npol, const int m)
         syncmem_int_h2d_op()(this->ctx, this->cpu_ctx, this->ip_m, ip_m0.data(), onsite_p->get_tot_nproj());
         syncmem_int_h2d_op()(this->ctx, this->cpu_ctx, this->vu_begin_iat, vu_begin_iat0.data(), this->ucell->nat);
 
-        resmem_complex_op()(this->ctx, this->vu_device, dftu->get_size_eff_pot_pw());
+        resmem_complex_op()(this->vu_device, dftu->get_size_eff_pot_pw());
     }
 
     syncmem_complex_h2d_op()(this->ctx, this->cpu_ctx, this->vu_device, dftu->get_eff_pot_pw(0), dftu->get_size_eff_pot_pw());

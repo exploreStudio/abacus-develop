@@ -217,7 +217,7 @@ void Sto_Forces<FPTYPE, Device>::cal_sto_force_nl(
 
    // allocate memory for the force
     FPTYPE* force = nullptr;
-    resmem_var_op()(this->ctx, force, ucell.nat * 3);
+    resmem_var_op()(force, ucell.nat * 3);
     base_device::memory::set_memory_op<FPTYPE, Device>()(this->ctx, force, 0.0, ucell.nat * 3);
 
     hamilt::FS_Nonlocal_tools<FPTYPE, Device> nl_tools(&nlpp, &ucell, p_kv, wfc_basis, p_sf, wg, nullptr);

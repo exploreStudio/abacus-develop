@@ -37,7 +37,7 @@ void bcast_dev(const Device* ctx, T* object, const int& n, const MPI_Comm& comm,
     {
         if(tmp_space == nullptr)
         {
-            base_device::memory::resize_memory_op<T, base_device::DEVICE_CPU>()(cpu_ctx, object_cpu, n);
+            base_device::memory::resize_memory_op<T, base_device::DEVICE_CPU>()(object_cpu, n);
             alloc = true;
         }
         else
@@ -74,7 +74,7 @@ void reduce_dev(const Device* ctx, T* object, const int& n, const MPI_Comm& comm
     {
         if(tmp_space == nullptr)
         {
-            base_device::memory::resize_memory_op<T, base_device::DEVICE_CPU>()(cpu_ctx, object_cpu, n);
+            base_device::memory::resize_memory_op<T, base_device::DEVICE_CPU>()(object_cpu, n);
             alloc = true;
         }
         else

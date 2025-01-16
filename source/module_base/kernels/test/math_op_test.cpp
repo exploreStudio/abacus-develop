@@ -306,9 +306,9 @@ TEST_F(TestModuleBaseMathMultiDevice, cal_ylm_real_op_gpu)
     std::vector<double> ylm(expected_ylm.size(), 0.0);
     double * d_ylm = nullptr, * d_g = nullptr, * d_p = nullptr;
 
-    resmem_var_op()(gpu_ctx, d_g, g.size());
-    resmem_var_op()(gpu_ctx, d_p, p.size());
-    resmem_var_op()(gpu_ctx, d_ylm, ylm.size());
+    resmem_var_op()(d_g, g.size());
+    resmem_var_op()(d_p, p.size());
+    resmem_var_op()(d_ylm, ylm.size());
 
     syncmem_var_h2d_op()(gpu_ctx, cpu_ctx, d_g, g.data(), g.size());
     syncmem_var_h2d_op()(gpu_ctx, cpu_ctx, d_p, p.data(), p.size());

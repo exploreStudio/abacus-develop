@@ -89,8 +89,8 @@ TEST_F(TestModuleHamiltVeff, veff_pw_op_gpu)
     std::vector<std::complex<double>> res = out;
     double* d_in = NULL;
     std::complex<double>* d_res = NULL;
-    resize_memory_double_op()(gpu_ctx, d_in, in.size());
-    resize_memory_complex_op()(gpu_ctx, d_res, res.size());
+    resize_memory_double_op()(d_in, in.size());
+    resize_memory_complex_op()(d_res, res.size());
     syncmem_double_h2d_op()(gpu_ctx, cpu_ctx, d_in, in.data(), in.size());
     syncmem_complex_h2d_op()(gpu_ctx, cpu_ctx, d_res, res.data(), res.size());
 
@@ -112,9 +112,9 @@ TEST_F(TestModuleHamiltVeff, veff_pw_spin_op_gpu)
     std::vector<std::complex<double>> res1 = out1_spin;
     double* d_in = NULL;
     std::complex<double>* d_res = NULL, * d_res1 = NULL;
-    resize_memory_double_op()(gpu_ctx, d_in, in_spin.size());
-    resize_memory_complex_op()(gpu_ctx, d_res, res.size());
-    resize_memory_complex_op()(gpu_ctx, d_res1, res1.size());
+    resize_memory_double_op()(d_in, in_spin.size());
+    resize_memory_complex_op()(d_res, res.size());
+    resize_memory_complex_op()(d_res1, res1.size());
     syncmem_double_h2d_op()(gpu_ctx, cpu_ctx, d_in, in_spin.data(), in_spin.size());
     syncmem_complex_h2d_op()(gpu_ctx, cpu_ctx, d_res, res.data(), res.size());
     syncmem_complex_h2d_op()(gpu_ctx, cpu_ctx, d_res1, res1.data(), res1.size());

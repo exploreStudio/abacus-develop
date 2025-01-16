@@ -27,7 +27,7 @@ template <typename T, typename Device>
 void Stochastic_Iter<T, Device>::dot(const int& n, const Real* x, const int& incx, const Real* y, const int& incy, Real& result)
 {
     Real* result_device = nullptr;
-    resmem_var_op()(this->ctx, result_device, 1);
+    resmem_var_op()(result_device, 1);
     container::kernels::blas_dot<Real, ct_Device>()(n, p_che->coef_real, 1, spolyv, 1, result_device);
     syncmem_var_d2h_op()(cpu_ctx, this->ctx, &result, result_device, 1);
     delmem_var_op()(this->ctx, result_device);
@@ -73,7 +73,7 @@ void Stochastic_Iter<T, Device>::orthog(const int& ik, psi::Psi<T, Device>& psi,
 
         // orthogonal part
         T* sum = nullptr;
-        resmem_complex_op()(this->ctx, sum, PARAM.inp.nbands * nchipk);
+        resmem_complex_op()(sum, PARAM.inp.nbands * nchipk);
         char transC = 'C';
         char transN = 'N';
 
@@ -539,7 +539,7 @@ void Stochastic_Iter<T, Device>::sum_stoeband(Stochastic_WF<T, Device>& stowf,
             const int npw = this->pkv->ngk[ik];
             const double kweight = this->pkv->wk[ik];
             T* hshchi = nullptr;
-            resmem_complex_op()(this->ctx, hshchi, nchip_ik * npwx);
+            resmem_complex_op()(hshchi, nchip_ik * npwx);
             T* tmpin = stowf.shchi->get_pointer();
             T* tmpout = hshchi;
             p_hamilt_sto->hPsi(tmpin, tmpout, nchip_ik);
@@ -573,7 +573,7 @@ void Stochastic_Iter<T, Device>::cal_storho(const UnitCell& ucell,
     const int nspin = PARAM.inp.nspin;
 
     T* porter = nullptr;
-    resmem_complex_op()(this->ctx, porter, nrxx);
+    resmem_complex_op()(porter, nrxx);
 
     std::vector<double*> sto_rho(nspin);
     for(int is = 0; is < nspin; ++is)
@@ -735,7 +735,7 @@ void Stochastic_Iter<T, Device>::calTnchi_ik(const int& ik, Stochastic_WF<T, Dev
         const int M = npwx * nchip[ik];
         const int N = p_che->norder;
         T* coef_real = nullptr;
-        resmem_complex_op()(this->ctx, coef_real, N);
+        resmem_complex_op()(coef_real, N);
         castmem_d2z_op()(this->ctx, this->ctx, coef_real, p_che->coef_real, p_che->norder);
         gemv_op()(this->ctx, transa, M, N, &one, stowf.chiallorder[ik].get_pointer(), LDA, coef_real, inc, &zero, out, inc);
         // zgemv_(&transa, &M, &N, &one, stowf.chiallorder[ik].get_pointer(), &LDA, coef_real, &inc, &zero, out, &inc);

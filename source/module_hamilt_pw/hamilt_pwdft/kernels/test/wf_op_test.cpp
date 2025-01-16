@@ -412,22 +412,22 @@ TEST_F(TestSrcPWWfMultiDevice, cal_sk_op_gpu)
     double * d_kvec_c = nullptr, * d_atom_tau = nullptr;
     std::complex<double> * d_sk = nullptr, * d_eigts1 = nullptr, * d_eigts2 = nullptr, * d_eigts3 = nullptr;
 
-    resmem_int_op()(gpu_ctx, d_atom_na, atom_na.size());
-    resmem_int_op()(gpu_ctx, d_igl2isz, igl2isz.size());
-    resmem_int_op()(gpu_ctx, d_is2fftixy, is2fftixy.size());
+    resmem_int_op()(d_atom_na, atom_na.size());
+    resmem_int_op()(d_igl2isz, igl2isz.size());
+    resmem_int_op()(d_is2fftixy, is2fftixy.size());
     syncmem_int_h2d_op()(gpu_ctx, cpu_ctx, d_atom_na, atom_na.data(), atom_na.size());
     syncmem_int_h2d_op()(gpu_ctx, cpu_ctx, d_igl2isz, igl2isz.data(), igl2isz.size());
     syncmem_int_h2d_op()(gpu_ctx, cpu_ctx, d_is2fftixy, is2fftixy.data(), is2fftixy.size());
 
-    resmem_var_op()(gpu_ctx, d_kvec_c, kvec_c.size());
-    resmem_var_op()(gpu_ctx, d_atom_tau, atom_tau.size());
+    resmem_var_op()(d_kvec_c, kvec_c.size());
+    resmem_var_op()(d_atom_tau, atom_tau.size());
     syncmem_var_h2d_op()(gpu_ctx, cpu_ctx, d_kvec_c, kvec_c.data(), kvec_c.size());
     syncmem_var_h2d_op()(gpu_ctx, cpu_ctx, d_atom_tau, atom_tau.data(), atom_tau.size());
 
-    resmem_complex_op()(gpu_ctx, d_sk, sk.size());
-    resmem_complex_op()(gpu_ctx, d_eigts1, eigts1.size());
-    resmem_complex_op()(gpu_ctx, d_eigts2, eigts2.size());
-    resmem_complex_op()(gpu_ctx, d_eigts3, eigts3.size());
+    resmem_complex_op()(d_sk, sk.size());
+    resmem_complex_op()(d_eigts1, eigts1.size());
+    resmem_complex_op()(d_eigts2, eigts2.size());
+    resmem_complex_op()(d_eigts3, eigts3.size());
     syncmem_complex_h2d_op()(gpu_ctx, cpu_ctx, d_sk, sk.data(), sk.size());
     syncmem_complex_h2d_op()(gpu_ctx, cpu_ctx, d_eigts1, eigts1.data(), eigts1.size());
     syncmem_complex_h2d_op()(gpu_ctx, cpu_ctx, d_eigts2, eigts2.data(), eigts2.size());

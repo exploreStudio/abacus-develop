@@ -20,12 +20,12 @@ StoChe<REAL, Device>::StoChe(const int& nche, const int& method, const REAL& ema
     p_che = new ModuleBase::Chebyshev<REAL, Device>(nche);
     if (method == 1)
     {
-        resmem_var_op()(this->ctx, spolyv, nche);
+        resmem_var_op()(spolyv, nche);
         spolyv_cpu = new REAL[nche];
     }
     else
     {
-        resmem_var_op()(this->ctx, spolyv, nche * nche);
+        resmem_var_op()(spolyv, nche * nche);
     }
 
     this->emax_sto = emax_sto;

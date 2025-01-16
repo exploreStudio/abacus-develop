@@ -173,7 +173,7 @@ void projectors::OnsiteProjector<T, Device>::init(const std::string& orbital_dir
             this->tot_nproj = itiaiprojm2irow_.size();
             this->npwx_ = this->pw_basis_->npwk_max;
             this->size_vproj = this->tot_nproj * this->npwx_;
-            resmem_complex_op()(this->ctx, this->tab_atomic_, this->size_vproj, "OnsiteP::tab_atomic_");
+            resmem_complex_op()(this->tab_atomic_, this->size_vproj, "OnsiteP::tab_atomic_");
         }
 
         delete this->fs_tools; // it is okay to delete nullptr
@@ -390,10 +390,10 @@ void projectors::OnsiteProjector<T, Device>::overlap_proj_psi(
     if(this->becp == nullptr || this->size_becp < npm*this->tot_nproj)
     {
         this->size_becp = npm*this->tot_nproj;
-        resmem_complex_op()(this->ctx, this->becp, this->size_becp);
+        resmem_complex_op()(this->becp, this->size_becp);
         if(this->device == base_device::GpuDevice )
         {
-            resmem_complex_h_op()(this->cpu_ctx, this->h_becp, this->size_becp);
+            resmem_complex_h_op()(this->h_becp, this->size_becp);
         }
         else
         {

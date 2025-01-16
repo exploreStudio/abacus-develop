@@ -371,8 +371,8 @@ TEST_F(TestModuleHsolverMathKernel, gemv_op_cpu)
 TEST_F(TestModuleHsolverMathKernel, zdot_real_op_gpu)
 {
     std::complex<double>*psi_L_dev = NULL, *psi_R_dev = NULL;
-    resize_memory_op()(gpu_ctx, psi_L_dev, psi_L.size());
-    resize_memory_op()(gpu_ctx, psi_R_dev, psi_R.size());
+    resize_memory_op()(psi_L_dev, psi_L.size());
+    resize_memory_op()(psi_R_dev, psi_R.size());
     synchronize_memory_op()(gpu_ctx, cpu_ctx, psi_L_dev, psi_L.data(), psi_L.size());
     synchronize_memory_op()(gpu_ctx, cpu_ctx, psi_R_dev, psi_R.data(), psi_R.size());
     hsolver::createGpuBlasHandle();
@@ -390,8 +390,8 @@ TEST_F(TestModuleHsolverMathKernel, vector_div_constant_op_gpu)
     // in GPU
     std::complex<double>* input_dev = NULL;
     std::complex<double>* output_dev = NULL;
-    resize_memory_op()(gpu_ctx, input_dev, input.size());
-    resize_memory_op()(gpu_ctx, output_dev, input.size());
+    resize_memory_op()(input_dev, input.size());
+    resize_memory_op()(output_dev, input.size());
     // syn the input data in CPU to GPU
     synchronize_memory_op()(gpu_ctx, cpu_ctx, input_dev, input.data(), input.size());
     // run
@@ -419,9 +419,9 @@ TEST_F(TestModuleHsolverMathKernel, vector_mul_vector_op_gpu)
     std::complex<double>* output_dev = NULL;
 
     // resize memory for values
-    resize_memory_op()(gpu_ctx, input_dev, input.size());
-    resize_memory_op_double()(gpu_ctx, input_double_dev, input.size());
-    resize_memory_op()(gpu_ctx, output_dev, input.size());
+    resize_memory_op()(input_dev, input.size());
+    resize_memory_op_double()(input_double_dev, input.size());
+    resize_memory_op()(output_dev, input.size());
 
     // syn the input data in CPU to GPU
     synchronize_memory_op()(gpu_ctx, cpu_ctx, input_dev, input.data(), input.size());
@@ -455,9 +455,9 @@ TEST_F(TestModuleHsolverMathKernel, vector_div_vector_op_gpu)
     std::complex<double>* output_dev = NULL;
 
     // resize memory for values in GPU
-    resize_memory_op()(gpu_ctx, input_dev, input.size());
-    resize_memory_op_double()(gpu_ctx, input_double_dev, input.size());
-    resize_memory_op()(gpu_ctx, output_dev, input.size());
+    resize_memory_op()(input_dev, input.size());
+    resize_memory_op_double()(input_double_dev, input.size());
+    resize_memory_op()(output_dev, input.size());
 
     // syn the input data in CPU to GPU
     synchronize_memory_op()(gpu_ctx, cpu_ctx, input_dev, input.data(), input.size());
@@ -491,9 +491,9 @@ TEST_F(TestModuleHsolverMathKernel, constantvector_addORsub_constantVector_op_gp
     std::complex<double>* output_dev = NULL;
 
     // resize memory for values in GPU
-    resize_memory_op()(gpu_ctx, input1_dev, input.size());
-    resize_memory_op()(gpu_ctx, input2_dev, input.size());
-    resize_memory_op()(gpu_ctx, output_dev, input.size());
+    resize_memory_op()(input1_dev, input.size());
+    resize_memory_op()(input2_dev, input.size());
+    resize_memory_op()(output_dev, input.size());
 
     // syn the input data in CPU to GPU
     synchronize_memory_op()(gpu_ctx, cpu_ctx, input1_dev, input1.data(), input.size());
@@ -529,8 +529,8 @@ TEST_F(TestModuleHsolverMathKernel, axpy_op_gpu)
     std::complex<double>* Y_axpy_dev = NULL;
 
     // resize memory for values in GPU
-    resize_memory_op()(gpu_ctx, X_axpy_dev, X_axpy.size());
-    resize_memory_op()(gpu_ctx, Y_axpy_dev, Y_axpy.size());
+    resize_memory_op()(X_axpy_dev, X_axpy.size());
+    resize_memory_op()(Y_axpy_dev, Y_axpy.size());
 
     // syn the input data in CPU to GPU
     synchronize_memory_op()(gpu_ctx, cpu_ctx, X_axpy_dev, X_axpy.data(), X_axpy.size());
@@ -560,7 +560,7 @@ TEST_F(TestModuleHsolverMathKernel, scal_op_gpu)
     std::complex<double>* X_scal_dev = NULL;
 
     // resize memory for values in GPU
-    resize_memory_op()(gpu_ctx, X_scal_dev, X_scal.size());
+    resize_memory_op()(X_scal_dev, X_scal.size());
 
     // syn the input data in CPU to GPU
     synchronize_memory_op()(gpu_ctx, cpu_ctx, X_scal_dev, X_scal.data(), X_scal.size());
@@ -589,9 +589,9 @@ TEST_F(TestModuleHsolverMathKernel, gemv_op_gpu)
     std::complex<double>* Y_gemv_dev = NULL;
 
     // resize memory for values in GPU
-    resize_memory_op()(gpu_ctx, A_gemv_dev, A_gemv.size());
-    resize_memory_op()(gpu_ctx, X_gemv_dev, X_gemv.size());
-    resize_memory_op()(gpu_ctx, Y_gemv_dev, Y_gemv.size());
+    resize_memory_op()(A_gemv_dev, A_gemv.size());
+    resize_memory_op()(X_gemv_dev, X_gemv.size());
+    resize_memory_op()(Y_gemv_dev, Y_gemv.size());
 
     // syn the input data in CPU to GPU
     synchronize_memory_op()(gpu_ctx, cpu_ctx, A_gemv_dev, A_gemv.data(), A_gemv.size());
@@ -654,7 +654,7 @@ TEST_F(TestModuleHsolverMathKernel, matrixSetToAnother_op_gpu)
     int LDB = 4;
 
     std::complex<double>* device_A = nullptr;
-    base_device::memory::resize_memory_op<std::complex<double>, base_device::DEVICE_GPU>()(gpu_ctx, device_A, A.size());
+    base_device::memory::resize_memory_op<std::complex<double>, base_device::DEVICE_GPU>()(device_A, A.size());
     base_device::memory::
         synchronize_memory_op<std::complex<double>, base_device::DEVICE_GPU, base_device::DEVICE_CPU>()(gpu_ctx,
                                                                                                         cpu_ctx,
@@ -663,7 +663,7 @@ TEST_F(TestModuleHsolverMathKernel, matrixSetToAnother_op_gpu)
                                                                                                         A.size());
 
     std::complex<double>* device_B = nullptr;
-    base_device::memory::resize_memory_op<std::complex<double>, base_device::DEVICE_GPU>()(gpu_ctx, device_B, B.size());
+    base_device::memory::resize_memory_op<std::complex<double>, base_device::DEVICE_GPU>()(device_B, B.size());
     base_device::memory::
         synchronize_memory_op<std::complex<double>, base_device::DEVICE_GPU, base_device::DEVICE_CPU>()(gpu_ctx,
                                                                                                         cpu_ctx,

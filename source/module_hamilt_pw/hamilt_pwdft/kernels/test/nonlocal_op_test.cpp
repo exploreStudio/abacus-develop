@@ -127,9 +127,9 @@ TEST_F(TestModuleHamiltNonlocal, nonlocal_pw_op_gpu)
   double* deeq_dev = NULL;
   std::complex<double>* ps_dev = NULL, * becp_dev = NULL;
   std::vector<std::complex<double>> ps(expected_ps.size(), std::complex<double>(0.0, 0.0));
-  resize_memory_double_op()(gpu_ctx, deeq_dev, deeq.size());
-  resize_memory_complex_double_op()(gpu_ctx, ps_dev, ps.size());
-  resize_memory_complex_double_op()(gpu_ctx, becp_dev, becp.size());
+  resize_memory_double_op()(deeq_dev, deeq.size());
+  resize_memory_complex_double_op()(ps_dev, ps.size());
+  resize_memory_complex_double_op()(becp_dev, becp.size());
   syncmem_d_h2d_op()(gpu_ctx, cpu_ctx, deeq_dev, deeq.data(), deeq.size());
   syncmem_cd_h2d_op()(gpu_ctx, cpu_ctx, ps_dev, ps.data(), ps.size());
   syncmem_cd_h2d_op()(gpu_ctx, cpu_ctx, becp_dev, becp.data(), becp.size());
@@ -157,9 +157,9 @@ TEST_F(TestModuleHamiltNonlocal, nonlocal_pw_spin_op_gpu)
   sum = 0; iat = 0;
   std::complex<double>* ps_dev = NULL, * becp_dev = NULL, * deeq_dev = NULL;
   std::vector<std::complex<double>> ps(expected_ps.size(), std::complex<double>(0.0, 0.0));
-  resize_memory_complex_double_op()(gpu_ctx, deeq_dev, deeq_spin.size());
-  resize_memory_complex_double_op()(gpu_ctx, ps_dev, ps.size());
-  resize_memory_complex_double_op()(gpu_ctx, becp_dev, becp_spin.size());
+  resize_memory_complex_double_op()(deeq_dev, deeq_spin.size());
+  resize_memory_complex_double_op()(ps_dev, ps.size());
+  resize_memory_complex_double_op()(becp_dev, becp_spin.size());
   syncmem_cd_h2d_op()(gpu_ctx, cpu_ctx, deeq_dev, deeq_spin.data(), deeq_spin.size());
   syncmem_cd_h2d_op()(gpu_ctx, cpu_ctx, ps_dev, ps.data(), ps.size());
   syncmem_cd_h2d_op()(gpu_ctx, cpu_ctx, becp_dev, becp_spin.data(), becp_spin.size());

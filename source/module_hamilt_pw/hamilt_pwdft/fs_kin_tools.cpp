@@ -27,8 +27,8 @@ FS_Kin_tools<FPTYPE, Device>::FS_Kin_tools(const UnitCell& ucell_in,
 
     if (this->device == base_device::GpuDevice)
     {
-        resmem_var_op()(this->ctx, d_gk, 3 * npwk_max);
-        resmem_var_op()(this->ctx, d_kfac, npwk_max);
+        resmem_var_op()(d_gk, 3 * npwk_max);
+        resmem_var_op()(d_kfac, npwk_max);
     }
     else
     {

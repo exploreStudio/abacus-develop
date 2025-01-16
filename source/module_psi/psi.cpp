@@ -58,7 +58,7 @@ Psi<T, Device>::Psi(const int nk_in, const int nbd_in, const int nbs_in, const i
 
     this->ngk = ngk_in; // modify later
     // This function will delete the psi array first(if psi exist), then malloc a new memory for it.
-    resize_memory_op()(this->ctx, this->psi, nk_in * static_cast<std::size_t>(nbd_in) * nbs_in, "no_record");
+    resize_memory_op()(this->psi, nk_in * static_cast<std::size_t>(nbd_in) * nbs_in, "no_record");
 
     this->nk = nk_in;
     this->nbands = nbd_in;
@@ -96,7 +96,7 @@ Psi<T, Device>::Psi(const int nk_in,
 
     this->ngk = ngk_in.data(); // modify later
     // This function will delete the psi array first(if psi exist), then malloc a new memory for it.
-    resize_memory_op()(this->ctx, this->psi, nk_in * static_cast<std::size_t>(nbd_in) * nbs_in, "no_record");
+    resize_memory_op()(this->psi, nk_in * static_cast<std::size_t>(nbd_in) * nbs_in, "no_record");
 
     this->nk = nk_in;
     this->nbands = nbd_in;
@@ -166,7 +166,7 @@ Psi<T, Device>::Psi(const int nk_in,
 
     this->ngk = nullptr;
     assert(nk_in > 0 && nbd_in >= 0 && nbs_in > 0);
-    resize_memory_op()(this->ctx, this->psi, nk_in * static_cast<std::size_t>(nbd_in) * nbs_in, "no_record");
+    resize_memory_op()(this->psi, nk_in * static_cast<std::size_t>(nbd_in) * nbs_in, "no_record");
 
     this->nk = nk_in;
     this->nbands = nbd_in;
@@ -278,7 +278,7 @@ void Psi<T, Device>::resize(const int nks_in, const int nbands_in, const int nba
     assert(nks_in > 0 && nbands_in >= 0 && nbasis_in > 0);
 
     // This function will delete the psi array first(if psi exist), then malloc a new memory for it.
-    resize_memory_op()(this->ctx, this->psi, nks_in * static_cast<std::size_t>(nbands_in) * nbasis_in, "no_record");
+    resize_memory_op()(this->psi, nks_in * static_cast<std::size_t>(nbands_in) * nbasis_in, "no_record");
 
     // this->zero_out();
 

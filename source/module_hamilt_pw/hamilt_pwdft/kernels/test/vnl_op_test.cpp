@@ -4049,20 +4049,20 @@ TEST_F(TestSrcPWVnlMultiDevice, cal_vnl_op_gpu)
            *d_tab = nullptr, *d_vkb1 = nullptr;
     std::complex<double>*d_sk = nullptr, *d_vkb = nullptr;
 
-    resmem_int_op()(gpu_ctx, d_atom_na, atom_na.size());
-    resmem_int_op()(gpu_ctx, d_atom_nb, atom_nb.size());
-    resmem_int_op()(gpu_ctx, d_atom_nh, atom_nh.size());
+    resmem_int_op()(d_atom_na, atom_na.size());
+    resmem_int_op()(d_atom_nb, atom_nb.size());
+    resmem_int_op()(d_atom_nh, atom_nh.size());
     syncmem_int_h2d_op()(gpu_ctx, cpu_ctx, d_atom_na, atom_na.data(), atom_na.size());
     syncmem_int_h2d_op()(gpu_ctx, cpu_ctx, d_atom_nb, atom_nb.data(), atom_nb.size());
     syncmem_int_h2d_op()(gpu_ctx, cpu_ctx, d_atom_nh, atom_nh.data(), atom_nh.size());
 
-    resmem_var_op()(gpu_ctx, d_gk, gk.size());
-    resmem_var_op()(gpu_ctx, d_ylm, ylm.size());
-    resmem_var_op()(gpu_ctx, d_indv, indv.size());
-    resmem_var_op()(gpu_ctx, d_nhtol, nhtol.size());
-    resmem_var_op()(gpu_ctx, d_nhtolm, nhtolm.size());
-    resmem_var_op()(gpu_ctx, d_tab, tab.size());
-    resmem_var_op()(gpu_ctx, d_vkb1, vkb1.size());
+    resmem_var_op()(d_gk, gk.size());
+    resmem_var_op()(d_ylm, ylm.size());
+    resmem_var_op()(d_indv, indv.size());
+    resmem_var_op()(d_nhtol, nhtol.size());
+    resmem_var_op()(d_nhtolm, nhtolm.size());
+    resmem_var_op()(d_tab, tab.size());
+    resmem_var_op()(d_vkb1, vkb1.size());
 
     syncmem_var_h2d_op()(gpu_ctx, cpu_ctx, d_gk, gk.data(), gk.size());
     syncmem_var_h2d_op()(gpu_ctx, cpu_ctx, d_ylm, ylm.data(), ylm.size());
@@ -4072,8 +4072,8 @@ TEST_F(TestSrcPWVnlMultiDevice, cal_vnl_op_gpu)
     syncmem_var_h2d_op()(gpu_ctx, cpu_ctx, d_tab, tab.data(), tab.size());
     syncmem_var_h2d_op()(gpu_ctx, cpu_ctx, d_vkb1, vkb1.data(), vkb1.size());
 
-    resmem_complex_op()(gpu_ctx, d_sk, sk.size());
-    resmem_complex_op()(gpu_ctx, d_vkb, vkb.size());
+    resmem_complex_op()(d_sk, sk.size());
+    resmem_complex_op()(d_vkb, vkb.size());
 
     syncmem_complex_h2d_op()(gpu_ctx, cpu_ctx, d_sk, sk.data(), sk.size());
     syncmem_complex_h2d_op()(gpu_ctx, cpu_ctx, d_vkb, vkb.data(), vkb.size());

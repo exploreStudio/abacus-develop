@@ -72,7 +72,7 @@ void Nonlocal<OperatorPW<T, Device>>::add_nonlocal_pp(T *hpsi_in, const T *becp,
     // T *ps = new T[nkb * m];
     // ModuleBase::GlobalFunc::ZEROS(ps, m * nkb);
     if (this->nkb_m < m * nkb) {
-        resmem_complex_op()(this->ctx, this->ps, nkb * m, "Nonlocal<PW>::ps");
+        resmem_complex_op()(this->ps, nkb * m, "Nonlocal<PW>::ps");
         this->nkb_m = m * nkb;
     }
     setmem_complex_op()(this->ctx, this->ps, 0, nkb * m);
@@ -235,7 +235,7 @@ void Nonlocal<OperatorPW<T, Device>>::act(
             // qianrui optimize 2021-3-31
             int nkb = this->ppcell->nkb;
             if (this->nkb_m < nbands * nkb) {
-                resmem_complex_op()(this->ctx, this->becp, nbands * nkb, "Nonlocal<PW>::becp");
+                resmem_complex_op()(this->becp, nbands * nkb, "Nonlocal<PW>::becp");
             }
             // ModuleBase::ComplexMatrix becp(nbands, nkb, false);
             char transa = 'C';

@@ -102,9 +102,9 @@ TEST_F(TestModulePWPWMultiDevice, set_3d_fft_box_op_gpu)
     std::vector<std::complex<double>> res(out_1.size(), std::complex<double>{0, 0});
     int * d_box_index = NULL;
     std::complex<double>* d_res = NULL, * d_in_1 = NULL;
-    resize_memory_int_gpu_op()(gpu_ctx, d_box_index, box_index.size());
-    resize_memory_complex_gpu_op()(gpu_ctx, d_res, res.size());
-    resize_memory_complex_gpu_op()(gpu_ctx, d_in_1, in_1.size());
+    resize_memory_int_gpu_op()(d_box_index, box_index.size());
+    resize_memory_complex_gpu_op()(d_res, res.size());
+    resize_memory_complex_gpu_op()(d_in_1, in_1.size());
     synchronize_memory_int_h2d_op()(gpu_ctx, cpu_ctx, d_box_index, box_index.data(), box_index.size());
     synchronize_memory_complex_h2d_op()(gpu_ctx, cpu_ctx, d_res, res.data(), res.size());
     synchronize_memory_complex_h2d_op()(gpu_ctx, cpu_ctx, d_in_1, in_1.data(), in_1.size());
@@ -125,8 +125,8 @@ TEST_F(TestModulePWPWMultiDevice, set_recip_to_real_output_op_gpu)
 {
     std::vector<std::complex<double>> res(out_2.size(), std::complex<double>{0, 0});
     std::complex<double>* d_res = NULL, * d_in_2 = NULL;
-    resize_memory_complex_gpu_op()(gpu_ctx, d_res, res.size());
-    resize_memory_complex_gpu_op()(gpu_ctx, d_in_2, in_2.size());
+    resize_memory_complex_gpu_op()(d_res, res.size());
+    resize_memory_complex_gpu_op()(d_in_2, in_2.size());
     synchronize_memory_complex_h2d_op()(gpu_ctx, cpu_ctx, d_res, res.data(), res.size());
     synchronize_memory_complex_h2d_op()(gpu_ctx, cpu_ctx, d_in_2, in_2.data(), in_2.size());
 
@@ -146,9 +146,9 @@ TEST_F(TestModulePWPWMultiDevice, set_real_to_recip_output_op_gpu)
     std::vector<std::complex<double>> res = out_3_init;
     int * d_box_index = NULL;
     std::complex<double>* d_res = NULL, * d_in_3 = NULL;
-    resize_memory_int_gpu_op()(gpu_ctx, d_box_index, box_index.size());
-    resize_memory_complex_gpu_op()(gpu_ctx, d_res, res.size());
-    resize_memory_complex_gpu_op()(gpu_ctx, d_in_3, in_3.size());
+    resize_memory_int_gpu_op()(d_box_index, box_index.size());
+    resize_memory_complex_gpu_op()(d_res, res.size());
+    resize_memory_complex_gpu_op()(d_in_3, in_3.size());
     synchronize_memory_int_h2d_op()(gpu_ctx, cpu_ctx, d_box_index, box_index.data(), box_index.size());
     synchronize_memory_complex_h2d_op()(gpu_ctx, cpu_ctx, d_res, res.data(), res.size());
     synchronize_memory_complex_h2d_op()(gpu_ctx, cpu_ctx, d_in_3, in_3.data(), in_3.size());

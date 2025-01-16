@@ -158,42 +158,40 @@ void pseudopot_cell_vnl::init(const UnitCell& ucell,
         {
             if (PARAM.inp.precision == "single")
             {
-                resmem_sd_op()(gpu_ctx, s_deeq, PARAM.inp.nspin * ucell.nat * this->nhm * this->nhm);
-                resmem_sd_op()(gpu_ctx, s_nhtol, ntype * this->nhm);
-                resmem_sd_op()(gpu_ctx, s_nhtolm, ntype * this->nhm);
-                resmem_sd_op()(gpu_ctx, s_indv, ntype * this->nhm);
-                resmem_sd_op()(gpu_ctx, s_qq_nt, ntype * this->nhm * this->nhm);
-                resmem_cd_op()(gpu_ctx, c_deeq_nc, PARAM.inp.nspin * ucell.nat * this->nhm * this->nhm);
-                resmem_cd_op()(gpu_ctx, c_qq_so, ntype * 4 * this->nhm * this->nhm);
+                resmem_sd_op()(s_deeq, PARAM.inp.nspin * ucell.nat * this->nhm * this->nhm);
+                resmem_sd_op()(s_nhtol, ntype * this->nhm);
+                resmem_sd_op()(s_nhtolm, ntype * this->nhm);
+                resmem_sd_op()(s_indv, ntype * this->nhm);
+                resmem_sd_op()(s_qq_nt, ntype * this->nhm * this->nhm);
+                resmem_cd_op()(c_deeq_nc, PARAM.inp.nspin * ucell.nat * this->nhm * this->nhm);
+                resmem_cd_op()(c_qq_so, ntype * 4 * this->nhm * this->nhm);
             }
             else
             {
-                resmem_zd_op()(gpu_ctx, z_deeq_nc, PARAM.inp.nspin * ucell.nat * this->nhm * this->nhm);
-                resmem_zd_op()(gpu_ctx, z_qq_so, ntype * 4 * this->nhm * this->nhm);
+                resmem_zd_op()(z_deeq_nc, PARAM.inp.nspin * ucell.nat * this->nhm * this->nhm);
+                resmem_zd_op()(z_qq_so, ntype * 4 * this->nhm * this->nhm);
             }
-            resmem_dd_op()(gpu_ctx, d_deeq, PARAM.inp.nspin * ucell.nat * this->nhm * this->nhm);
-            resmem_dd_op()(gpu_ctx, d_indv, ntype * this->nhm);
-            resmem_dd_op()(gpu_ctx, d_nhtol, ntype * this->nhm);
-            resmem_dd_op()(gpu_ctx, d_nhtolm, ntype * this->nhm);
-            resmem_dd_op()(gpu_ctx, d_qq_nt, ntype * this->nhm * this->nhm);
+            resmem_dd_op()(d_deeq, PARAM.inp.nspin * ucell.nat * this->nhm * this->nhm);
+            resmem_dd_op()(d_indv, ntype * this->nhm);
+            resmem_dd_op()(d_nhtol, ntype * this->nhm);
+            resmem_dd_op()(d_nhtolm, ntype * this->nhm);
+            resmem_dd_op()(d_qq_nt, ntype * this->nhm * this->nhm);
         }
         else
         {
             if (PARAM.inp.precision == "single")
             {
-                resmem_sh_op()(cpu_ctx,
-                               s_deeq,
+                resmem_sh_op()(s_deeq,
                                PARAM.inp.nspin * ucell.nat * this->nhm * this->nhm,
                                "VNL::s_deeq");
-                resmem_sh_op()(cpu_ctx, s_nhtol, ntype * this->nhm, "VNL::s_nhtol");
-                resmem_sh_op()(cpu_ctx, s_nhtolm, ntype * this->nhm, "VNL::s_nhtolm");
-                resmem_sh_op()(cpu_ctx, s_indv, ntype * this->nhm, "VNL::s_indv");
-                resmem_sh_op()(cpu_ctx, s_qq_nt, ntype * this->nhm * this->nhm, "VNL::s_qq_nt");
-                resmem_ch_op()(cpu_ctx,
-                               c_deeq_nc,
+                resmem_sh_op()(s_nhtol, ntype * this->nhm, "VNL::s_nhtol");
+                resmem_sh_op()(s_nhtolm, ntype * this->nhm, "VNL::s_nhtolm");
+                resmem_sh_op()(s_indv, ntype * this->nhm, "VNL::s_indv");
+                resmem_sh_op()(s_qq_nt, ntype * this->nhm * this->nhm, "VNL::s_qq_nt");
+                resmem_ch_op()(c_deeq_nc,
                                PARAM.inp.nspin * ucell.nat * this->nhm * this->nhm,
                                "VNL::c_deeq_nc");
-                resmem_ch_op()(cpu_ctx, c_qq_so, ntype * 4 * this->nhm * this->nhm, "VNL::c_qq_so");
+                resmem_ch_op()(c_qq_so, ntype * 4 * this->nhm * this->nhm, "VNL::c_qq_so");
             }
             else
             {
@@ -275,18 +273,18 @@ void pseudopot_cell_vnl::init(const UnitCell& ucell,
     {
         if (PARAM.inp.precision == "single")
         {
-            resmem_sd_op()(gpu_ctx, s_tab, this->tab.getSize());
-            resmem_cd_op()(gpu_ctx, c_vkb, nkb * npwx);
+            resmem_sd_op()(s_tab, this->tab.getSize());
+            resmem_cd_op()(c_vkb, nkb * npwx);
         }
-        resmem_zd_op()(gpu_ctx, z_vkb, nkb * npwx);
-        resmem_dd_op()(gpu_ctx, d_tab, this->tab.getSize());
+        resmem_zd_op()(z_vkb, nkb * npwx);
+        resmem_dd_op()(d_tab, this->tab.getSize());
     }
     else
     {
         if (PARAM.inp.precision == "single")
         {
-            resmem_sh_op()(cpu_ctx, s_tab, this->tab.getSize());
-            resmem_ch_op()(cpu_ctx, c_vkb, nkb * npwx);
+            resmem_sh_op()(s_tab, this->tab.getSize());
+            resmem_ch_op()(c_vkb, nkb * npwx);
         }
         this->z_vkb = this->vkb.c;
         this->d_tab = this->tab.ptr;
@@ -339,7 +337,7 @@ void pseudopot_cell_vnl::getvnl(const int& ik, const UnitCell& ucell, ModuleBase
     using resmem_complex_op = base_device::memory::resize_memory_op<std::complex<double>, Device>;
     using delmem_complex_op = base_device::memory::delete_memory_op<std::complex<double>, Device>;
     std::complex<double>* sk = nullptr;
-    resmem_complex_op()(ctx, sk, ucell.nat * npw, "VNL::sk");
+    resmem_complex_op()(sk, ucell.nat * npw, "VNL::sk");
     this->psf->get_sk(ctx, ik, this->wfcpw, sk);
 
     int jkb = 0, iat = 0;
@@ -457,8 +455,8 @@ void pseudopot_cell_vnl::getvnl(Device* ctx,
     FPTYPE *vkb1 = nullptr, *gk = nullptr, *ylm = nullptr, *_tab = this->get_tab_data<FPTYPE>(),
            *_indv = this->get_indv_data<FPTYPE>(), *_nhtol = this->get_nhtol_data<FPTYPE>(),
            *_nhtolm = this->get_nhtolm_data<FPTYPE>();
-    resmem_var_op()(ctx, ylm, x1 * npw, "VNL::ylm");
-    resmem_var_op()(ctx, vkb1, nhm * npw, "VNL::vkb1");
+    resmem_var_op()(ylm, x1 * npw, "VNL::ylm");
+    resmem_var_op()(vkb1, nhm * npw, "VNL::vkb1");
 
     ModuleBase::Vector3<double>* _gk = new ModuleBase::Vector3<double>[npw];
 #ifdef _OPENMP
@@ -470,14 +468,14 @@ void pseudopot_cell_vnl::getvnl(Device* ctx,
     }
     if (PARAM.inp.device == "gpu")
     {
-        resmem_int_op()(ctx, atom_nh, ucell.ntype);
-        resmem_int_op()(ctx, atom_nb, ucell.ntype);
-        resmem_int_op()(ctx, atom_na, ucell.ntype);
+        resmem_int_op()(atom_nh, ucell.ntype);
+        resmem_int_op()(atom_nb, ucell.ntype);
+        resmem_int_op()(atom_na, ucell.ntype);
         syncmem_int_op()(ctx, cpu_ctx, atom_nh, h_atom_nh, ucell.ntype);
         syncmem_int_op()(ctx, cpu_ctx, atom_nb, h_atom_nb, ucell.ntype);
         syncmem_int_op()(ctx, cpu_ctx, atom_na, h_atom_na, ucell.ntype);
 
-        resmem_var_op()(ctx, gk, npw * 3);
+        resmem_var_op()(gk, npw * 3);
         castmem_var_h2d_op()(ctx, cpu_ctx, gk, reinterpret_cast<double*>(_gk), npw * 3);
     }
     else
@@ -487,7 +485,7 @@ void pseudopot_cell_vnl::getvnl(Device* ctx,
         atom_na = h_atom_na;
         if (PARAM.inp.precision == "single")
         {
-            resmem_var_op()(ctx, gk, npw * 3);
+            resmem_var_op()(gk, npw * 3);
             castmem_var_h2h_op()(cpu_ctx, cpu_ctx, gk, reinterpret_cast<double*>(_gk), npw * 3);
         }
         else
@@ -499,7 +497,7 @@ void pseudopot_cell_vnl::getvnl(Device* ctx,
     ModuleBase::YlmReal::Ylm_Real(ctx, x1, npw, gk, ylm);
 
     std::complex<FPTYPE>* sk = nullptr;
-    resmem_complex_op()(ctx, sk, ucell.nat * npw);
+    resmem_complex_op()(sk, ucell.nat * npw);
     this->psf->get_sk(ctx, ik, this->wfcpw, sk);
 
     cal_vnl_op()(ctx,

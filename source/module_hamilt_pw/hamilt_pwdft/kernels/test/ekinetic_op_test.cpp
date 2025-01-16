@@ -81,10 +81,10 @@ TEST_F(TestModuleHamiltEkinetic, ekinetic_pw_op_gpu)
 {
   double* gk2_dev = NULL;
   std::complex<double>* hpsi_dev = NULL, * psi_dev = NULL;
-  resize_memory_double_op()(gpu_ctx, gk2_dev, gk2.size());
-  resize_memory_complex_double_op()(gpu_ctx, psi_dev, psi.size());
+  resize_memory_double_op()(gk2_dev, gk2.size());
+  resize_memory_complex_double_op()(psi_dev, psi.size());
   std::vector<std::complex<double> > hpsi(expected_hpsi.size(), std::complex<double>(0.0, 0.0));
-  resize_memory_complex_double_op()(gpu_ctx, hpsi_dev, hpsi.size());
+  resize_memory_complex_double_op()(hpsi_dev, hpsi.size());
   syncmem_cd_h2d_op()(gpu_ctx, cpu_ctx, hpsi_dev, hpsi.data(), hpsi.size());
   syncmem_d_h2d_op()(gpu_ctx, cpu_ctx, gk2_dev, gk2.data(), gk2.size());
   syncmem_cd_h2d_op()(gpu_ctx, cpu_ctx, psi_dev, psi.data(), psi.size());

@@ -111,7 +111,7 @@ TEST_F(TestModulePsiMemory, set_memory_op_complex_double_cpu)
 TEST_F(TestModulePsiMemory, resize_memory_op_double_cpu)
 {
     double* xx_tmp = NULL;
-    resize_memory_double_cpu_op()(cpu_ctx, xx_tmp, xx.size());
+    resize_memory_double_cpu_op()(xx_tmp, xx.size());
     for (int ii = 0; ii < xx.size(); ii++)
     {
         xx_tmp[ii] = xx[ii];
@@ -126,7 +126,7 @@ TEST_F(TestModulePsiMemory, resize_memory_op_double_cpu)
 TEST_F(TestModulePsiMemory, resize_memory_op_comlex_double_cpu)
 {
     std::complex<double>* z_xx_tmp = NULL;
-    resize_memory_comlex_double_cpu_op()(cpu_ctx, z_xx_tmp, z_xx.size());
+    resize_memory_comlex_double_cpu_op()(z_xx_tmp, z_xx.size());
     for (int ii = 0; ii < z_xx.size(); ii++)
     {
         z_xx_tmp[ii] = z_xx[ii];
@@ -200,7 +200,7 @@ TEST_F(TestModulePsiMemory, set_memory_op_complex_double_gpu)
 TEST_F(TestModulePsiMemory, resize_memory_op_double_gpu)
 {
     double* xx_tmp = NULL;
-    resize_memory_double_gpu_op()(gpu_ctx, xx_tmp, xx.size());
+    resize_memory_double_gpu_op()(xx_tmp, xx.size());
 
     thrust::device_ptr<double> d_xx(xx_tmp);
     thrust::copy(xx.begin(), xx.end(), d_xx);
@@ -217,7 +217,7 @@ TEST_F(TestModulePsiMemory, resize_memory_op_double_gpu)
 TEST_F(TestModulePsiMemory, resize_memory_op_complex_double_gpu)
 {
     std::complex<double>* z_xx_tmp = NULL;
-    resize_memory_comlex_double_gpu_op()(gpu_ctx, z_xx_tmp, z_xx.size());
+    resize_memory_comlex_double_gpu_op()(z_xx_tmp, z_xx.size());
 
     thrust::device_ptr<std::complex<double>> dz_xx(z_xx_tmp);
     thrust::copy(z_xx.begin(), z_xx.end(), dz_xx);

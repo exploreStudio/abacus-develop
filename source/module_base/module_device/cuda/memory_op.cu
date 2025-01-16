@@ -52,14 +52,13 @@ __global__ void cast_memory(std::complex<FPTYPE_out>* out, const FPTYPE_in* in, 
 }
 
 template <typename FPTYPE>
-void resize_memory_op<FPTYPE, base_device::DEVICE_GPU>::operator()(const base_device::DEVICE_GPU* dev,
-                                                                   FPTYPE*& arr,
-                                                                   const size_t size,
+void resize_memory_op<FPTYPE, base_device::DEVICE_GPU>::operator()(FPTYPE*& arr,
+                                                                     const size_t size,
                                                                    const char* record_in)
 {
     if (arr != nullptr)
     {
-        delete_memory_op<FPTYPE, base_device::DEVICE_GPU>()(dev, arr);
+        delete_memory_op<FPTYPE, base_device::DEVICE_GPU>()(gpu_ctx, arr);
     }
     cudaErrcheck(cudaMalloc((void**)&arr, sizeof(FPTYPE) * size));
     std::string record_string;

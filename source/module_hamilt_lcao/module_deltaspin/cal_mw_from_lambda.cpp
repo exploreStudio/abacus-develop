@@ -27,7 +27,7 @@ void spinconstrain::SpinConstrain<std::complex<double>>::calculate_delta_hcc(std
 #if ((defined __CUDA) || (defined __ROCM))
         base_device::DEVICE_GPU* ctx = {};
         base_device::DEVICE_CPU* cpu_ctx = {};
-        base_device::memory::resize_memory_op<std::complex<double>, base_device::DEVICE_CPU>()(cpu_ctx, becp_cpu, size_ps);
+        base_device::memory::resize_memory_op<std::complex<double>, base_device::DEVICE_CPU>()(becp_cpu, size_ps);
         base_device::memory::synchronize_memory_op<std::complex<double>, base_device::DEVICE_CPU, base_device::DEVICE_GPU>()(cpu_ctx, ctx, becp_cpu, becp_k, size_ps);   
 #endif
     }
@@ -68,7 +68,7 @@ void spinconstrain::SpinConstrain<std::complex<double>>::calculate_delta_hcc(std
 #if ((defined __CUDA) || (defined __ROCM))
         base_device::DEVICE_GPU* ctx = {};
         base_device::DEVICE_CPU* cpu_ctx = {};
-        base_device::memory::resize_memory_op<std::complex<double>, base_device::DEVICE_GPU>()(ctx, ps_pointer, size_ps);
+        base_device::memory::resize_memory_op<std::complex<double>, base_device::DEVICE_GPU>()(ps_pointer, size_ps);
         base_device::memory::synchronize_memory_op<std::complex<double>, base_device::DEVICE_GPU, base_device::DEVICE_CPU>()(ctx, cpu_ctx, ps_pointer, ps.data(), size_ps);   
 #endif
     }
@@ -260,20 +260,20 @@ void spinconstrain::SpinConstrain<std::complex<double>>::cal_mw_from_lambda(int 
                 becp_tmp.resize(size_becp * nk);
                 std::complex<double>* h_tmp = nullptr;
                 std::complex<double>* s_tmp = nullptr;
-                base_device::memory::resize_memory_op<std::complex<double>, base_device::DEVICE_GPU>()(ctx, h_tmp, nbands * nbands);
-                base_device::memory::resize_memory_op<std::complex<double>, base_device::DEVICE_GPU>()(ctx, s_tmp, nbands * nbands);
+                base_device::memory::resize_memory_op<std::complex<double>, base_device::DEVICE_GPU>()(h_tmp, nbands * nbands);
+                base_device::memory::resize_memory_op<std::complex<double>, base_device::DEVICE_GPU>()(s_tmp, nbands * nbands);
                 int initial_hs = 0;
                 if(this->sub_h_save == nullptr)
                 {
                     initial_hs = 1;
                     
-                    base_device::memory::resize_memory_op<std::complex<double>, base_device::DEVICE_GPU>()(ctx, this->sub_h_save, nbands * nbands * nk);
-                    base_device::memory::resize_memory_op<std::complex<double>, base_device::DEVICE_GPU>()(ctx, this->sub_s_save, nbands * nbands * nk);
-                    base_device::memory::resize_memory_op<std::complex<double>, base_device::DEVICE_GPU>()(ctx, this->becp_save, size_becp * nk);
+                    base_device::memory::resize_memory_op<std::complex<double>, base_device::DEVICE_GPU>()(this->sub_h_save, nbands * nbands * nk);
+                    base_device::memory::resize_memory_op<std::complex<double>, base_device::DEVICE_GPU>()(this->sub_s_save, nbands * nbands * nk);
+                    base_device::memory::resize_memory_op<std::complex<double>, base_device::DEVICE_GPU>()(this->becp_save, size_becp * nk);
                 }
                 std::complex<double>* becp_pointer = nullptr;
                 // allocate memory for becp_pointer in GPU device
-                base_device::memory::resize_memory_op<std::complex<double>, base_device::DEVICE_GPU>()(ctx, becp_pointer, size_becp);
+                base_device::memory::resize_memory_op<std::complex<double>, base_device::DEVICE_GPU>()(becp_pointer, size_becp);
                 for (int ik = 0; ik < nk; ++ik)
                 {
                     psi_t->fix_k(ik);
@@ -462,8 +462,8 @@ void spinconstrain::SpinConstrain<std::complex<double>>::update_psi_charge(const
 
             std::complex<double>* h_tmp = nullptr;
             std::complex<double>* s_tmp = nullptr;
-            base_device::memory::resize_memory_op<std::complex<double>, base_device::DEVICE_GPU>()(ctx, h_tmp, nbands * nbands);
-            base_device::memory::resize_memory_op<std::complex<double>, base_device::DEVICE_GPU>()(ctx, s_tmp, nbands * nbands);
+            base_device::memory::resize_memory_op<std::complex<double>, base_device::DEVICE_GPU>()(h_tmp, nbands * nbands);
+            base_device::memory::resize_memory_op<std::complex<double>, base_device::DEVICE_GPU>()(s_tmp, nbands * nbands);
             assert(this->sub_h_save != nullptr);
             assert(this->sub_s_save != nullptr);
             assert(this->becp_save != nullptr);

@@ -18,13 +18,12 @@ struct resize_memory_op
     /// @brief Allocate memory for a given pointer. Note this op will free the pointer first.
     ///
     /// Input Parameters
-    /// \param dev : the type of computing device
     /// \param size : array size
     /// \param record_string : label for memory record
     ///
     /// Output Parameters
     /// \param arr : allocated array
-    void operator()(const Device* dev, FPTYPE*& arr, const size_t size, const char* record_in = nullptr);
+    void operator()(FPTYPE*& arr, const size_t size, const char* record_in = nullptr);
 };
 
 template <typename FPTYPE, typename Device>
@@ -113,8 +112,7 @@ void delete_memory(FPTYPE* arr, base_device::AbacusDevice_t device_type = base_d
 template <typename FPTYPE>
 struct resize_memory_op<FPTYPE, base_device::DEVICE_GPU>
 {
-    void operator()(const base_device::DEVICE_GPU* dev,
-                    FPTYPE*& arr,
+    void operator()(FPTYPE*& arr,
                     const size_t size,
                     const char* record_in = nullptr);
 };

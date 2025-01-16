@@ -23,7 +23,7 @@ void Forces<FPTYPE, Device>::cal_force_onsite(ModuleBase::matrix& force_onsite,
 
     // allocate memory for the force
     FPTYPE* force = nullptr;
-    resmem_var_op()(this->ctx, force, ucell_in.nat * 3);
+    resmem_var_op()(force, ucell_in.nat * 3);
     base_device::memory::set_memory_op<FPTYPE, Device>()(this->ctx, force, 0.0, ucell_in.nat * 3);
 
     auto* onsite_p = projectors::OnsiteProjector<FPTYPE, Device>::get_instance();

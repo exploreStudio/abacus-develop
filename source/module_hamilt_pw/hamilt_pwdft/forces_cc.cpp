@@ -134,12 +134,12 @@ void Forces<FPTYPE, Device>::cal_force_cc(ModuleBase::matrix& forcecc,
     }
 
 	if(this->device == base_device::GpuDevice ) {
-		resmem_var_op()(this->ctx, gv_x_d, rho_basis->npw);
-        resmem_var_op()(this->ctx, gv_y_d, rho_basis->npw);
-        resmem_var_op()(this->ctx, gv_z_d, rho_basis->npw);
-        resmem_var_op()(this->ctx, rhocgigg_vec_d, rho_basis->npw);
-        resmem_complex_op()(this->ctx, psiv_d, rho_basis->nmaxgr);
-        resmem_var_op()(this->ctx, force_d, 3);
+		resmem_var_op()(gv_x_d, rho_basis->npw);
+        resmem_var_op()(gv_y_d, rho_basis->npw);
+        resmem_var_op()(gv_z_d, rho_basis->npw);
+        resmem_var_op()(rhocgigg_vec_d, rho_basis->npw);
+        resmem_complex_op()(psiv_d, rho_basis->nmaxgr);
+        resmem_var_op()(force_d, 3);
 
 		syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, gv_x_d, gv_x.data(), rho_basis->npw);
         syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, gv_y_d, gv_y.data(), rho_basis->npw);
@@ -308,13 +308,13 @@ void Forces<FPTYPE, Device>::deriv_drhoc
     double *aux_d = nullptr;
     double *drhocg_d = nullptr;
 	if(this->device == base_device::GpuDevice ) {
-		resmem_var_op()(this->ctx, r_d, mesh);
-		resmem_var_op()(this->ctx, rhoc_d, mesh);
-		resmem_var_op()(this->ctx, rab_d, mesh);
+		resmem_var_op()(r_d, mesh);
+		resmem_var_op()(rhoc_d, mesh);
+		resmem_var_op()(rab_d, mesh);
 
-		resmem_var_op()(this->ctx, aux_d, mesh);
-		resmem_var_op()(this->ctx, gx_arr_d, rho_basis->ngg);
-		resmem_var_op()(this->ctx, drhocg_d, rho_basis->ngg);
+		resmem_var_op()(aux_d, mesh);
+		resmem_var_op()(gx_arr_d, rho_basis->ngg);
+		resmem_var_op()(drhocg_d, rho_basis->ngg);
 
 		syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, gx_arr_d, gx_arr.data(), rho_basis->ngg);
 		syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, r_d, r, mesh);

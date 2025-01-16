@@ -101,7 +101,7 @@ TEST(blas_connector, ScalGpu) {
     const int incx = 1;
     std::complex<double> result[8], answer[8];
     std::complex<double>* result_gpu = nullptr;
-    resmem_zd_op()(gpu_ctx, result_gpu, 8 * sizeof(std::complex<double>));
+    resmem_zd_op()(result_gpu, 8 * sizeof(std::complex<double>));
     for (int i=0; i< size; i++) {
         result[i] = std::complex<double>{static_cast<double>(std::rand() / double(RAND_MAX)),
                  static_cast<double>(std::rand() / double(RAND_MAX))};
@@ -198,8 +198,8 @@ TEST(blas_connector, AxpyGpu) {
     std::array<T, size> x_const, result, answer;
     T* x_gpu = nullptr;
     T* result_gpu = nullptr;
-    resmem_zd_op()(gpu_ctx, x_gpu, size * sizeof(std::complex<double>));
-    resmem_zd_op()(gpu_ctx, result_gpu, size * sizeof(std::complex<double>));
+    resmem_zd_op()(x_gpu, size * sizeof(std::complex<double>));
+    resmem_zd_op()(result_gpu, size * sizeof(std::complex<double>));
     std::generate(x_const.begin(), x_const.end(), []() {
         return T{static_cast<double>(std::rand() / double(RAND_MAX)),
                  static_cast<double>(std::rand() / double(RAND_MAX))};
@@ -640,9 +640,9 @@ TEST(blas_connector, GemmGpu) {
     std::complex<double>* a_gpu = nullptr;
     std::complex<double>* b_gpu = nullptr;
     std::complex<double>* result_gpu = nullptr;
-    resmem_zd_op()(gpu_ctx, a_gpu, size_k * lda * sizeof(std::complex<double>));
-    resmem_zd_op()(gpu_ctx, b_gpu, size_n * ldb * sizeof(std::complex<double>));
-    resmem_zd_op()(gpu_ctx, result_gpu, size_n * ldc * sizeof(std::complex<double>));
+    resmem_zd_op()(a_gpu, size_k * lda * sizeof(std::complex<double>));
+    resmem_zd_op()(b_gpu, size_n * ldb * sizeof(std::complex<double>));
+    resmem_zd_op()(result_gpu, size_n * ldc * sizeof(std::complex<double>));
     std::generate(a_const.begin(), a_const.end(), []() {
         return T{static_cast<double>(std::rand() / double(RAND_MAX)),
                  static_cast<double>(std::rand() / double(RAND_MAX))};

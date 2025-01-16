@@ -107,8 +107,8 @@ TEST_F(TestModuleElecstateMultiDevice, elecstate_pw_op_gpu)
     std::vector<double> rho_data(expected_rho.size(), 0);
     double* d_rho_data = NULL;
     std::complex<double>* d_wfcr = NULL;
-    resize_memory_var_op()(gpu_ctx, d_rho_data, rho_data.size());
-    resize_memory_complex_op()(gpu_ctx, d_wfcr, wfcr.size());
+    resize_memory_var_op()(d_rho_data, rho_data.size());
+    resize_memory_complex_op()(d_wfcr, wfcr.size());
     syncmem_var_h2d_op()(gpu_ctx, cpu_ctx, d_rho_data, rho_data.data(), rho_data.size());
     syncmem_complex_h2d_op()(gpu_ctx, cpu_ctx, d_wfcr, wfcr.data(), wfcr.size());
     double ** rho = new double* [1];
@@ -136,9 +136,9 @@ TEST_F(TestModuleElecstateMultiDevice, elecstate_pw_spin_op_gpu)
     double* d_rho_data_2 = NULL;
     std::complex<double>* d_wfcr_2 = NULL;
     std::complex<double>* d_wfcr_another_spin_2 = NULL;
-    resize_memory_var_op()(gpu_ctx, d_rho_data_2, rho_data_2.size());
-    resize_memory_complex_op()(gpu_ctx, d_wfcr_2, wfcr_2.size());
-    resize_memory_complex_op()(gpu_ctx, d_wfcr_another_spin_2, wfcr_another_spin_2.size());
+    resize_memory_var_op()(d_rho_data_2, rho_data_2.size());
+    resize_memory_complex_op()(d_wfcr_2, wfcr_2.size());
+    resize_memory_complex_op()(d_wfcr_another_spin_2, wfcr_another_spin_2.size());
     syncmem_var_h2d_op()(gpu_ctx, cpu_ctx, d_rho_data_2, rho_data_2.data(), rho_data_2.size());
     syncmem_complex_h2d_op()(gpu_ctx, cpu_ctx, d_wfcr_2, wfcr_2.data(), wfcr_2.size());
     syncmem_complex_h2d_op()(gpu_ctx, cpu_ctx, d_wfcr_another_spin_2, wfcr_another_spin_2.data(), wfcr_another_spin_2.size());

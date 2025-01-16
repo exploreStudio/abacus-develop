@@ -133,18 +133,18 @@ void Potential::allocate()
     }
     if (PARAM.inp.basis_type == "pw" && PARAM.inp.device == "gpu") {
         if (PARAM.inp.precision == "single") {
-            resmem_sd_op()(gpu_ctx, s_veff_smooth, PARAM.inp.nspin * nrxx_smooth);
-            resmem_sd_op()(gpu_ctx, s_vofk_smooth, PARAM.inp.nspin * nrxx_smooth);
+            resmem_sd_op()(s_veff_smooth, PARAM.inp.nspin * nrxx_smooth);
+            resmem_sd_op()(s_vofk_smooth, PARAM.inp.nspin * nrxx_smooth);
         }
         else {
-            resmem_dd_op()(gpu_ctx, d_veff_smooth, PARAM.inp.nspin * nrxx_smooth);
-            resmem_dd_op()(gpu_ctx, d_vofk_smooth, PARAM.inp.nspin * nrxx_smooth);
+            resmem_dd_op()(d_veff_smooth, PARAM.inp.nspin * nrxx_smooth);
+            resmem_dd_op()(d_vofk_smooth, PARAM.inp.nspin * nrxx_smooth);
         }
     }
     else {
         if (PARAM.inp.precision == "single") {
-            resmem_sh_op()(cpu_ctx, s_veff_smooth, PARAM.inp.nspin * nrxx_smooth, "POT::sveff_smooth");
-            resmem_sh_op()(cpu_ctx, s_vofk_smooth, PARAM.inp.nspin * nrxx_smooth, "POT::svofk_smooth");
+            resmem_sh_op()(s_veff_smooth, PARAM.inp.nspin * nrxx_smooth, "POT::sveff_smooth");
+            resmem_sh_op()(s_vofk_smooth, PARAM.inp.nspin * nrxx_smooth, "POT::svofk_smooth");
         }
         else {
             this->d_veff_smooth = this->veff_smooth.c;

@@ -59,26 +59,25 @@ DiagoDavid<T, Device>::DiagoDavid(const Real* precondition_in,
     /// - "basis" : number of occupied ks-orbitals(subscripts i,j) * number of unoccupied ks-orbitals(subscripts a,b), corresponding to "bands" of the ground state
 
     // the lowest N eigenvalues
-    base_device::memory::resize_memory_op<Real, base_device::DEVICE_CPU>()(
-                        this->cpu_ctx, this->eigenvalue, nbase_x, "DAV::eig");
+    base_device::memory::resize_memory_op<Real, base_device::DEVICE_CPU>()(this->eigenvalue, nbase_x, "DAV::eig");
     base_device::memory::set_memory_op<Real, base_device::DEVICE_CPU>()(
                         this->cpu_ctx, this->eigenvalue, 0, nbase_x);
 
     // basis(dim, nbase_x), leading dimension = dim
-    resmem_complex_op()(this->ctx, basis, nbase_x * dim, "DAV::basis");
+    resmem_complex_op()(basis, nbase_x * dim, "DAV::basis");
     setmem_complex_op()(this->ctx, basis, 0, nbase_x * dim);
 
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     // hpsi(nbase_x, dim); // the product of H and psi in the reduced basis set
-    resmem_complex_op()(this->ctx, this->hpsi, nbase_x * dim, "DAV::hpsi");
+    resmem_complex_op()(this->hpsi, nbase_x * dim, "DAV::hpsi");
     setmem_complex_op()(this->ctx, this->hpsi, 0, nbase_x * dim);
 
     // spsi(nbase_x, dim); // the Product of S and psi in the reduced basis set
-    resmem_complex_op()(this->ctx, this->spsi, nbase_x * dim, "DAV::spsi");
+    resmem_complex_op()(this->spsi, nbase_x * dim, "DAV::spsi");
     setmem_complex_op()(this->ctx, this->spsi, 0, nbase_x * dim);
 
     // hcc(nbase_x, nbase_x); // Hamiltonian on the reduced basis
-    resmem_complex_op()(this->ctx, this->hcc, nbase_x * nbase_x, "DAV::hcc");
+    resmem_complex_op()(this->hcc, nbase_x * nbase_x, "DAV::hcc");
     setmem_complex_op()(this->ctx, this->hcc, 0, nbase_x * nbase_x);
 
     // scc(nbase_x, nbase_x); // Overlap on the reduced basis
@@ -86,19 +85,19 @@ DiagoDavid<T, Device>::DiagoDavid(const Real* precondition_in,
     // setmem_complex_op()(this->ctx, this->scc, 0, nbase_x * nbase_x);
 
     // vcc(nbase_x, nbase_x); // Eigenvectors of hcc
-    resmem_complex_op()(this->ctx, this->vcc, nbase_x * nbase_x, "DAV::vcc");
+    resmem_complex_op()(this->vcc, nbase_x * nbase_x, "DAV::vcc");
     setmem_complex_op()(this->ctx, this->vcc, 0, nbase_x * nbase_x);
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     
     // lagrange_matrix(nband, nband); // for orthogonalization
-    resmem_complex_op()(this->ctx, this->lagrange_matrix, nband * nband);
+    resmem_complex_op()(this->lagrange_matrix, nband * nband);
     setmem_complex_op()(this->ctx, this->lagrange_matrix, 0, nband * nband);
 
 #if defined(__CUDA) || defined(__ROCM)
     // device precondition array
     if (this->device == base_device::GpuDevice)
     {
-        resmem_var_op()(this->ctx, this->d_precondition, dim);
+        resmem_var_op()(this->d_precondition, dim);
         syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, this->d_precondition, this->precondition, dim);
     }
 #endif
@@ -353,7 +352,7 @@ void DiagoDavid<T, Device>::cal_grad(const HPsiFunc& hpsi_func,
     // vc_ev_vector(notconv, nbase);
     // eigenvectors of unconverged index extracted from vcc
     T* vc_ev_vector = nullptr;
-    resmem_complex_op()(this->ctx, vc_ev_vector, notconv * nbase);
+    resmem_complex_op()(vc_ev_vector, notconv * nbase);
     setmem_complex_op()(this->ctx, vc_ev_vector, 0, notconv * nbase);
 
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -419,7 +418,7 @@ void DiagoDavid<T, Device>::cal_grad(const HPsiFunc& hpsi_func,
         {
 #if defined(__CUDA) || defined(__ROCM)
             Real* e_temp_gpu = nullptr;
-            resmem_var_op()(this->ctx, e_temp_gpu, nbase);
+            resmem_var_op()(e_temp_gpu, nbase);
             syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, e_temp_gpu, e_temp_cpu.data(), nbase);
             vector_mul_vector_op<T, Device>()(this->ctx,
                                                    nbase,
@@ -499,7 +498,7 @@ void DiagoDavid<T, Device>::cal_grad(const HPsiFunc& hpsi_func,
     // there is a nbase to nbase + notconv band orthogonalise
     // plan for SchmidtOrth
     T* lagrange = nullptr;
-    resmem_complex_op()(this->ctx, lagrange, notconv * (nbase + notconv));
+    resmem_complex_op()(lagrange, notconv * (nbase + notconv));
     setmem_complex_op()(this->ctx, lagrange, 0, notconv * (nbase + notconv));
 
     std::vector<int> pre_matrix_mm_m(notconv, 0);
@@ -700,7 +699,7 @@ void DiagoDavid<T, Device>::diag_zhegvx(const int& nbase,
         {
 #if defined(__CUDA) || defined(__ROCM)
             Real* eigenvalue_gpu = nullptr;
-            resmem_var_op()(this->ctx, eigenvalue_gpu, nbase_x);
+            resmem_var_op()(eigenvalue_gpu, nbase_x);
             syncmem_var_h2d_op()(this->ctx, this->cpu_ctx, eigenvalue_gpu, this->eigenvalue, nbase_x);
 
             dnevx_op<T, Device>()(this->ctx, nbase, nbase_x, hcc, nband, eigenvalue_gpu, vcc);
@@ -824,16 +823,14 @@ void DiagoDavid<T, Device>::refresh(const int& dim,
         T* hcc_cpu = nullptr;
         // T* scc_cpu = nullptr;
         T* vcc_cpu = nullptr;
-        base_device::memory::resize_memory_op<T, base_device::DEVICE_CPU>()(this->cpu_ctx,
-                                                                            hcc_cpu,
+        base_device::memory::resize_memory_op<T, base_device::DEVICE_CPU>()(hcc_cpu,
                                                                             nbase_x * nbase_x,
                                                                             "DAV::hcc");
         // base_device::memory::resize_memory_op<T, base_device::DEVICE_CPU>()(this->cpu_ctx,
         //                                                                     scc_cpu,
         //                                                                     nbase_x * nbase_x,
         //                                                                     "DAV::scc");
-        base_device::memory::resize_memory_op<T, base_device::DEVICE_CPU>()(this->cpu_ctx,
-                                                                            vcc_cpu,
+        base_device::memory::resize_memory_op<T, base_device::DEVICE_CPU>()(vcc_cpu,
                                                                             nbase_x * nbase_x,
                                                                             "DAV::vcc");
 

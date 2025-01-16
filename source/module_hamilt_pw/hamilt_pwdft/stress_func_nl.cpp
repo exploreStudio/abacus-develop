@@ -30,7 +30,7 @@ void Stress_Func<FPTYPE, Device>::stress_nl(ModuleBase::matrix& sigma,
     ModuleBase::timer::tick("Stress_Func", "stress_nl");
 
     FPTYPE* stress_device = nullptr;
-    resmem_var_op()(this->ctx, stress_device, 9);
+    resmem_var_op()(stress_device, 9);
     setmem_var_op()(this->ctx, stress_device, 0, 9);
     std::vector<FPTYPE> sigmanlc(9, 0.0);
 

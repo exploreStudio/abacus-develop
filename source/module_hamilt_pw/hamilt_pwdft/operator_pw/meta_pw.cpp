@@ -27,7 +27,7 @@ Meta<OperatorPW<T, Device>>::Meta(Real tpiba_in,
     this->vk_row = vk_row;
     this->vk_col = vk_col;
     this->wfcpw = wfcpw_in;
-    resmem_complex_op()(this->ctx, this->porter, this->wfcpw->nmaxgr, "Meta<PW>::porter");
+    resmem_complex_op()(this->porter, this->wfcpw->nmaxgr, "Meta<PW>::porter");
 
 }
 

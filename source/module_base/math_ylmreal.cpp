@@ -327,7 +327,7 @@ void YlmReal::Ylm_Real(Device * ctx, const int lmax2, const int ng, const FPTYPE
         ModuleBase::WARNING_QUIT("YLM_REAL","l>30 or l<0");
     }
     FPTYPE * p = nullptr, * phi = nullptr, * cost = nullptr;
-    resmem_var_op()(ctx, p, (lmax + 1) * (lmax + 1) * ng, "YlmReal::Ylm_Real");
+    resmem_var_op()(p, (lmax + 1) * (lmax + 1) * ng, "YlmReal::Ylm_Real");
 
     cal_ylm_real_op()(
         ctx,

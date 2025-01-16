@@ -18,7 +18,7 @@ namespace memory
 template <typename FPTYPE>
 struct resize_memory_op<FPTYPE, base_device::DEVICE_CPU>
 {
-    void operator()(const base_device::DEVICE_CPU* dev, FPTYPE*& arr, const size_t size, const char* record_in)
+    void operator()(FPTYPE*& arr, const size_t size, const char* record_in)
     {
         if (arr != nullptr)
         {
@@ -156,8 +156,7 @@ template struct delete_memory_op<std::complex<double>*, base_device::DEVICE_CPU>
 template <typename FPTYPE>
 struct resize_memory_op<FPTYPE, base_device::DEVICE_GPU>
 {
-    void operator()(const base_device::DEVICE_GPU* dev,
-                    FPTYPE*& arr,
+    void operator()(FPTYPE*& arr,
                     const size_t size,
                     const char* record_in = nullptr)
     {
@@ -404,10 +403,10 @@ template <typename FPTYPE>
 void resize_memory(FPTYPE* arr, base_device::AbacusDevice_t device_type)
 {
     if (device_type == base_device::AbacusDevice_t::CpuDevice){
-        resize_memory_op<FPTYPE, base_device::DEVICE_CPU>()(cpu_ctx, arr);
+        resize_memory_op<FPTYPE, base_device::DEVICE_CPU>()(arr);
     }
     else if (device_type == base_device::AbacusDevice_t::GpuDevice){
-        resize_memory_op<FPTYPE, base_device::DEVICE_GPU>()(gpu_ctx, arr);
+        resize_memory_op<FPTYPE, base_device::DEVICE_GPU>()(arr);
     }
 }
 
